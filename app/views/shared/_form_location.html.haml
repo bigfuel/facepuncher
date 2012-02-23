@@ -1,0 +1,74 @@
+:javascript
+  $(document).ready(function() {
+    // map
+    var latlng = new google.maps.LatLng(#{@start_lat},#{@start_lng});
+    var myOptions = {
+      zoom: 15,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+    // street view
+    var panoramaOptions = {
+      position: latlng,
+      pov: {
+        heading: 34,
+        pitch: 10,
+        zoom: 1
+      }
+    };
+    var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+    map.setStreetView(panorama);
+
+    // add marker
+    $('#find_coordinates').click(function(e) {
+      e.preventDefault();
+      var address = $('#location_address').val();
+      if (address == '') {
+        alert('You must provide an address!')
+        return;
+      }
+      var place = {};
+      var callback = (function(loc) {
+        $('#location_latitude').val(loc.lat());
+        $('#location_longitude').val(loc.lng());
+        var marker = new google.maps.Marker({
+          map: map,
+          position: loc,
+          clickable: true
+        });
+        map.setCenter(loc);
+
+        var panoramaOptions = {
+          position: loc,
+          pov: {
+            heading: 34,
+            pitch: 10,
+            zoom: 1
+          }
+        };
+        var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+        map.setStreetView(panorama);
+      });
+      fp.maps.find(address, callback);
+    });
+  });
+
+.field
+  = f.label :name, "Location Name"
+  = f.text_field :name
+
+.field
+  = f.label :address, "Location Address"
+  = f.text_field :address, id: 'location_address', maxlength: "255", size: "30"
+  %br
+  = content_tag :button, "Find Coordinates", type: :button, id: 'find_coordinates'
+
+.field
+  = f.label :latitude, "Location Latitude"
+  = f.text_field :latitude, id: 'location_latitude'
+
+.field
+  = f.label :longitude, "Location Longitude"
+  = f.text_field :longitude, id: 'location_longitude'

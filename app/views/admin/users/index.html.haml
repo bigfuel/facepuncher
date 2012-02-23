@@ -1,0 +1,22 @@
+.stats
+  #{@users.count} total
+
+
+= paginate(@users, window: 5)
+
+%table.table.table-striped.table-bordered
+  %tr
+    - %w{email failed_attempts sign_in_count last_sign_in_at created_at}.each do |c|
+      %th.sort= sort_by c
+    %th
+
+  - @users.each do |user|
+    %tr
+      %td= link_to user.email, admin_user_path(user)
+      %td= user.failed_attempts
+      %td= user.sign_in_count
+      %td= user.last_sign_in_at
+      %td= user.created_at
+      %td= link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, user], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn", title: "Delete"
+
+= paginate(@users, window: 5)

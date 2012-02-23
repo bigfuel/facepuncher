@@ -1,0 +1,16 @@
+= form_for [:admin, @project, @facebook_event] do |f|
+  - if @facebook_event.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@facebook_event.errors.count, "error")} prohibited this facebook Event from being saved:"
+      %ul
+        -@facebook_event.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :limit
+    = f.text_field :limit
+  .actions
+    = f.submit

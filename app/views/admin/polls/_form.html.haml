@@ -1,0 +1,36 @@
+= form_for [:admin, @project, @poll] do |f|
+  - if @poll.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@poll.errors.count, "error")} prohibited this poll from being saved:"
+      %ul
+        - @poll.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :question
+    = f.text_field :question
+
+  #choices.field
+    = f.label :choices, style: "float:left"
+    = link_to "[+]", "#", class: "add"
+    = f.fields_for :choices do |c|
+      .field.choice
+        = c.hidden_field :id unless c.object.new_record?
+        = c.text_field :content
+        %br
+        = c.file_field :image
+        - if c.object.new_record?
+          = link_to "[-]", "#", class: "remove"
+        - else
+          = link_to "[-]", polymorphic_url([:admin, @project, @poll, c.object], format: :json), method: :delete, confirm: 'Are you sure?', remote: true, class: "remove"
+
+  .field
+    = f.label :start_date
+    = f.text_field :start_date, class: "datetimepicker"
+
+  .field
+    = f.label :end_date
+    = f.text_field :end_date, class: "datetimepicker"
+
+  .actions
+    = f.submit

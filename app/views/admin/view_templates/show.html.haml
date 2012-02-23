@@ -1,0 +1,24 @@
+%p#notice= notice
+.column
+  = link_to 'New View Template', new_admin_project_view_template_path(@project), class: "button short"
+  = link_to 'Edit', [:edit, :admin, @project, @view_template], class: "button short"
+  = link_to 'Back', admin_project_view_templates_path(@project), class: "button short"
+
+.column.right
+  %table
+    %tr
+      %td Path
+      %td= @view_template.path
+    %tr
+      %td Formats
+      %td= @view_template.formats
+    %tr
+      %td Locale
+      %td= @view_template.locale
+    %tr
+      %td Handlers
+      %td= @view_template.handlers
+    %tr
+      %td Contents
+      %td
+        %pre= @view_template.contents

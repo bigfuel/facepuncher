@@ -1,0 +1,30 @@
+= form_for [:admin, @project, @video], html: {multipart: true} do |f|
+  - if @video.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@video.errors.count, "error")} prohibited this video from being saved:"
+      %ul
+        - @video.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+
+  .field
+    %label
+      Youtube
+      %b
+        Video ID ONLY
+    = f.text_field :youtube_id
+
+  .field
+    = f.label :screencap
+    = f.file_field :screencap
+
+  .field
+    = f.label :description
+    = f.text_field :description
+
+  .actions
+    = f.hidden_field :project_id
+    = f.submit

@@ -1,0 +1,59 @@
+!!! 5
+%html
+  %head
+    %meta{content: "text/html;charset=UTF-8", "http-equiv" => "content-type"}
+    %meta{property: "fb:app_id", content: "#{@project.facebook_app_id}"}
+    %title= @page_title ||= "Facebook Tab"
+    = yield :stylesheets
+    = javascript_include_tag '//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js'
+    :javascript
+      window.jQuery || document.write("<script src='#{asset_path('jquery.min.js')}' type='text/javascript'>\x3C/script>")
+      function fbInitHook() {}
+    = javascript_include_tag 'application'
+    = yield :scripts
+    %noscript
+      .noscriptmsg
+        Please be advised that your browser currently has JavaScript disabled. This site is designed to be used with JavaScript enabled. To ensure an optimal user experience, please enable JavaScript in your browser's settings, then
+        = succeed "." do
+          = link_to "click here", "#{request.url}"
+    = csrf_meta_tag
+  %body
+    = content_for?(:content) ? yield(:content) : yield
+    - if @project
+      - if @project.facebook_app_id
+        #fb-root
+        :javascript
+          window.fbAsyncInit = function() {
+            FB.init({
+              appId: '#{@project.facebook_app_id}',
+              status: true,
+              cookie: true,
+              xfbml: true
+            });
+            fbInitHook();
+          };
+
+          function sizeChangeCallback() {
+            FB.Canvas.setSize();
+          }
+
+          // Load the SDK Asynchronously
+          (function(d){
+             var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+             js = d.createElement('script'); js.id = id; js.async = true;
+             js.src = "//connect.facebook.net/en_US/all.js";
+             d.getElementsByTagName('head')[0].appendChild(js);
+           }(document));
+      - if @project.google_analytics_tracking_code
+        :javascript
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', "#{@project.google_analytics_tracking_code}"]);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+      = yield :footer_scripts

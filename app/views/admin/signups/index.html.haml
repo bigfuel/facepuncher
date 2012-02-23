@@ -1,0 +1,27 @@
+.alert
+
+= link_to 'New Signup', new_admin_project_signup_path(@project, @signup), class: "button short left"
+= link_to "Download CSV", admin_project_signups_path(@project, format: :csv), class: "button short left"
+
+.stats
+  #{@project.signups.all.count} total
+
+
+= paginate(@signups, window: 5)
+
+%table
+  %tr
+    - %w{first_name last_name email zip_code created_at}.each do |c|
+      %th.sort= sort_by c
+    %th.delete -
+
+  - @signups.each do |signup|
+    %tr
+      %td= signup.first_name
+      %td= signup.last_name
+      %td= link_to truncate(signup.email, length: 50), [:admin, @project, signup], class: "text"
+      %td= signup.zip_code
+      %td= l signup.created_at, format: :custom
+      %td= link_to '-', polymorphic_url([:admin, @project, signup], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+
+= paginate(@signups, window: 5)

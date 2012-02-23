@@ -1,0 +1,38 @@
+= form_for [:admin, @project], html: {multipart: true, class: "well"} do |f|
+  - if @project.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+      %ul
+        - @project.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+
+  .field
+    = f.label :description
+    = f.text_field :description
+
+  .field
+    = f.label :facebook_app_id, 'Facebook app ID'
+    = f.text_field :facebook_app_id
+
+  .field
+    = f.label :facebook_app_secret
+    = f.text_field :facebook_app_secret
+
+  .field
+    = f.label :repo
+    = f.text_field :repo
+
+  .field
+    = f.label :google_analytics_tracking_code
+    = f.text_field :google_analytics_tracking_code
+
+  .field
+    = f.label :production_url
+    = f.text_field :production_url
+
+  .actions
+    = f.submit 'Save', class: 'btn'

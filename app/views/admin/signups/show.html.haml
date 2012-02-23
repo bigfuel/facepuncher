@@ -1,0 +1,31 @@
+%p#notice= notice
+.column
+  = link_to 'New Signup', new_admin_project_signup_path(@project), class: "button short"
+  = link_to 'Back', admin_project_signups_path(@project), class: "button short"
+
+.column.right
+  %table
+    %tr
+      %td First Name
+      %td= @signup.first_name
+    %tr
+      %td Last Name
+      %td= @signup.last_name
+    %tr
+      %td Address
+      %td= @signup.address
+    %tr
+      %td City
+      %td= @signup.city
+    %tr
+      %td State Province
+      %td= @signup.state_province
+    %tr
+      %td Zip Code
+      %td= @signup.zip_code
+    %tr
+      %td Email
+      %td= @signup.email
+    %tr
+      %td Created at
+      %td= @signup.created_at

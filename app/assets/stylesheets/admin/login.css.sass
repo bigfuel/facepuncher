@@ -1,0 +1,24 @@
+#user_new
+  line-height: 0
+
+form
+  &.new_user
+    width: 245px
+    p
+      margin: 10px
+    div
+      margin: 5px 0
+    br
+      display: none
+  #error_explanation
+    ul
+      line-height: 16px
+  .field_with_errors
+    padding-left: 10px
+    input
+      border: 1px inset red
+
+a[href="/users/sign_up"], a[href="/users/sign_in"], a[href="/users/password/new"], a[href="/users/unlock/new"]
+  width: 250px
+  height: 20px
+  display: inline-block

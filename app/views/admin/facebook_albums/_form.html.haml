@@ -1,0 +1,16 @@
+= form_for [:admin, @project, @facebook_album] do |f|
+  - if @facebook_album.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@facebook_album.errors.count, "error")} prohibited this facebook album from being saved:"
+      %ul
+        -@facebook_album.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :set_id
+    = f.text_field :set_id
+  .actions
+    = f.submit

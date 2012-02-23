@@ -1,0 +1,13 @@
+%p#notice= notice
+.column
+  = link_to 'New FB Event', new_admin_project_facebook_event_path(@project), class: "button short"
+  = link_to 'Back', admin_project_facebook_events_path(@project), class: "button short"
+
+.column.center
+  %table
+    %tr
+      %td Name
+      %td= @facebook_event.name
+    %tr
+      %td Set ID
+      %td= @facebook_event.limit

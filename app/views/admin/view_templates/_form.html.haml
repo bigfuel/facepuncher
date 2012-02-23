@@ -1,0 +1,31 @@
+= form_for [:admin, @project, @view_template], html: {multipart: true} do |f|
+  - if @view_template.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@view_template.errors.count, "error")} prohibited this view template from being saved:"
+      %ul
+        - @view_template.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :path
+    = f.text_field :path
+
+  .field
+    = f.label :formats
+    = f.text_field :formats
+
+  .field
+    = f.label :locale
+    = f.text_field :locale
+
+  .field
+    = f.label :handlers
+    = f.text_field :handlers
+
+  .field
+    = f.label :contents
+    = f.text_area :contents
+
+  .actions
+    = f.hidden_field :project_id
+    = f.submit
