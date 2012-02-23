@@ -1,0 +1,13 @@
+%p#notice= notice
+.column
+  = link_to 'New FB Album', new_admin_project_facebook_album_path(@project), class: "button short"
+  = link_to 'Back', admin_project_facebook_albums_path(@project), class: "button short"
+
+.column.center
+  %table
+    %tr
+      %td Name
+      %td= @facebook_album.name
+    %tr
+      %td Set ID
+      %td= @facebook_album.set_id

@@ -1,0 +1,37 @@
+.alert
+
+= link_to 'New Post', new_admin_project_post_path(@project, @post), class: "button short left"
+
+.stats
+  #{@project.posts.all.count} total
+
+= paginate(@posts, window: 5)
+
+%table
+  %tr
+    - %w{title content url image tags updated_at position move}.each do |c|
+      %th.sort= sort_by c
+    %th{colspan: 2} Actions
+    %th.delete -
+
+  - @posts.each do |post|
+    %tr
+      %td= link_to post.title, [:admin, @project, post]
+      %td= post.content
+      %td= post.url
+      %td= link_to image_tag(post.image.url), [:admin, @project, post] if post.image?
+      %td= post.tags
+      %td= l post.updated_at, format: :custom
+      %td= post.position
+      %td
+        = link_to 'Up', up_admin_project_post_path(@project, post, format: :html), remote: false, method: :put, class: "up button"
+        = link_to 'Down', down_admin_project_post_path(@project, post, format: :html), remote: false, method: :put, class: "down button"
+      %td
+        - if post.state != 'approved'
+          = link_to 'Approve', approve_admin_project_post_path(@project, post, format: :json), remote: true, class: "approve button"
+        - if post.state != 'denied'
+          = link_to 'Deny', deny_admin_project_post_path(@project, post, format: :json), remote: true, class: "deny button"
+      %td= link_to 'Edit', [:edit, :admin, @project, post], class: "button"
+      %td= link_to '-', polymorphic_url([:admin, @project, post], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+
+= paginate(@posts, window: 5)

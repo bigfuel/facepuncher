@@ -1,0 +1,18 @@
+%p#notice= notice
+.column
+  = link_to 'New Video', new_admin_project_video_path(@project), class: "button short"
+  = link_to 'Edit', [:edit, :admin, @project, @video], class: "button short"
+  = link_to 'Back', admin_project_videos_path(@project), class: "button short"
+
+.column.center
+  %table
+    %tr
+      %td Name
+      %td= @video.name
+    %tr
+      %td State
+      %td= @video.state
+
+.column
+  - unless @video.screencap.blank?
+    = image_tag @video.screencap.url, class: "show-list-img"

@@ -1,0 +1,84 @@
+- content_for :scripts do
+  = javascript_include_tag 'https://maps-api-ssl.google.com/maps/api/js?sensor=false'
+  :javascript
+    $(document).ready(function() {
+      var geocoder = new google.maps.Geocoder();
+
+      // map
+      var latlng = new google.maps.LatLng(#{@event.location.latitude},#{@event.location.longitude});
+      var myOptions = {
+        zoom: 15,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+      // street view
+      var panoramaOptions = {
+        position: latlng,
+        pov: {
+          heading: 34,
+          pitch: 10,
+          zoom: 1
+        }
+      };
+      var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+      var sv = new google.maps.StreetViewService();
+
+      function processSVData(data, status) {
+        if (status == google.maps.StreetViewStatus.OK) {
+          panorama.setPano(data.location.pano);
+          panorama.setVisible(true);
+        }
+      }
+
+      sv.getPanoramaByLocation(latlng, 300, processSVData)
+    });
+
+%p#notice= notice
+.column
+  = link_to 'New Event', new_admin_project_event_path(@project), class: "button short"
+  = link_to 'Edit', [:edit, :admin, @project, @event], class: "button short"
+  = link_to 'Back', admin_project_event_path(@project), class: "button short"
+
+.column.center
+  %table
+    %tr
+      %td Name
+      %td= @event.name
+    %tr
+      %td State
+      %td= @event.state
+    %tr
+      %td Type
+      %td= @event.type
+    %tr
+      %td Start Date
+      %td= l @event.start_date, format: :custom if @event.start_date
+    %tr
+      %td End Date
+      %td= l @event.end_date, format: :custom if @event.end_date
+    %tr
+      %td URL
+      %td= @event.url
+    %tr
+      %td Location Name
+      %td= @event.location.name
+    %tr
+      %td Location Address
+      %td= @event.location.address
+    %tr
+      %td Location Latitude
+      %td= @event.location.latitude
+    %tr
+      %td Location Longitude
+      %td= @event.location.longitude
+    %tr
+      %td Created at
+      %td= l @event.created_at, format: :custom
+
+.google-map
+  #map_canvas
+  #pano
+  %p
+    * Showing nearest Street View (within 300 Meters)

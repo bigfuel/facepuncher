@@ -1,0 +1,30 @@
+.alert
+
+= link_to 'New release', new_admin_project_release_path(@project), class: "button short"
+
+.stats
+  #{@project.releases.count} total
+
+= paginate(@releases, window: 10)
+
+%table{class: "table-list"}
+  %tr
+    - %w{live_date description state branch status}.each do |c|
+      %th.sort= sort_by c
+    %th{colspan: 2} Action
+    %th.delete -
+
+    - @releases.each do |release|
+      %tr
+        %td= release.live_date < Time.current ? "#{time_ago_in_words(release.live_date)} ago" : "in #{time_ago_in_words(release.live_date)}"
+        %td= link_to release.description, admin_project_release_path(@project, release)
+        %td= release.state
+        %td= release.branch
+        %td= release.status
+        %td
+          - if release.can_go_live?
+            = link_to 'Deploy', go_live_admin_project_release_path(@project, release, format: :html), remote: false, confirm: 'Are you sure?', class: "go-live button"
+        %td= link_to 'Edit', [:edit, :admin, @project, release], class: "button"
+        %td= link_to '-', polymorphic_url([:admin, @project, release], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+
+= paginate(@releases, window: 10)

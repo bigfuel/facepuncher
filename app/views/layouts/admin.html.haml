@@ -1,0 +1,37 @@
+!!! 5
+%html
+  %head
+    %meta{content: "text/html;charset=UTF-8", "http-equiv" => "content-type"}/
+    %title= @page_title ||= "Admin"
+    = yield :head
+    = yield :stylesheets
+    = stylesheet_link_tag 'admin/application'
+    = javascript_include_tag '//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.6.2.min.js', '//ajax.aspnetcdn.com/ajax/jquery.ui/1.8.13/jquery-ui.min.js', '//ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js', 'https://maps-api-ssl.google.com/maps/api/js?sensor=false'
+    :javascript
+      window.jQuery || document.write("<script src='#{asset_path('jquery.min.js')}'>\x3C/script>");document.write("<script src='#{asset_path('jquery-ui.min.js')}'>\x3C/script>")
+    = javascript_include_tag 'admin/application'
+    = yield :scripts
+    = csrf_meta_tag
+  %body
+    .container
+      #wrapper
+        %p.alert= alert
+        - if signed_in?
+          #nav-main
+            %p
+              %b
+                = link_to current_user.email, admin_user_path(current_user)
+              = link_to "- Logout", destroy_user_session_path, method: :delete
+              %br/
+            .navbar
+              .navbar-inner
+                .container
+                  %ul#appmodel.nav
+                    %li= link_to "Users (#{User.count})", admin_users_path
+                    %li= link_to "Projects (#{Project.count})", admin_projects_path
+                    - if @project && !@project.new_record?
+                      - Project.reflect_on_all_associations(:references_many).map(&:name).each do |a|
+                        - count = @project_association_count && @project_association_count[@project.id] ? @project_association_count[@project.id][a] : '?'
+                        %li= link_to "#{a.to_s.humanize} (#{count})", instance_eval("admin_project_#{a.to_s}_path(@project)")
+        #content
+          = yield

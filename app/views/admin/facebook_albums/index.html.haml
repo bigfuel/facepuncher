@@ -1,0 +1,25 @@
+.alert
+
+= link_to 'New FB Album', new_admin_project_facebook_album_path(@project), class: "button short"
+
+.stats
+  #{@project.facebook_albums.all.count} total
+
+= paginate @facebook_albums
+
+%table
+  %tr
+    - %w{name set_id updated_at}.each do |c|
+      %th.sort= sort_by c
+    %th{colspan: 1} Action
+    %th.delete -
+
+    - @facebook_albums.each do |facebook_album|
+      %tr
+        %td= facebook_album.name
+        %td= facebook_album.set_id
+        %td= l facebook_album.updated_at, format: :custom
+        %td= link_to 'Edit', [:edit, :admin, @project, facebook_album], class: "button"
+        %td= link_to '-', admin_project_facebook_album_path(@project, facebook_album, format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+
+= paginate @facebook_albums

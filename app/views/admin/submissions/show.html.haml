@@ -1,0 +1,29 @@
+%p#notice= notice
+.column
+  = link_to 'New Submission', new_admin_project_submission_path(@project), class: "button short"
+  = link_to 'Back', admin_project_submissions_path(@project), class: "button short"
+
+.column.center
+  %table
+    %tr
+      %td FB Name
+      %td= @submission.facebook_name
+    %tr
+      %td FB User ID
+      %td= @submission.facebook_id
+    %tr
+      %td FB Email
+      %td= @submission.facebook_email
+    %tr
+      %td Created at
+      %td= @submission.created_at
+    %tr
+      %td State
+      %td= @submission.state
+    %tr
+      %td Why
+      %td= @submission.description
+
+.column
+  - unless @submission.photo.blank?
+    = image_tag @submission.photo.url, class: "show-list-img"

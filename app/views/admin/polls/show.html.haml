@@ -1,0 +1,26 @@
+%p#notice= notice
+.column
+  = link_to 'New Poll', new_admin_project_poll_path(@project), class: "button short"
+  = link_to 'Edit', [:edit, :admin, @project, @poll], class: "button short"
+  = link_to 'Back', admin_project_polls_path(@project), class: "button short"
+
+.column.right
+  = form_tag vote_poll_path(@project.name, @poll), method: :put do
+    %h2= @poll.question
+    %ul
+      - @poll.choices.each do |choice|
+        %li
+          = radio_button :choice, :id, choice.id
+          = "#{choice.content} (#{choice.votes} votes)"
+          - if choice.image?
+            %br
+            = image_tag("#{choice.image.url}")
+
+      %li
+        Start Date:
+        = @poll.start_date
+      %li
+        End Date:
+        = @poll.end_date
+
+    = submit_tag "Vote"

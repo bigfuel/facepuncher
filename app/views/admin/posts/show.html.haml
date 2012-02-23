@@ -1,0 +1,21 @@
+%p#notice= notice
+.column
+  = link_to 'New Post', new_admin_project_post_path(@project), class: "button short"
+  = link_to 'Edit', [:edit, :admin, @project, @post], class: "button short"
+  = link_to 'Back', admin_project_posts_path(@project), class: "button short"
+
+.column.right
+  %table
+    %tr
+      %td Title
+      %td= @post.title
+    %tr
+      %td Content
+      %td= @post.content
+    %tr
+      %td URL
+      %td= @post.url
+.column
+  - unless @post.image.blank?
+    = image_tag @post.image.url, class: "show-list-img"
+

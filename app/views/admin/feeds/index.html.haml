@@ -1,0 +1,26 @@
+.alert
+
+= link_to 'New feed', new_admin_project_feed_path(@project), class: "button short"
+
+.stats
+  #{@project.feeds.all.count} total
+
+= paginate(@feeds, window: 5)
+
+%table{class: "table-list"}
+  %tr
+    - %w{name url limit updated_at}.each do |c|
+      %th.sort= sort_by c
+    %th{colspan: 1} Action
+    %th.delete -
+
+    -@feeds.each do |feed|
+      %tr
+        %td= feed.name
+        %td= feed.url
+        %td= feed.limit
+        %td= l feed.updated_at, format: :custom
+        %td= link_to 'Edit', [:edit, :admin, @project, feed], class: "button"
+        %td= link_to '-', polymorphic_url([:admin, @project, feed], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+
+= paginate(@feeds, window: 5)

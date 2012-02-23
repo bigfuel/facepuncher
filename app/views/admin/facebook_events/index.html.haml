@@ -1,0 +1,25 @@
+.alert
+
+= link_to 'New FB Event', new_admin_project_facebook_event_path(@project), class: "button short"
+
+.stats
+  #{@project.facebook_events.all.count} total
+
+= paginate @facebook_events
+
+%table
+  %tr
+    - %w{name limit updated_at}.each do |c|
+      %th.sort= sort_by c
+    %th{colspan: 1} Action
+    %th.delete -
+
+    - @facebook_events.each do |facebook_event|
+      %tr
+        %td= facebook_event.name
+        %td= facebook_event.limit
+        %td= l facebook_event.updated_at, format: :custom
+        %td= link_to 'Edit', [:edit, :admin, @project, facebook_event], class: "button"
+        %td= link_to '-', admin_project_facebook_event_path(@project, facebook_event, format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+
+= paginate @facebook_events

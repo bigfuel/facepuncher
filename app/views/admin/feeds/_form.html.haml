@@ -1,0 +1,23 @@
+= form_for [:admin, @project, @feed], html: {multipart: true} do |f|
+  - if @feed.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@feed.errors.count, "error")} prohibited this feed from being saved:"
+      %ul
+        - @feed.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+
+  .field
+    = f.label :url
+    = f.text_field :url
+
+  .field
+    = f.label :limit
+    = f.text_field :limit
+
+  .actions
+    = f.hidden_field :project_id
+    = f.submit

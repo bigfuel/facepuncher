@@ -1,0 +1,25 @@
+%p#notice= notice
+.column
+  = link_to 'New Release', new_admin_project_release_path(@project), class: "button short"
+  = link_to 'Back', admin_project_releases_path(@project), class: "button short"
+
+.column.right
+  %table
+    %tr
+      %td Live Date
+      %td= @release.live_date
+    %tr
+      %td Description
+      %td= @release.description
+    %tr
+      %td Branch
+      %td= @release.branch
+    %tr
+      %td Status
+      %td= @release.status
+    %tr
+      %td Created at
+      %td= @release.created_at
+    %tr
+      %td Updated at
+      %td= @release.updated_at

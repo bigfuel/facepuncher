@@ -1,0 +1,27 @@
+.alert
+
+= link_to 'New View Template', new_admin_project_view_template_path(@project), class: "button short"
+
+.stats
+  #{@project.view_templates.all.count} total
+
+= paginate(@view_templates, window: 5)
+
+%table{class: "table-list"}
+  %tr
+    - %w{path formats locales handlers updated_at}.each do |c|
+      %th.sort= sort_by c
+    %th{colspan: 1} Action
+    %th.delete -
+
+    -@view_templates.each do |view_template|
+      %tr
+        %td= view_template.path
+        %td= view_template.formats
+        %td= view_template.locale
+        %td= view_template.handlers
+        %td= l view_template.updated_at, format: :custom
+        %td= link_to 'Edit', [:edit, :admin, @project, view_template], class: "button"
+        %td= link_to '-', polymorphic_url([:admin, @project, view_template], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+
+= paginate(@view_templates, window: 5)

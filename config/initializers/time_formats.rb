@@ -1,0 +1,1 @@
+Time::DATE_FORMATS[:default] = -> time { I18n.l(time) }
