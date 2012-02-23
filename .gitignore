@@ -1,5 +1,4 @@
 .bundle
-tmp/
 db/*.sqlite3
 log/*
 data
@@ -13,7 +12,6 @@ app/assets/projects/**/*
 public/assets
 vendor/bundle
 vendor/cache
-public/stylesheets/sass/**/.sass-cache
 coverage
 config/config.yml
 config/mongoid.yml
