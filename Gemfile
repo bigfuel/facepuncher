@@ -90,7 +90,7 @@ group :development, :test do
   # gem 'cover_me', '>= 1.0.0.pre2', require: false
 end
 
-group :production do
+group :production, :staging do
   gem 'airbrake'
   # gem 'rpm_contrib'
 end
