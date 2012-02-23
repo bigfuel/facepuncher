@@ -5,8 +5,10 @@ Rails.application.config.before_configuration do
   if Rails.env.development?
     local_assets_path = Rails.root.join("tmp", "local_assets")
 
-    retriable on: Errno::ENOENT, tries: NUM_RETRIES, interval: 3 do
-      FileUtils.rm_r(local_assets_path, secure: true)
+    if Dir.exists?(local_assets_path)
+      retriable on: Errno::ENOENT, tries: NUM_RETRIES, interval: 3 do
+        FileUtils.rm_r(local_assets_path, secure: true)
+      end
     end
 
     FileUtils.mkdir_p(local_assets_path)
