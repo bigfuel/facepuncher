@@ -1,0 +1,35 @@
+common: &default
+  preload_models: true
+  use_utc: false
+  use_activesupport_time_zone: true
+  identity_map_enabled: true
+
+development:
+  <<: *default
+  host: localhost
+  database: facepuncher_development
+
+test:
+  <<: *default
+  host: localhost
+  database: facepuncher_test
+
+staging:
+  <<: *default
+  uri: <%= ENV['MONGOHQ_URL'] %>
+
+# set these environment variables on your prod server
+production:
+  <<: *default
+  uri: <%= ENV['MONGOHQ_URL'] %>
+
+  # host: <%= ENV['MONGOID_HOST'] %>
+  # port: <%= ENV['MONGOID_PORT'] %>
+  # username: <%= ENV['MONGOID_USERNAME'] %>
+  # password: <%= ENV['MONGOID_PASSWORD'] %>
+  # database: <%= ENV['MONGOID_DATABASE'] %>
+  # slaves:
+  #   - host: slave1.local
+  #     port: 27018
+  #   - host: slave2.local
+  #     port: 27019

@@ -1,0 +1,29 @@
+development: &default
+  aws_access_key_id:      AKIAITADPSWHGYY64TTA
+  aws_secret_access_key:  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
+  s3_bucket:              bigfuel-facepunch-development
+  s3_url:                 https://s3.amazonaws.com
+  redis:                  redis://localhost:6379
+  # asset_host:             bigfuel-facepunch-development.s3.amazonaws.com
+  uploader_host:          bigfuel-facepunch-development.s3.amazonaws.com
+  project_path:           <%= ENV['HOME'] %>/Development/fp_projects
+
+test:
+  <<: *default
+  s3_bucket:              bigfuel-facepunch-test
+  uploader_host:          bigfuel-facepunch-test.s3.amazonaws.com
+  # asset_host:             bigfuel-facepunch-test.s3.amazonaws.com
+
+staging:
+  <<: *default
+  s3_bucket:              bigfuel-facepunch-staging
+  redis:                  <%= ENV['REDISTOGO_URL'] %>
+  asset_host:             bigfuel-facepunch-staging.s3.amazonaws.com
+  uploader_host:          bigfuel-facepunch-staging.s3.amazonaws.com
+
+production:
+  <<: *default
+  s3_bucket:              bigfuel-facepunch-production
+  redis:                  <%= ENV['REDISTOGO_URL'] %>
+  asset_host:             d920trcyqxo08.cloudfront.net
+  uploader_host:          d920trcyqxo08.cloudfront.net
