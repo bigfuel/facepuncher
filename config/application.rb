@@ -60,7 +60,7 @@ module Facepuncher
 
     # Custom
     config.cache_store = :redis_store, ENV['REDISTOGO_URL'] || APP_CONFIG['redis']
-    config.action_controller.asset_host = APP_CONFIG['cdn_host'] if APP_CONFIG['cdn_host']
+    config.action_controller.asset_host = APP_CONFIG['asset_host'] if APP_CONFIG['asset_host']
 
     unless %W{development test}.include?(Rails.env)
       config.middleware.insert_before Rack::Cache, Rack::Static, urls: [config.assets.prefix], root: 'public'
