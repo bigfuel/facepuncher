@@ -4,7 +4,6 @@ development: &default
   s3_bucket:              BUCKETNAME
   s3_url:                 https://s3.amazonaws.com
   redis:                  redis://localhost:6379
-  # cdn_host:               your-sub-domain-here.s3.amazonaws.com
   uploader_host:          your-sub-domain-here.s3.amazonaws.com
   airbrake_api_key:       API_KEY
   project_path:           PATH_TO_PROJECTS_DIR
@@ -12,11 +11,11 @@ development: &default
 test:
   <<: *default
   s3_bucket:              BUCKETNAME
-  uploader_host:          HOST
+  uploader_host:          your-sub-domain-here.s3.amazonaws.com
 
 production:
   <<: *default
   s3_bucket:              BUCKETNAME
   redis:                  <%= ENV['REDISTOGO_URL'] %>
-  cdn_host:               your-sub-domain-here.cloudfront.net
+  asset_host:             your-sub-domain-here.cloudfront.net
   uploader_host:          your-sub-domain-here.cloudfront.net
