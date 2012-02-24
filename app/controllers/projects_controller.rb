@@ -6,6 +6,7 @@ class ProjectsController < PageController
     @post = @project.posts.new
     @poll = @project.polls.new
     @event = @project.events.new
+    @event.build_location
     @video = @project.videos.new
     @signup = @project.signups.new
 
