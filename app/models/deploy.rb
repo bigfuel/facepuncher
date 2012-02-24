@@ -93,7 +93,7 @@ module Deploy
   def self.compile_assets(project_name)
     config = Rails.application.config
     public_asset_path = File.join(Rails.public_path, config.assets.prefix)
-    FileUtils.rm_r(public_asset_path, secure: true)
+    FileUtils.rm_r(public_asset_path, secure: true) if Dir.exists?(public_asset_path)
     FileUtils.mkdir_p(public_asset_path)
 
     manifest_path = config.assets.manifest ? Pathname.new(config.assets.manifest).join(project_name) : Pathname.new(public_asset_path).join(project_name)
