@@ -32,6 +32,7 @@ class Admin::EventsController < AdminController
 
   def create
     @event = @project.events.new(params[:event])
+    @event.build_location(params[:event][:location_attributes])
 
     respond_to do |format|
       if @event.save
