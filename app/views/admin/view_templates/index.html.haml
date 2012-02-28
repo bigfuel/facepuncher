@@ -1,27 +1,28 @@
-.alert
+%p
+  = link_to '<i class="icon-plus"></i> New View Template'.html_safe, new_admin_project_view_template_path(@project), class: "btn", title: "New"
 
-= link_to 'New View Template', new_admin_project_view_template_path(@project), class: "button short"
-
-.stats
+.well
+  %h6 Stats
   #{@project.view_templates.all.count} total
 
 = paginate(@view_templates, window: 5)
 
-%table{class: "table-list"}
+%table.table.table-striped.table-bordered
   %tr
-    - %w{path formats locales handlers updated_at}.each do |c|
+    %th{width: 250}=sort_by "handlers"
+    - %w{path formats locales updated_at}.each do |c|
       %th.sort= sort_by c
-    %th{colspan: 1} Action
-    %th.delete -
 
     -@view_templates.each do |view_template|
       %tr
+        %td
+          = view_template.handlers
+          .actions
+            = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, view_template], class: "btn", title: "Edit"
+            = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, view_template], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn", title: "Delete"
         %td= view_template.path
         %td= view_template.formats
         %td= view_template.locale
-        %td= view_template.handlers
         %td= l view_template.updated_at, format: :custom
-        %td= link_to 'Edit', [:edit, :admin, @project, view_template], class: "button"
-        %td= link_to '-', polymorphic_url([:admin, @project, view_template], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
 
 = paginate(@view_templates, window: 5)
