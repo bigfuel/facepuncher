@@ -16,6 +16,6 @@ module ApplicationHelper
   end
 
   def controller_action
-    "#{action_name.capitalize} #{controller_name.capitalize.singularize}"
+    "#{action_name.capitalize} #{controller_name.humanize.capitalize.singularize}"
   end
 end
