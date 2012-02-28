@@ -1,6 +1,42 @@
 // = require_self
 
-//@import "fb_shared/reset.css.sass"
 @import "bootstrap"
+@import "datetime"
+
+body
+	padding-top: 60px
+
 @import "bootstrap-responsive"
-@import "index"
+
+.pagination
+	border-left: 1px solid #ddd
+	span
+		&.current
+			float: left
+			padding: 0 14px
+			line-height: 34px
+			text-decoration: none
+			border: 1px solid #ddd
+			border-left-width: 0
+
+.table
+	tbody tr:hover td, tbody tr:hover th
+		background-color: #eaeaea
+	tr
+		&.inactive
+			color: #ccc
+			a
+				color: #ccc
+				cursor: default
+			.actions
+				.btn
+					display: inline-block
+			.btn
+				display: none
+				&.home
+					display: inline-block
+					cursor: pointer
+	td
+		.actions
+			display: none
+			float: right
