@@ -1,16 +1,27 @@
-= form_for [:admin, @project, @facebook_album] do |f|
-  - if @facebook_album.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@facebook_album.errors.count, "error")} prohibited this facebook album from being saved:"
-      %ul
-        -@facebook_album.errors.full_messages.each do |msg|
-          %li= msg
+%p
+  = link_to 'Back', admin_project_facebook_albums_path(@project), title: "Back", class: "btn btn-inverse"
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :set_id
-    = f.text_field :set_id
-  .actions
-    = f.submit
+.row
+  .span6
+    = form_for [:admin, @project, @facebook_album], html: { class: "form-horizontal"} do |f|
+      - if @facebook_album.errors.any?
+        .alert.alert-error
+          %p
+            %b
+              = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+          %ul
+            - @facebook_album.errors.full_messages.each do |msg|
+              %li= msg
+
+      %fieldset
+        %legend= controller_action
+        .control-group
+          = f.label :name, class: "control-label"
+          .controls= f.text_field :name
+
+        .control-group
+          = f.label :set_id, "Set ID", class: "control-label"
+          .controls= f.text_field :set_id
+
+        .actions
+          = f.submit 'Save', class: 'btn btn-primary'
