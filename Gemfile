@@ -28,7 +28,6 @@ gem 'haml-rails'
 gem 'sass'
 gem 'kaminari'
 gem 'devise'
-gem 'mini_magick'
 gem 'state_machine'
 gem 'fog'
 gem 'resque', git: 'https://github.com/hone/resque.git', branch: 'heroku'
@@ -36,13 +35,12 @@ gem 'resque-loner'
 gem 'resque-scheduler'
 gem 'sinatra'
 gem 'koala'
-gem 'slither', require: false
-gem 'net-sftp'
+gem 'mini_magick'
 gem 'carrierwave'
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem 'redis-store'
 gem 'redis-rails'
-gem 'feedzirra', git: 'git://github.com/sdettling/feedzirra.git'
+gem 'feedzirra'
 gem 'profanity_filter'
 gem 'grit'
 gem 'validates_timeliness'
@@ -65,7 +63,7 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'simplecov', require: false
-  gem 'guard-minitest', git: 'git://github.com/aspiers/guard-minitest.git'
+  gem 'guard-minitest'
 end
 
 group :development do
