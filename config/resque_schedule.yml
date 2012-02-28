@@ -7,12 +7,6 @@
 # | +---------- Hour              (range: 0-23)
 # +------------ Minute            (range: 0-59)
 
-navigation_cache:
-  cron: "0 * * * *"
-  class: NavigationCache
-  args:
-  description: "Expires the nav cache hourly"
-
 rss_feeds:
   cron: "*/15 * * * *"
   class: RssFeeds
