@@ -10,6 +10,12 @@
   .span6
     %table.table.table-bordered
       %tr
+        %td Created at
+        %td= @image.created_at
+      %tr
+        %td Updated at
+        %td= @image.updated_at
+      %tr
         %td State
         %td= @image.state
       %tr

@@ -47,6 +47,12 @@
   .span6
     %table.table.table-striped.table-bordered
       %tr
+        %td Created at
+        %td= @event.created_at
+      %tr
+        %td Updated at
+        %td= @event.updated_at
+      %tr
         %td Name
         %td= @event.name
       %tr
@@ -76,9 +82,6 @@
       %tr
         %td Location Longitude
         %td= @event.location.longitude
-      %tr
-        %td Created at
-        %td= l @event.created_at, format: :custom
 
   .span6
     .google-map

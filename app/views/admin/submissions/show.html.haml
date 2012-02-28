@@ -10,6 +10,12 @@
   .span6
     %table.table.table-bordered
       %tr
+        %td Created at
+        %td= @submission.created_at
+      %tr
+        %td Updated at
+        %td= @submission.updated_at
+      %tr
         %td State
         %td= @submission.state
       %tr
@@ -24,9 +30,6 @@
       %tr
         %td Description
         %td= @submission.description
-      %tr
-        %td Created at
-        %td= @submission.created_at
       %tr
         %td Image
         %td
