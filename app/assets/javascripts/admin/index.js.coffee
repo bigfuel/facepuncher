@@ -48,6 +48,11 @@ jQuery ->
       $(".event-form").submit()
     )
     fp.maps.find address, callback
+  # Admin - Project dashboard
+  $(".table tr").hover (->
+    $("td .actions", this).show()
+  ), ->
+    $("td .actions", this).hide()
 
   $(".delete").bind("ajax:beforeSend", ->
     $(this).parents("table").siblings(".alert").empty()
