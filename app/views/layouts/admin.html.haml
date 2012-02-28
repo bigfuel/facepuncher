@@ -30,8 +30,7 @@
                     %li= link_to "Users (#{User.count})", admin_users_path
                     %li= link_to "Projects (#{Project.count})", admin_projects_path
                     - if @project && !@project.new_record?
-                      - Project.reflect_on_all_associations(:references_many).map(&:name).each do |a|
-                        - count = @project_association_count && @project_association_count[@project.id] ? @project_association_count[@project.id][a] : '?'
-                        %li= link_to "#{a.to_s.humanize} (#{count})", instance_eval("admin_project_#{a.to_s}_path(@project)")
+                      - Project.reflect_on_all_associations(:references_many).map(&:name).each do |relation|
+                        %li= link_to "#{relation.to_s.humanize} (#{@project.send(relation).count})", instance_eval("admin_project_#{relation.to_s}_path(@project)")
         #content
           = yield
