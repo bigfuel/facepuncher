@@ -14,6 +14,12 @@
   .span6
     %table.table.table-bordered
       %tr
+        %td Created at
+        %td= @project.created_at
+      %tr
+        %td Updated at
+        %td= @project.updated_at
+      %tr
         %td Name
         %td
           %b

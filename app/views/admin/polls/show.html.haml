@@ -8,25 +8,37 @@
 
 .row
   .span6
-    = form_tag vote_poll_path(@project.name, @poll), method: :put do
+    = form_tag vote_poll_path(@project.name, @poll), class: "form-horizontal", method: :put do
       %fieldset
         %legend= @poll.question
-        .control-group
         - @poll.choices.each do |choice|
           .control-group
-            = radio_button :choice, :id, choice.id
-            = "#{choice.content} (#{choice.votes} votes)"
-            - if choice.image?
-              %br
-              = image_tag("#{choice.image.url}")
+            .control-label= radio_button :choice, :id, choice.id
+            .controls
+              = "#{choice.content} (#{choice.votes} votes)"
+              - if choice.image?
+                %br
+                = image_tag("#{choice.image.url}")
 
         .control-group
           .control-label Start Date
-          .controls= @poll.start_date
+          .controls
+            .uneditable-input= @poll.start_date
 
         .control-group
           .control-label End Date
-          .controls= @poll.end_date
+          .controls
+            .uneditable-input= @poll.end_date
+
+        .control-group
+          .control-label Created At
+          .controls
+            .uneditable-input= @poll.created_at
+
+        .control-group
+          .control-label Updated At
+          .controls
+            .uneditable-input= @poll.updated_at
 
         .form-actions
           = submit_tag "Vote", class: 'btn btn-primary'

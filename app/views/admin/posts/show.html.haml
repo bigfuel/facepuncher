@@ -13,6 +13,12 @@
   .span6
     %table.table.table-bordered
       %tr
+        %td Created at
+        %td= @post.created_at
+      %tr
+        %td Updated at
+        %td= @post.updated_at
+      %tr
         %td State
         %td= @post.state
       %tr
