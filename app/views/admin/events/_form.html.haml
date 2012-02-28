@@ -1,34 +1,37 @@
-= form_for [:admin, @project, @event], html: {class: "event-form"} do |f|
+= form_for [:admin, @project, @event], html: {class: "form-horizontal"} do |f|
   - if @event.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@event.errors.count, "error")} prohibited this event from being saved:"
+    .alert.alert-error
+      %p
+        %b
+          = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
       %ul
         - @event.errors.full_messages.each do |msg|
           %li= msg
 
-  .field
-    = f.label :name
-    = f.text_field :name
+  %fieldset
+    %legend= controller_action
+    .control-group
+      = f.label :name, class: "control-label"
+      .controls= f.text_field :name
 
-  .field
-    = f.label :type
-    = f.text_field :type
+    .control-group
+      = f.label :type, class: "control-label"
+      .controls= f.text_field :type
 
-  .field
-    = f.label :start_date
-    = f.text_field :start_date, class: "datetimepicker"
+    .control-group
+      = f.label :start_date, class: "control-label"
+      .controls= f.text_field :start_date, class: "datetimepicker"
 
-  .field
-    = f.label :end_date
-    = f.text_field :end_date, class: "datetimepicker"
+    .control-group
+      = f.label :end_date, class: "control-label"
+      .controls= f.text_field :end_date, class: "datetimepicker"
 
-  .field
-    = f.label :url
-    = f.text_field :url
+    .control-group
+      = f.label :url, class: "control-label"
+      .controls= f.text_field :url
 
-  = f.fields_for :location do |l|
-    = render partial: 'shared/form_location', locals: {f: l}
+    = f.fields_for :location do |l|
+      = render partial: 'shared/form_location', locals: {f: l}
 
-  .actions
-    = link_to "Submit", "#", title: "Create Event", class: "button short", id: "submit-event"
-    -# = f.submit
+    .form-actions
+      = link_to "Submit", "#", title: "Save", id: "submit-event", class: 'btn btn-primary'
