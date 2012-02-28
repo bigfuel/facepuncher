@@ -1,18 +1,31 @@
-%p#notice= notice
-.column
-  = link_to 'New Video', new_admin_project_video_path(@project), class: "button short"
-  = link_to 'Edit', [:edit, :admin, @project, @video], class: "button short"
-  = link_to 'Back', admin_project_videos_path(@project), class: "button short"
+- unless notice.blank?
+  #notice.alert= notice
 
-.column.center
-  %table
-    %tr
-      %td Name
-      %td= @video.name
-    %tr
-      %td State
-      %td= @video.state
-
-.column
-  - unless @video.screencap.blank?
-    = image_tag @video.screencap.url, class: "show-list-img"
+%p
+  = link_to 'Back', admin_project_videos_path(@project), title: "Back", class: "btn btn-inverse"
+  = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_video_path(@project), title: "New", class: "btn"
+  = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_video_path(@project), title: "Edit", class: "btn"
+  - if @video.state == 'approved'
+    = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, @video, format: :json), remote: true, class: "deny btn"
+  - elsif
+    = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, @video, format: :json), remote: true, class: "approve btn"
+.row
+  .span6
+    %table.table.table-bordered
+      %tr
+        %td State
+        %td= @video.state    
+      %tr
+        %td Name
+        %td= @video.name
+      %tr
+        %td Youtube ID
+        %td= @video.youtube_id
+      %tr
+        %td Description
+        %td= @video.description
+      %tr
+        %td Image
+        %td
+          - unless @video.screencap.blank?
+            = image_tag @video.screencap.url
