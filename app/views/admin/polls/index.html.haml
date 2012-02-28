@@ -1,20 +1,27 @@
-.alert
+%p
+  = link_to '<i class="icon-plus"></i> New Poll'.html_safe, new_admin_project_poll_path(@project, @poll), class: "btn", title: "New"
 
-= link_to 'New poll', new_admin_project_poll_path(@project, @poll), class: "button short"
-
-.stats
+.well
+  %h6 Stats
   #{@project.polls.all.count} total
 
-%table
+%table.table.table-striped.table-bordered
   %tr
-    - %w{question choices start_date end_date state created_at}.each do |c|
+    %th.sort{width: 250}= sort_by "question"
+    - %w{choices start_date end_date state created_at}.each do |c|
       %th.sort= sort_by c
-    %th{colspan: 2} Actions
-    %th.delete -
 
     - @project.polls.each do |poll|
-      %tr
-        %td= link_to poll.question, [:admin, @project, poll], class: "text"
+      %tr{class: (poll.state == 'active' ? nil : "inactive")}
+        %td
+          = link_to poll.question, [:admin, @project, poll], class: "text"
+          .actions
+            = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, poll], class: "btn", title: "Edit"
+            - if poll.state == 'active'
+              = link_to '<i class="icon-ban-circle"></i>'.html_safe, deactivate_admin_project_poll_path(@project, poll, format: :json), remote: true, class: "deactivate btn"
+            - elsif
+              = link_to '<i class="icon-ok-circle"></i>'.html_safe, activate_admin_project_poll_path(@project, poll, format: :json), remote: true, class: "activate btn"
+            = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, poll], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn", title: "Delete"
         %td
           - poll.choices.each do |c|
             ="-#{c.content}"
@@ -23,10 +30,4 @@
         %td
           = l poll.end_date, format: :custom if poll.end_date?
         %td= poll.state
-        %td= l poll.created_at, format: :custom
-        - if poll.state != 'active'
-          %td= link_to 'Activate', activate_admin_project_poll_path(@project, poll, format: :json), remote: true, class: "activate button"
-        - if poll.state != 'inactive'
-          %td= link_to 'Deactivate', deactivate_admin_project_poll_path(@project, poll, format: :json), remote: true, class: "deactivate button"
-        %td= link_to 'Edit', [:edit, :admin, @project, poll], class: "button"
-        %td= link_to '-', polymorphic_url([:admin, @project, poll], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+        %td= poll.created_at
