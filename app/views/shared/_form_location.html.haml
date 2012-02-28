@@ -55,20 +55,21 @@
     });
   });
 
-.field
-  = f.label :name, "Location Name"
-  = f.text_field :name
+.control-group
+  = f.label :name, "Location Name", class: "control-label"
+  .controls= f.text_field :name
 
-.field
-  = f.label :address, "Location Address"
-  = f.text_field :address, id: 'location_address', maxlength: "255", size: "30"
-  %br
-  = content_tag :button, "Find Coordinates", type: :button, id: 'find_coordinates'
+.control-group
+  = f.label :address, "Location Address", class: "control-label"
+  .controls
+    = f.text_field :address, id: 'location_address', maxlength: "255", size: "30"
+    %br
+    = content_tag :button, "Find Coordinates", type: :button, style: "margin-top: 10px", class: "btn", id: "find_coordinates"
 
-.field
-  = f.label :latitude, "Location Latitude"
-  = f.text_field :latitude, id: 'location_latitude'
+.control-group
+  = f.label :latitude, "Location Latitude", class: "control-label"
+  .controls= f.text_field :latitude, id: 'location_latitude'
 
-.field
-  = f.label :longitude, "Location Longitude"
-  = f.text_field :longitude, id: 'location_longitude'
+.control-group
+  = f.label :longitude, "Location Longitude", class: "control-label"
+  .controls= f.text_field :longitude, id: 'location_longitude'
