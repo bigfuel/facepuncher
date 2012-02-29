@@ -15,8 +15,7 @@
     %th{width: 63}
 
     - @releases.each do |release|
-      / %tr{class: (release.state == 'live' ? nil : "inactive")}
-      %tr
+      %tr{class: (release.state == 'live' ? "live" : nil)}
         %td
           = link_to release.description, admin_project_release_path(@project, release)
           .actions
