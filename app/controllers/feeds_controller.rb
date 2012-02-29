@@ -4,8 +4,8 @@ class FeedsController < ApplicationController
   def index
     feed = @project.feeds.where(name: params[:name]).first
     @response = Hash.new
-    entries = []
-    entries = RssFeed.get(@project.name, feed.name).take(feed.limit)
+    entries = RssFeed.get(@project.name, feed.name) || []
+    entries = entries.take(feed.limit)
 
     @response[:size] = entries.size
 
