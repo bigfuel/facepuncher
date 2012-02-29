@@ -31,6 +31,8 @@ class Project
   scope :active, where(state: 'active')
   scope :inactive, where(state: 'inactive')
 
+  paginates_per 50
+
   validates :name, presence: true, uniqueness: true
   validates :repo, presence: true
 
