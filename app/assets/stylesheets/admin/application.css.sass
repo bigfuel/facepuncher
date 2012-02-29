@@ -4,51 +4,54 @@
 @import "datetime"
 
 body
-	padding-top: 60px
+  padding-top: 60px
 
 @import "bootstrap-responsive"
 
 .pagination
-	border-left: 1px solid #ddd
-	span
-		&.current, &.gap
-			float: left
-			padding: 0 14px
-			line-height: 34px
-			text-decoration: none
-			border: 1px solid #ddd
-			border-left-width: 0
+  border-left: 1px solid #ddd
+  span
+    &.current, &.gap
+      float: left
+      padding: 0 14px
+      line-height: 34px
+      text-decoration: none
+      border: 1px solid #ddd
+      border-left-width: 0
 
 .table
-	tbody tr:hover td, tbody tr:hover th
-		background-color: #eaeaea
-	tr
-		&.inactive
-			color: #ccc
-			a
-				color: #ccc
-				cursor: default
-			.actions
-				.btn
-					display: inline-block
-			.btn
-				display: none
-				&.home
-					display: inline-block
-					cursor: pointer
-	td
-		.actions
-			display: none
-			float: right
+  tbody tr:hover td, tbody tr:hover th
+    background-color: #eaeaea
+  tr
+    &.inactive
+      color: #ccc
+      a
+        color: #ccc
+        cursor: default
+      .actions
+        .btn
+          display: inline-block
+      .btn
+        display: none
+        &.home
+          display: inline-block
+          cursor: pointer
+    &.live
+      color: green
+
+  td
+    .actions
+      display: none
+      float: right
 
 .import-csv
-	display: none
+  display: none
 
 .google-map
-	#map_canvas
-		width: 420px
-		height: 230px
-		margin-bottom: 5px
-	#pano
-		width: 420px
-		height: 230px
+  #map_canvas
+    width: 420px
+    height: 230px
+    margin-bottom: 5px
+  #pano
+    width: 420px
+    height: 230px
