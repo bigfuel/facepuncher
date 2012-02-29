@@ -1,5 +1,6 @@
 %p
-  = link_to '<i class="icon-plus"></i> New Project'.html_safe, new_admin_project_path, class: "btn", title: "Edit"
+  = link_to '<i class="icon-plus"></i> New Project'.html_safe, new_admin_project_path, class: "btn", title: "New"
+  = link_to '<i class="icon-list-alt"></i> Queue Deploy'.html_safe, queue_deploy_admin_project_path("queue", format: :json), remote: true, confirm: 'Are you sure?', class: "btn deploy", title: "Queue Deploy"
 
 = paginate @projects
 
@@ -11,7 +12,7 @@
     %th{width: 111}
 
   - @projects.each do |project|
-    %tr{ class: project.active? ? nil : "inactive" }
+    %tr{class: project.active? ? nil : "inactive"}
       %td
         = link_to project.name, [:admin, project]
         .actions

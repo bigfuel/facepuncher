@@ -10,7 +10,6 @@ class Admin::ProjectsController < AdminController
 
   def new
     @project = Project.new
-    @project[:lead_gen_code] = nil
   end
 
   def edit
@@ -22,7 +21,7 @@ class Admin::ProjectsController < AdminController
 
     respond_to do |format|
       format.html
-      format.json { render json: @poll }
+      format.json { render json: @project }
     end
   end
 
@@ -77,6 +76,15 @@ class Admin::ProjectsController < AdminController
   def deactivate
     @project = Project.where(name: params[:id]).first
     @project.deactivate
+
+    respond_to do |format|
+      format.html { redirect_to(admin_projects_url) }
+      format.json { render json: '{ "status": "success" }',  status: :ok }
+    end
+  end
+
+  def queue_deploy
+    DeployProject.queue_active
 
     respond_to do |format|
       format.html { redirect_to(admin_projects_url) }
