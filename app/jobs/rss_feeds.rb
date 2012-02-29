@@ -4,7 +4,7 @@ class RssFeeds
   class << self
     def perform
       Project.active.each do |project|
-        Cacheable.update(project.name, :feeds)
+        RssFeed.update(project.name)
       end
     end
   end

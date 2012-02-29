@@ -3,7 +3,6 @@ class Post
   include Mongoid::Timestamps
   include Mongoid::TaggableWithContext
   include ActsAsList::Mongoid
-  include ProjectCacheable
 
   field :title, type: String
   field :content, type: String
@@ -37,10 +36,6 @@ class Post
     event :deny do
       transition [:pending, :approved] => :denied
     end
-  end
-
-  def self.cached_results
-    where(state: "approved").order_by([:created_at, :asc]).entries
   end
 
   private
