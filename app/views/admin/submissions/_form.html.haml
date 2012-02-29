@@ -1,29 +1,44 @@
-- unless @submission.new_record?
-  = image_tag @submission.photo.url(:thumb)
+%p
+  = link_to 'Back', admin_project_submissions_path(@project), title: "Back", class: "btn btn-inverse"
 
-= form_for [:admin, @project, @submission], html: { multipart: true } do |f|
-  - if @submission.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@submission.errors.count, "error")} prohibited this submission from being saved:"
-      %ul
-        -@submission.errors.full_messages.each do |msg|
-          %li= msg
+.row
+  .span6
+    = form_for [:admin, @project, @submission], html: { multipart: true, class: "form-horizontal"} do |f|
+      - if @submission.errors.any?
+        .alert.alert-error
+          %p
+            %b
+              = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+          %ul
+            - @submission.errors.full_messages.each do |msg|
+              %li= msg
 
-  .field
-    = f.label :photo
-    = f.file_field :photo
-  .field
-    = f.label :facebook_name
-    = f.text_field :facebook_name
-  .field
-    = f.label :facebook_id, 'Facebook ID'
-    = f.text_field :facebook_id
-  .field
-    = f.label :facebook_email
-    = f.text_field :facebook_email
-  .field
-    = f.label :description
-    = f.text_area :description
-  .actions
-    = f.hidden_field :project_id
-    = f.submit
+      %fieldset
+        %legend= controller_action
+        .control-group
+          = f.label :facebook_name, class: "control-label"
+          .controls= f.text_field :facebook_name
+
+        .control-group
+          = f.label :facebook_id, 'Facebook ID', class: "control-label"
+          .controls= f.text_field :facebook_id
+
+        .control-group
+          = f.label :facebook_email, class: "control-label"
+          .controls= f.text_field :facebook_email
+
+        .control-group
+          = f.label :description, class: "control-label"
+          .controls= f.text_area :description
+
+        .control-group
+          = f.label :photo, class: "control-label"
+          .controls
+            = f.file_field :photo
+            %br
+              - unless @submission.new_record?
+                = image_tag @submission.photo.url
+
+        .form-actions
+          = f.hidden_field :project_id
+          = f.submit 'Save', class: 'btn btn-primary'

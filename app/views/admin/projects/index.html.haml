@@ -1,30 +1,32 @@
 %p
-  %a{href: new_admin_project_path, class: "btn"}
-    %i.icon-plus
-    New Project
+  = link_to '<i class="icon-plus"></i> New Project'.html_safe, new_admin_project_path, class: "btn", title: "Edit"
 
 = paginate @projects
 
 %table.table.table-striped.table-bordered
   %tr
-    - %w{name facebook_app_id}.each do |c|
-      %th.sort= sort_by c
-    %th{width: 116}
-    %th{width: 116}
+    %th.sort= sort_by "name"
+    %th.sort{width: 150}= "facebook_app_id"
+    %th{width: 120} Live
+    %th{width: 111}
 
   - @projects.each do |project|
-    %tr
-      %td= link_to project.name, [:admin, project], class: "text"
-      %td= project.facebook_app_id
-      %td.actions
-        = link_to '<i class="icon-home"></i>'.html_safe, [:admin, project], class: "btn", title: "Project Summary"
-        = link_to '<i class="icon-eye-open"></i>'.html_safe, "/#{project.name}/", class: "btn", title: "Go to App"
-        = link_to '<i class="icon-asterisk"></i>'.html_safe, activate_admin_project_path(project, format: :json), remote: true, class: "btn", title: project.repo
+    %tr{ class: project.active? ? nil : "inactive" }
       %td
-        = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_path(project), class: "btn", title: "Edit"
-        -#= link_to '<i class="icon-ok-circle"></i>'.html_safe, activate_admin_project_path(project, format: :json), remote: true, class: "btn", title: "Activate"
-        = link_to '<i class="icon-ban-circle"></i>'.html_safe, deactivate_admin_project_path(project, format: :json), remote: true, class: "btn", title: "Deactivate"
-
-        = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, project], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn", title: "Delete"
+        = link_to project.name, [:admin, project]
+        .actions
+          = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_path(project), class: "btn", title: "Edit"
+          - if project.active?
+            = link_to '<i class="icon-ban-circle"></i>'.html_safe, deactivate_admin_project_path(project, format: :json), remote: true, class: "deactivate btn", title: "Deactivate"
+          - else
+            = link_to '<i class="icon-ok-circle"></i>'.html_safe, activate_admin_project_path(project, format: :json), remote: true, class: "activate btn", title: "Activate"
+          = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, project], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+      %td= project.facebook_app_id
+      %td
+        = link_to '<i class="icon-eye-open"></i>'.html_safe, "/#{project.name}/", class: "btn", title: "Go to App"
+        / = project.live_release
+      %td
+        = link_to '<i class="icon-home"></i>'.html_safe, [:admin, project], class: "btn home", title: "Project Summary"
+        = link_to '<i class="icon-asterisk"></i> Repo'.html_safe, project.repo, remote: true, class: "btn", title: project.repo
 
 = paginate @projects

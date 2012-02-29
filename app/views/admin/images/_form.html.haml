@@ -1,23 +1,36 @@
-= form_for [:admin, @project, @image], html: {multipart: true} do |f|
-  - if @image.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@image.errors.count, "error")} prohibited this image from being saved:"
-      %ul
-        - @image.errors.full_messages.each do |msg|
-          %li= msg
+%p
+  = link_to 'Back', admin_project_images_path(@project), title: "Back", class: "btn btn-inverse"
 
-  .field
-    = f.label :name
-    = f.text_field :name
+.row
+  .span6
+    = form_for [:admin, @project, @image], html: { multipart: true, class: "form-horizontal"} do |f|
+      - if @image.errors.any?
+        .alert.alert-error
+          %p
+            %b
+              = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+          %ul
+            - @image.errors.full_messages.each do |msg|
+              %li= msg
 
-  .field
-    = f.label :image
-    = f.file_field :image
+      %fieldset
+        %legend= controller_action
+        .control-group
+          = f.label :name, class: "control-label"
+          .controls= f.text_field :name
 
-  .field
-    = f.label :description
-    = f.text_field :description
+        .control-group
+          = f.label :description, class: "control-label"
+          .controls= f.text_field :description
 
-  .actions
-    = f.hidden_field :project_id
-    = f.submit
+        .control-group
+          = f.label :image, class: "control-label"
+          .controls
+            = f.file_field :image
+            %br
+            - unless @image.new_record?
+              = image_tag @image.image.url
+
+        .form-actions
+          = f.hidden_field :project_id
+          = f.submit 'Save', class: 'btn btn-primary'

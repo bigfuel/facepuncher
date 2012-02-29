@@ -1,31 +1,40 @@
-= form_for [:admin, @project, @view_template], html: {multipart: true} do |f|
-  - if @view_template.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@view_template.errors.count, "error")} prohibited this view template from being saved:"
-      %ul
-        - @view_template.errors.full_messages.each do |msg|
-          %li= msg
+%p
+  = link_to 'Back', admin_project_view_templates_path(@project), title: "Back", class: "btn btn-inverse"
 
-  .field
-    = f.label :path
-    = f.text_field :path
+.row
+  .span12
+    = form_for [:admin, @project, @view_template], html: { multipart: true, class: "form-horizontal"} do |f|
+      - if @view_template.errors.any?
+        .alert.alert-error
+          %p
+            %b
+              = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+          %ul
+            - @view_template.errors.full_messages.each do |msg|
+              %li= msg
 
-  .field
-    = f.label :formats
-    = f.text_field :formats
+      %fieldset
+        %legend= controller_action
+        .control-group
+          = f.label :path, class: "control-label"
+          .controls= f.text_field :path
 
-  .field
-    = f.label :locale
-    = f.text_field :locale
+        .control-group
+          = f.label :formats, class: "control-label"
+          .controls= f.text_field :formats
 
-  .field
-    = f.label :handlers
-    = f.text_field :handlers
+        .control-group
+          = f.label :locale, class: "control-label"
+          .controls= f.text_field :locale
 
-  .field
-    = f.label :contents
-    = f.text_area :contents
+        .control-group
+          = f.label :handlers, class: "control-label"
+          .controls= f.text_field :handlers
 
-  .actions
-    = f.hidden_field :project_id
-    = f.submit
+        .control-group
+          = f.label :contents, class: "control-label"
+          .controls= f.text_area :contents, style: "width: 95%"
+
+        .form-actions
+          = f.hidden_field :project_id
+          = f.submit 'Save', class: 'btn btn-primary'

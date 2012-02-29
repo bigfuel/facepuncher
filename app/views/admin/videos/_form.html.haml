@@ -1,30 +1,40 @@
-= form_for [:admin, @project, @video], html: {multipart: true} do |f|
-  - if @video.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@video.errors.count, "error")} prohibited this video from being saved:"
-      %ul
-        - @video.errors.full_messages.each do |msg|
-          %li= msg
+%p
+  = link_to 'Back', admin_project_videos_path(@project), title: "Back", class: "btn btn-inverse"
 
-  .field
-    = f.label :name
-    = f.text_field :name
+.row
+  .span6
+    = form_for [:admin, @project, @video], html: { multipart: true, class: "form-horizontal"} do |f|
+      - if @video.errors.any?
+        .alert.alert-error
+          %p
+            %b
+              = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+          %ul
+            - @video.errors.full_messages.each do |msg|
+              %li= msg
 
-  .field
-    %label
-      Youtube
-      %b
-        Video ID ONLY
-    = f.text_field :youtube_id
+      %fieldset
+        %legend= controller_action
+        .control-group
+          = f.label :name, class: "control-label"
+          .controls= f.text_field :name
 
-  .field
-    = f.label :screencap
-    = f.file_field :screencap
+        .control-group
+          = f.label :youtube_id, "YouTube Video ID", class: "control-label"
+          .controls= f.text_field :youtube_id
 
-  .field
-    = f.label :description
-    = f.text_field :description
+        .control-group
+          = f.label :description, class: "control-label"
+          .controls= f.text_field :description
 
-  .actions
-    = f.hidden_field :project_id
-    = f.submit
+        .control-group
+          = f.label :screencap, class: "control-label"
+          .controls
+            = f.file_field :screencap
+            %br
+            - unless @video.new_record?
+              = image_tag @video.screencap.url
+
+        .form-actions
+          = f.hidden_field :project_id
+          = f.submit 'Save', class: 'btn btn-primary'

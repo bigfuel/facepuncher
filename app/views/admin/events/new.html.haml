@@ -1,8 +1,10 @@
-.column
-  = render 'form'
+%p
+	= link_to 'Back', admin_project_events_path(@project), title: "Back", class: "btn btn-inverse"
 
-  = link_to 'Back', admin_project_events_path(@project), class: "button short"
-
-.google-map
-  #map_canvas
-  #pano
+.row
+	.span6
+		= render 'form'
+	.span6
+		.google-map{style: "margin-top: 40px"}
+			#map_canvas
+			#pano

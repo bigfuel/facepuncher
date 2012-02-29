@@ -1,23 +1,32 @@
-= form_for [:admin, @project, @feed], html: {multipart: true} do |f|
-  - if @feed.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@feed.errors.count, "error")} prohibited this feed from being saved:"
-      %ul
-        - @feed.errors.full_messages.each do |msg|
-          %li= msg
+%p
+  = link_to 'Back', admin_project_feeds_path(@project), title: "Back", class: "btn btn-inverse"
 
-  .field
-    = f.label :name
-    = f.text_field :name
+.row
+  .span6
+    = form_for [:admin, @project, @feed], html: { class: "form-horizontal"} do |f|
+      - if @feed.errors.any?
+        .alert.alert-error
+          %p
+            %b
+              = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+          %ul
+            - @feed.errors.full_messages.each do |msg|
+              %li= msg
 
-  .field
-    = f.label :url
-    = f.text_field :url
+      %fieldset
+        %legend= controller_action
+        .control-group
+          = f.label :name, class: "control-label"
+          .controls= f.text_field :name
 
-  .field
-    = f.label :limit
-    = f.text_field :limit
+        .control-group
+          = f.label :url, class: "control-label"
+          .controls= f.text_field :url
 
-  .actions
-    = f.hidden_field :project_id
-    = f.submit
+        .control-group
+          = f.label :limit, class: "control-label"
+          .controls= f.text_field :limit
+
+        .form-actions
+          = f.hidden_field :project_id
+          = f.submit 'Save', class: 'btn btn-primary'

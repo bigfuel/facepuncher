@@ -1,31 +1,45 @@
-.alert
+%p
+  = link_to '<i class="icon-plus"></i> New Event'.html_safe, new_admin_project_event_path(@project), class: "btn", title: "New"
+  = link_to '<i class="icon-upload"></i> Import from CSV'.html_safe, "#", class: "btn import", title: "Import from CSV"
 
-= link_to 'New event', new_admin_project_event_path(@project), class: "button short"
+.row
+  .span3
+    = form_tag import_admin_project_events_path(@project.name), multipart: true, class: "well form-inline import-csv" do
+      %h6 Import from CSV
+      = file_field_tag :file
+      %br
+      = submit_tag "Upload", disable_with: 'Uploading...', class: "btn"
 
-.import
-  = form_tag import_admin_project_events_path(@project.name), multipart: true do
-    %h2 Import from CSV
-    = file_field_tag :file
-    = submit_tag "Upload", disable_with: 'Uploading...'
-
-.stats
+.well
+  %h6 Stats
   #{@project.events.all.count} total
 
-%table
+%table.table.table-striped.table-bordered
   %tr
-    - %w{name state type start_date end_date url location.address location.latitude location.longitude updated_at}.each do |c|
+    %th.sort{width: 250}= sort_by "name"
+    - %w{state type start_date end_date}.each do |c|
       %th.sort= sort_by c
-    %th{colspan: 3} Actions
-    %th.delete -
+    %th.sort= sort_by "location.address", "Address"
+    %th.sort= sort_by "location.latitude", "Latitude"
+    %th.sort= sort_by "location.longitude", "Longitude"
+    %th.sort= sort_by "updated_at", "Updated At"
+    %th Locate
 
     - @events.each do |event|
-      %tr{id: "#{dom_id(event)}"}
-        %td= link_to event.name, [:admin, @project, event], class: "text"
+      %tr{id: "#{dom_id(event)}", class: (event.state == 'approved' ? nil : "inactive")}
+        %td
+          = link_to truncate(event.name, length: 50), [:admin, @project, event]
+          .actions
+            = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, event], class: "btn", title: "Edit"
+            - if event.state == 'approved'
+              = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_event_path(@project, event, format: :json), remote: true, class: "deny btn", title: "Deny"
+            - elsif
+              = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_event_path(@project, event, format: :json), remote: true, class: "approve btn", title: "Approve"
+            = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, event], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn", title: "Delete"
         %td= event.state
         %td= event.type
         %td= l event.start_date, format: :custom
         %td= l event.end_date, format: :custom
-        %td= event.url
         %td= event.location.address
         %td.event-latitude= event.location.latitude
         %td.event-longitude= event.location.longitude
@@ -37,15 +51,6 @@
               = l.hidden_field :address
               = l.hidden_field :latitude
               = l.hidden_field :longitude
-            -# = f.submit 'Locate', class: "button locate"
-            = link_to 'Locate', 'javascript: void(0);', 'data-form-id' => "edit_#{dom_id(event)}", class: "locate button"
-
-        %td
-          - if event.state != 'approved'
-            = link_to 'Approve', approve_admin_project_event_path(@project, event, format: :json), remote: true, class: "approve button"
-          - if event.state != 'denied'
-            = link_to 'Deny', deny_admin_project_event_path(@project, event, format: :json), remote: true, class: "deny button"
-        %td= link_to 'Edit', [:edit, :admin, @project, event], class: "button"
-        %td= link_to '-', polymorphic_url([:admin, @project, event], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+            = link_to 'Locate', 'javascript: void(0);', 'data-form-id' => "edit_#{dom_id(event)}", class: "locate btn"
 
 = paginate(@events, window: 5)

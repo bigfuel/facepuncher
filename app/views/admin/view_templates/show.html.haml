@@ -1,24 +1,33 @@
-%p#notice= notice
-.column
-  = link_to 'New View Template', new_admin_project_view_template_path(@project), class: "button short"
-  = link_to 'Edit', [:edit, :admin, @project, @view_template], class: "button short"
-  = link_to 'Back', admin_project_view_templates_path(@project), class: "button short"
+- unless notice.blank?
+  #notice.alert= notice
 
-.column.right
-  %table
-    %tr
-      %td Path
-      %td= @view_template.path
-    %tr
-      %td Formats
-      %td= @view_template.formats
-    %tr
-      %td Locale
-      %td= @view_template.locale
-    %tr
-      %td Handlers
-      %td= @view_template.handlers
-    %tr
-      %td Contents
-      %td
-        %pre= @view_template.contents
+%p
+  = link_to 'Back', admin_project_view_templates_path(@project), title: "Back", class: "btn btn-inverse"
+  = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_view_template_path(@project), title: "New", class: "btn"
+  = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_view_template_path(@project), title: "Edit", class: "btn"
+
+.row
+  .span12
+    %table.table.table-bordered
+      %tr
+        %td{width: 120} Created at
+        %td= @view_template.created_at
+      %tr
+        %td Updated at
+        %td= @view_template.updated_at
+      %tr
+        %td Path
+        %td= @view_template.path
+      %tr
+        %td Formats
+        %td= @view_template.formats
+      %tr
+        %td Locale
+        %td= @view_template.locale
+      %tr
+        %td Handlers
+        %td= @view_template.handlers
+      %tr
+        %td Contents
+        %td
+          %pre= @view_template.contents

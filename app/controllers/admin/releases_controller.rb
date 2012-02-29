@@ -18,7 +18,6 @@ class Admin::ReleasesController < AdminController
   end
 
   def new
-    current = @project.releases.current_live
     @release = @project.releases.new
 
     respond_to do |format|

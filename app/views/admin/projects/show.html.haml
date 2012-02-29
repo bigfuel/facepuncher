@@ -1,36 +1,49 @@
-%p#notice= notice
-.column
-  = link_to '<i class="icon-eye-open"></i>'.html_safe, "/#{@project.name}/", class: "btn", title: "Go to App"
-  = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_path(@project), class: "btn", title: "Edit"
+- unless notice.blank?
+  #notice.alert= notice
+
+%p
+  = link_to 'Back', admin_projects_path, title: "Back", class: "btn btn-inverse"
+  = link_to '<i class="icon-eye-open"></i>'.html_safe, "/#{@project.name}/", title: "Go to App", class: "btn"
+  = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_path(@project), title: "Edit", class: "btn"
   - if @project.state == "inactive"
-    = link_to '<i class="icon-ok-circle"></i>'.html_safe, activate_admin_project_path(@project, format: :json), remote: true, class: "activate btn", title: "Activate"
+    = link_to '<i class="icon-ok-circle"></i>'.html_safe, activate_admin_project_path(@project, format: :json), remote: true, title: "Activate", class: "activate btn"
   - elsif
-    = link_to '<i class="icon-ban-circle"></i>'.html_safe, deactivate_admin_project_path(@project, format: :json), remote: true, class: "deactivate btn", title: "Deactivate"
-  = link_to 'Back', admin_projects_path, class: "btn btn-info", title: "Back"
+    = link_to '<i class="icon-ban-circle"></i>'.html_safe, deactivate_admin_project_path(@project, format: :json), remote: true, title: "Deactivate", class: "deactivate btn"
 
-.column.right
-  %h2
-    = @project.name
-  %p
-    %b Description:
-    = @project.description
+.row
+  .span6
+    %table.table.table-bordered
+      %tr
+        %td Created at
+        %td= @project.created_at
+      %tr
+        %td Updated at
+        %td= @project.updated_at
+      %tr
+        %td Name
+        %td
+          %b
+            = @project.name
+      %tr
+        %td Description
+        %td= @project.description
 
-  %p
-    %b facebook_app_id:
-    = @project.facebook_app_id
+      %tr
+        %td facebook_app_id
+        %td= @project.facebook_app_id
 
-  %p
-    %b facebook_app_secret:
-    = @project.facebook_app_secret
+      %tr
+        %td facebook_app_secret
+        %td= @project.facebook_app_secret
 
-  %p
-    %b git repo:
-    = @project.repo
+      %tr
+        %td git repo
+        %td= @project.repo
 
-  %p
-    %b google_analytics_tracking_code:
-    = @project.google_analytics_tracking_code
+      %tr
+        %td google_analytics_tracking_code
+        %td= @project.google_analytics_tracking_code
 
-  %p
-    %b production_url:
-    = link_to @project.production_url
+      %tr
+        %td production_url
+        %td= link_to @project.production_url

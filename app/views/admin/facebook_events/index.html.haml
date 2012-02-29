@@ -1,25 +1,26 @@
-.alert
+%p
+  = link_to '<i class="icon-plus"></i> New Facebook Event'.html_safe, new_admin_project_facebook_event_path(@project), class: "btn", title: "New"
 
-= link_to 'New FB Event', new_admin_project_facebook_event_path(@project), class: "button short"
-
-.stats
+.well
+  %h6 Stats
   #{@project.facebook_events.all.count} total
 
-= paginate @facebook_events
+= paginate(@facebook_events, window: 5)
 
-%table
+%table.table.table-striped.table-bordered
   %tr
-    - %w{name limit updated_at}.each do |c|
+    %th{width: 250}= sort_by "name"
+    - %w{limit updated_at}.each do |c|
       %th.sort= sort_by c
-    %th{colspan: 1} Action
-    %th.delete -
 
     - @facebook_events.each do |facebook_event|
       %tr
-        %td= facebook_event.name
+        %td
+          = link_to facebook_event.name, [:admin, @project, facebook_event]
+          .actions
+            = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, facebook_event], class: "btn", title: "Edit"
+            = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, facebook_event], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn", title: "Delete"
         %td= facebook_event.limit
         %td= l facebook_event.updated_at, format: :custom
-        %td= link_to 'Edit', [:edit, :admin, @project, facebook_event], class: "button"
-        %td= link_to '-', admin_project_facebook_event_path(@project, facebook_event, format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
 
 = paginate @facebook_events

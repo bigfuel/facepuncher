@@ -1,26 +1,44 @@
-%p#notice= notice
-.column
-  = link_to 'New Poll', new_admin_project_poll_path(@project), class: "button short"
-  = link_to 'Edit', [:edit, :admin, @project, @poll], class: "button short"
-  = link_to 'Back', admin_project_polls_path(@project), class: "button short"
+- unless notice.blank?
+  #notice.alert= notice
 
-.column.right
-  = form_tag vote_poll_path(@project.name, @poll), method: :put do
-    %h2= @poll.question
-    %ul
-      - @poll.choices.each do |choice|
-        %li
-          = radio_button :choice, :id, choice.id
-          = "#{choice.content} (#{choice.votes} votes)"
-          - if choice.image?
-            %br
-            = image_tag("#{choice.image.url}")
+%p
+  = link_to 'Back', admin_project_polls_path(@project), title: "Back", class: "btn btn-inverse"
+  = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_poll_path(@project, @signup), class: "btn", title: "Edit"
+  = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_poll_path(@project), title: "Edit", class: "btn"
 
-      %li
-        Start Date:
-        = @poll.start_date
-      %li
-        End Date:
-        = @poll.end_date
+.row
+  .span6
+    = form_tag vote_poll_path(@project.name, @poll), class: "form-horizontal", method: :put do
+      %fieldset
+        %legend= @poll.question
+        - @poll.choices.each do |choice|
+          .control-group
+            .control-label= radio_button :choice, :id, choice.id
+            .controls
+              = "#{choice.content} (#{choice.votes} votes)"
+              - if choice.image?
+                %br
+                = image_tag("#{choice.image.url}")
 
-    = submit_tag "Vote"
+        .control-group
+          .control-label Start Date
+          .controls
+            .uneditable-input= @poll.start_date
+
+        .control-group
+          .control-label End Date
+          .controls
+            .uneditable-input= @poll.end_date
+
+        .control-group
+          .control-label Created At
+          .controls
+            .uneditable-input= @poll.created_at
+
+        .control-group
+          .control-label Updated At
+          .controls
+            .uneditable-input= @poll.updated_at
+
+        .form-actions
+          = submit_tag "Vote", class: 'btn btn-primary'
