@@ -21,7 +21,7 @@
               = link_to '<i class="icon-ban-circle"></i>'.html_safe, deactivate_admin_project_poll_path(@project, poll, format: :json), remote: true, class: "deactivate btn", title: "Deactivate"
             - elsif
               = link_to '<i class="icon-ok-circle"></i>'.html_safe, activate_admin_project_poll_path(@project, poll, format: :json), remote: true, class: "activate btn", title: "Activate"
-            = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, poll], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn", title: "Delete"
+            = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, poll], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
         %td
           - poll.choices.each do |c|
             ="-#{c.content}"
