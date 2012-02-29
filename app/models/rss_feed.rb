@@ -7,10 +7,10 @@ module RssFeed
   class << self
     def update(project_name)
       project = Project.find_by_name(project_name)
-      results = Hash.new
+
       project.feeds.each do |feed_data|
         retriable tries: NUM_RETRIES, interval: 1 do
-          entries = []
+          rss_feed = []
           Feedzirra::Feed.add_common_feed_entry_element(:enclosure, value: :url, as: :enclosure_url)
           Feedzirra::Feed.add_common_feed_entry_element(:enclosure, value: :type, as: :enclosure_type)
           Feedzirra::Feed.fetch_and_parse(feed_data.url,
@@ -27,16 +27,14 @@ module RssFeed
                 e[:mediaType]     = entry.enclosure_type
                 e[:published]     = entry.published
                 e[:categories]    = entry.categories
-                entries << e
+                rss_feed << e
               end
-              Rails.cache.write("projects:#{project.name}:feeds:#{feed_data.name}", entries)
+              Rails.cache.write("projects:#{project.name}:feeds:#{feed_data.name}", rss_feed)
             end,
             on_failure: lambda {|url, response_code, response_header, response_body| raise response_body }
           )
-          results[feed_data.name] = entries
         end
       end
-      results
     end
 
     def read(project_name, feed_name)
