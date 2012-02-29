@@ -5,7 +5,7 @@
   %h6 Stats
   #{@project.submissions.all.count} total / #{@project.submissions.submitted.count} submitted
 
-= paginate(@submissions, window: 5)
+= paginate @submissions
 
 %table.table.table-striped.table-bordered
   %tr
@@ -31,4 +31,4 @@
       %td= l submission.created_at, format: :custom
       %td= image_tag(submission.photo.url) if submission.photo?
       
-= paginate(@submissions, window: 5)
+= paginate @submissions
