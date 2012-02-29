@@ -22,13 +22,13 @@
         #choices.control-group
           = f.label :choices, class: "control-label"
           .controls
-            %p= link_to '<i class="icon-plus"></i>'.html_safe, "#", class: "btn add"
+            %p= link_to '<i class="icon-plus"></i>'.html_safe, "#", class: "btn add-poll-choice"
             = f.fields_for :choices do |c|
               %p.choice
                 = c.hidden_field :id unless c.object.new_record?
                 = c.text_field :content
                 - if c.object.new_record?
-                  = link_to '<i class="icon-minus"></i>'.html_safe, "#", class: "btn remove"
+                  = link_to '<i class="icon-minus"></i>'.html_safe, "#", class: "btn remove-poll-choice"
                 - else
                   = link_to '<i class="icon-minus"></i>', polymorphic_url([:admin, @project, @poll, c.object], format: :json), method: :delete, confirm: 'Are you sure?', remote: true, class: "btn remove"
                 = c.file_field :image
