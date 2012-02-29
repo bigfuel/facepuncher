@@ -6,7 +6,7 @@
   %h6 Stats
   #{@project.signups.all.count} total
 
-= paginate(@signups, window: 5)
+= paginate @signups
 
 %table.table.table-striped.table-bordered
   %tr
@@ -26,4 +26,4 @@
       %td= signup.zip_code
       %td= l signup.created_at, format: :custom
 
-= paginate(@signups, window: 5)
+= paginate @signups

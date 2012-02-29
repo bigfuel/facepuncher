@@ -5,7 +5,7 @@
   %h6 Stats
   #{@project.feeds.all.count} total
 
-= paginate(@feeds, window: 5)
+= paginate @feeds
 
 %table.table.table-striped.table-bordered
   %tr
@@ -24,4 +24,4 @@
         %td= feed.limit
         %td= l feed.updated_at, format: :custom
 
-= paginate(@feeds, window: 5)
+= paginate @feeds

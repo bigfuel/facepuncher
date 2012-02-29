@@ -5,7 +5,7 @@
   %h6 Stats
   #{@project.view_templates.all.count} total
 
-= paginate(@view_templates, window: 5)
+= paginate @view_templates
 
 %table.table.table-striped.table-bordered
   %tr
@@ -25,4 +25,4 @@
         %td= view_template.locale
         %td= l view_template.updated_at, format: :custom
 
-= paginate(@view_templates, window: 5)
+= paginate @view_templates

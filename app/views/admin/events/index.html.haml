@@ -14,6 +14,8 @@
   %h6 Stats
   #{@project.events.all.count} total
 
+= paginate @events
+
 %table.table.table-striped.table-bordered
   %tr
     %th.sort{width: 250}= sort_by "name"
@@ -53,4 +55,4 @@
               = l.hidden_field :longitude
             = link_to 'Locate', 'javascript: void(0);', 'data-form-id' => "edit_#{dom_id(event)}", class: "locate btn"
 
-= paginate(@events, window: 5)
+= paginate @events

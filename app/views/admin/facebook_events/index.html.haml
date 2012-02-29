@@ -5,7 +5,7 @@
   %h6 Stats
   #{@project.facebook_events.all.count} total
 
-= paginate(@facebook_events, window: 5)
+= paginate @facebook_events
 
 %table.table.table-striped.table-bordered
   %tr

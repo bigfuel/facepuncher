@@ -5,7 +5,7 @@
   %h6 Stats
   #{@project.videos.all.count} total
 
-= paginate(@videos, window: 5)
+= paginate @videos
 
 %table.table.table-striped.table-bordered
   %tr
@@ -31,4 +31,4 @@
         %td= l video.updated_at, format: :custom
         %td= image_tag(video.screencap.url) if video.screencap?
 
-= paginate(@videos, window: 5)
+= paginate @videos

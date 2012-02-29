@@ -5,7 +5,7 @@
   %h6 Stats
   #{@project.posts.all.count} total
 
-= paginate(@posts, window: 5)
+= paginate @posts
 
 %table.table.table-striped.table-bordered
   %tr
@@ -34,4 +34,4 @@
         = link_to 'Up', up_admin_project_post_path(@project, post, format: :html), remote: false, method: :put, class: "up button"
         = link_to 'Down', down_admin_project_post_path(@project, post, format: :html), remote: false, method: :put, class: "down button"
 
-= paginate(@posts, window: 5)
+= paginate @posts

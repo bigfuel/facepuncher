@@ -5,7 +5,7 @@
   %h6 Stats
   #{@project.releases.all.count} total
 
-= paginate(@releases, window: 10)
+= paginate @releases
 
 %table.table.table-striped.table-bordered
   %tr
@@ -30,4 +30,4 @@
           - if release.can_go_live?
             = link_to 'Deploy', go_live_admin_project_release_path(@project, release, format: :html), remote: false, confirm: 'Are you sure?', class: "go-live btn"
 
-= paginate(@releases, window: 10)
+= paginate @releases

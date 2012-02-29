@@ -5,7 +5,7 @@
   %h6 Stats
   #{@project.facebook_albums.all.count} total
 
-= paginate(@facebook_albums, window: 5)
+= paginate @facebook_albums
 
 %table.table.table-striped.table-bordered
   %tr
