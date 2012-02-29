@@ -1,36 +1,45 @@
-= form_for [:admin, @project, @poll] do |f|
-  - if @poll.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@poll.errors.count, "error")} prohibited this poll from being saved:"
-      %ul
-        - @poll.errors.full_messages.each do |msg|
-          %li= msg
+%p
+  = link_to 'Back', admin_project_polls_path(@project), title: "Back", class: "btn btn-inverse"
 
-  .field
-    = f.label :question
-    = f.text_field :question
+.row
+  .span6
+    = form_for [:admin, @project, @poll], html: { class: "form-horizontal"} do |f|
+      - if @poll.errors.any?
+        .alert.alert-error
+          %p
+            %b
+              = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+          %ul
+            - @poll.errors.full_messages.each do |msg|
+              %li= msg
 
-  #choices.field
-    = f.label :choices, style: "float:left"
-    = link_to "[+]", "#", class: "add"
-    = f.fields_for :choices do |c|
-      .field.choice
-        = c.hidden_field :id unless c.object.new_record?
-        = c.text_field :content
-        %br
-        = c.file_field :image
-        - if c.object.new_record?
-          = link_to "[-]", "#", class: "remove"
-        - else
-          = link_to "[-]", polymorphic_url([:admin, @project, @poll, c.object], format: :json), method: :delete, confirm: 'Are you sure?', remote: true, class: "remove"
+      %fieldset
+        %legend= controller_action
+        .control-group
+          = f.label :question, class: "control-label"
+          .controls= f.text_field :question
 
-  .field
-    = f.label :start_date
-    = f.text_field :start_date, class: "datetimepicker"
+        #choices.control-group
+          = f.label :choices, class: "control-label"
+          .controls
+            %p= link_to '<i class="icon-plus"></i>'.html_safe, "#", class: "btn add-poll-choice"
+            = f.fields_for :choices do |c|
+              %p.choice
+                = c.hidden_field :id unless c.object.new_record?
+                = c.text_field :content
+                - if c.object.new_record?
+                  = link_to '<i class="icon-minus"></i>'.html_safe, "#", class: "btn remove-poll-choice"
+                - else
+                  = link_to '<i class="icon-minus"></i>', polymorphic_url([:admin, @project, @poll, c.object], format: :json), method: :delete, confirm: 'Are you sure?', remote: true, class: "btn remove"
+                = c.file_field :image
 
-  .field
-    = f.label :end_date
-    = f.text_field :end_date, class: "datetimepicker"
+        .control-group
+          = f.label :start_date, class: "control-label"
+          .controls= f.text_field :start_date, class: "datetimepicker"
 
-  .actions
-    = f.submit
+        .control-group
+          = f.label :end_date, class: "control-label"
+          .controls= f.text_field :end_date, class: "datetimepicker"
+
+        .form-actions
+          = f.submit 'Save', class: 'btn btn-primary'

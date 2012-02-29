@@ -1,34 +1,34 @@
-.alert
+%p
+  = link_to '<i class="icon-plus"></i> New Video'.html_safe, new_admin_project_video_path(@project), class: "btn", title: "New"
 
-= link_to 'New video', new_admin_project_video_path(@project), class: "button short"
-
-.stats
+.well
+  %h6 Stats
   #{@project.videos.all.count} total
 
 = paginate(@videos, window: 5)
 
-%table{class: "table-list"}
+%table.table.table-striped.table-bordered
   %tr
-    %th Image
-    - %w{name state youtube_id description updated_at}.each do |c|
+    %th{width: 250}= sort_by "name"
+    - %w{state youtube_id description updated_at}.each do |c|
       %th.sort= sort_by c
-    %th{colspan: 2} Action
-    %th.delete -
+    %th Image
 
     -@videos.each do |video|
-      %tr
-        %td= link_to image_tag(video.screencap.url), [:admin, @project, video] if video.screencap?
-        %td= video.name
+      %tr{class: (video.state == 'approved' ? nil : "inactive")}
+        %td
+          = link_to video.name, [:admin, @project, video]
+          .actions
+            = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, video], class: "btn", title: "Edit"
+            - if video.state == 'approved'
+              = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, video, format: :json), remote: true, class: "deny btn", title: "Deny"
+            - elsif
+              = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, video, format: :json), remote: true, class: "approve btn", title: "Approve"
+            = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, video], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn", title: "Delete"
         %td= video.state
         %td= video.youtube_id
         %td= video.description
         %td= l video.updated_at, format: :custom
-        %td
-          - if video.state != 'approved'
-            = link_to 'Approve', approve_admin_project_video_path(@project, video, format: :json), remote: true, class: "approve button"
-          - if video.state != 'denied'
-            = link_to 'Deny', deny_admin_project_video_path(@project, video, format: :json), remote: true, class: "deny button"
-        %td= link_to 'Edit', [:edit, :admin, @project, video], class: "button"
-        %td= link_to '-', polymorphic_url([:admin, @project, video], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "delete button"
+        %td= image_tag(video.screencap.url) if video.screencap?
 
 = paginate(@videos, window: 5)

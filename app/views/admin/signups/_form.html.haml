@@ -1,34 +1,47 @@
-- unless @signup.new_record?
-  = image_tag @signup.photo.url(:thumb)
+%p
+  = link_to 'Back', admin_project_signups_path(@project), title: "Back", class: "btn btn-inverse"
 
-= form_for [:admin, @project, @signup], html: { multipart: true } do |f|
-  - if @signup.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@signup.errors.count, "error")} prohibited this signup from being saved:"
-      %ul
-      -@signup.errors.full_messages.each do |msg|
-        %li= msg
+.row
+  .span6
+    = form_for [:admin, @project, @signup], html: { multipart: true, class: "form-horizontal"} do |f|
+      - if @signup.errors.any?
+        .alert.alert-error
+          %p
+            %b
+              = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
+          %ul
+            - @signup.errors.full_messages.each do |msg|
+              %li= msg
 
-  .field
-    = f.label :first_name
-    = f.text_field :first_name
-  .field
-    = f.label :last_name
-    = f.text_field :last_name
-  .field
-    = f.label :address
-    = f.text_field :address
-  .field
-    = f.label :city
-    = f.text_field :city
-  .field
-    = f.label :state_province
-    = f.text_field :state_province
-  .field
-    = f.label :zip_code
-    = f.text_field :zip_code
-  .field
-    = f.label :email
-    = f.text_field :email
-  .actions
-    = f.submit
+      %fieldset
+        %legend= controller_action
+        .control-group
+          = f.label :first_name, class: "control-label"
+          .controls= f.text_field :first_name
+
+        .control-group
+          = f.label :last_name, class: "control-label"
+          .controls= f.text_field :last_name
+
+        .control-group
+          = f.label :address, class: "control-label"
+          .controls= f.text_field :address
+
+        .control-group
+          = f.label :city, class: "control-label"
+          .controls= f.text_field :city
+
+        .control-group
+          = f.label :state_province, class: "control-label"
+          .controls= f.text_field :state_province
+
+        .control-group
+          = f.label :zip_code, class: "control-label"
+          .controls= f.text_field :zip_code
+
+        .control-group
+          = f.label :email, class: "control-label"
+          .controls= f.text_field :email
+
+        .form-actions
+          = f.submit 'Save', class: 'btn btn-primary'
