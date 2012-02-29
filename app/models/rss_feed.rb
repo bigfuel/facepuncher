@@ -5,9 +5,9 @@ module RssFeed
   NUM_RETRIES = 3
 
   class << self
-    def update(project_id)
-      project = Project.find(project_id)
-
+    def update(project_name)
+      project = Project.find_by_name(project_name)
+      results = Hash.new
       project.feeds.each do |feed_data|
         retriable tries: NUM_RETRIES, interval: 1 do
           entries = []
@@ -33,22 +33,21 @@ module RssFeed
             end,
             on_failure: lambda {|url, response_code, response_header, response_body| raise response_body }
           )
-          entries
+          results[feed_data.name] = entries
         end
       end
+      results
     end
 
     def read(project_name, feed_name)
       Rails.cache.read("projects:#{project_name}:feeds:#{feed_name}")
     end
 
-    def get(project_id, feed_name)
-      project = Project.find(project_id)
-
-      results = read(project.name, feed_name)
+    def get(project_name, feed_name)
+      results = read(project_name, feed_name)
       unless results
-        update(project_id)
-        results = read(project.name, feed_name)
+        update(project_name)
+        results = read(project_name, feed_name)
       end
       results
     end
