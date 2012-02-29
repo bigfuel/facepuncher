@@ -19,6 +19,14 @@ jQuery ->
   ).on "ajax:error", ".delete", (e) ->
     addAlert()
 
+  $("#content").on("ajax:beforeSend", ".deploy", (e) ->
+    removeAlert()
+  ).on("ajax:success", ".deploy", (e) ->
+    $(this).addClass("disabled")
+    $(this).removeAttr("href").removeAttr("data-confirm").removeAttr("data-remote")
+  ).on "ajax:error", ".deploy", (e) ->
+    addAlert()
+
   $("#content").on("ajax:beforeSend", ".activate", (e) ->
     removeAlert()
   ).on("ajax:success", ".activate", (e) ->

@@ -11,6 +11,7 @@ Facepuncher::Application.routes.draw do
       member do
         get 'activate'
         get 'deactivate'
+        get 'queue_deploy'
       end
 
       resources :signups
