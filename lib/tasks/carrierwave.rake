@@ -3,9 +3,6 @@ namespace :carrierwave do
     Image.all.entries.each do |i|
       i.rename(:file_filename, :file)
     end
-    Wallpaper.all.entries.each do |w|
-      w.rename(:image_filename, :image)
-    end
     Caption.all.entries.each do |c|
       c.rename(:image_filename, :image)
     end
