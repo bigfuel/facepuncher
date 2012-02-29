@@ -26,8 +26,8 @@ class FeedTest < ActiveSupport::TestCase
   end
 
   context RssFeed do
-    should "return true if updated" do
-      assert_equal true, RssFeed.update(@project.id)
+    should "return feed results in a hash if updated" do
+      flunk
     end
 
     should "return nil when fetching single feed if it doesn't exist" do
@@ -35,7 +35,7 @@ class FeedTest < ActiveSupport::TestCase
     end
 
     should "return results when fetching single feed" do
-      assert_equal false, RssFeed.get(@project.id, @rss.name).empty?
+      assert_equal false, RssFeed.get(@project.name, @rss.name).empty?
     end
   end
 end

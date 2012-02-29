@@ -18,6 +18,7 @@ class Feed
 
   def self.cached_results
     project_id = scoped.selector['project_id']
-    RssFeed.update(project_id)
+    project = Project.find(project_id)
+    RssFeed.update(project.name)
   end
 end

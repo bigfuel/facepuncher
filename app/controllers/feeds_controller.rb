@@ -5,7 +5,7 @@ class FeedsController < ApplicationController
     feed = @project.feeds.where(name: params[:name]).first
     @response = Hash.new
     entries = []
-    entries = RssFeed.get(@project.id, feed.name).take(feed.limit)
+    entries = RssFeed.get(@project.name, feed.name).take(feed.limit)
 
     @response[:size] = entries.size
 
