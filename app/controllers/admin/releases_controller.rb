@@ -64,7 +64,7 @@ class Admin::ReleasesController < AdminController
 
     respond_to do |format|
       format.html { redirect_to admin_project_releases_url(@project) }
-      format.json { head :ok }
+      format.json { render json: '{ "status": "success" }',  status: :ok }
     end
   end
 
