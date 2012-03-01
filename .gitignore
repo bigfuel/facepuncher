@@ -17,3 +17,4 @@ config/config.yml
 config/mongoid.yml
 config/newrelic.yml
 .rvmrc
+dump

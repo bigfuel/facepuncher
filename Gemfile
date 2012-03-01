@@ -42,7 +42,7 @@ gem 'redis-store', git: 'git@github.com:kamui/redis-store.git'
 gem 'redis-rails'
 gem 'feedzirra'
 gem 'profanity_filter'
-gem 'grit'
+gem 'grit', git: 'git://github.com/mojombo/grit.git' # process_info
 gem 'validates_timeliness'
 gem 'asset_sync'
 gem 'database_views'
@@ -62,7 +62,7 @@ group :test do
   gem 'database_cleaner'
   gem 'simplecov', require: false
   gem 'guard-minitest'
-  gem 'minitest-rails', git: 'git://github.com/kamui/minitest-rails.git', branch: 'gemspec'
+  gem 'minitest-rails', git: 'git://github.com/rawongithub/minitest-rails.git', branch: 'gemspec'
   gem 'capybara_minitest_spec'
   gem 'minitest-matchers'
   gem 'valid_attribute'

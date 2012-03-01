@@ -1,13 +1,13 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class EventsControllerTest < ActionController::TestCase
-  setup do
+describe EventsController do
+  before do
     @project = Fabricate(:project, name: "bf_project_test")
     @project.activate
   end
 
-  context "on GET to :index" do
-    setup do
+  describe "on GET to :index" do
+    before do
       @pending = Array.new
       @denied = Array.new
       @approved = Array.new
@@ -28,7 +28,7 @@ class EventsControllerTest < ActionController::TestCase
       @approved << e
     end
 
-    should "return a list of approved events" do
+    it "return a list of approved events" do
       get :index, project_name: "bf_project_test", format: :json
       assert_response :success
       @events = assigns(:events)
@@ -36,7 +36,7 @@ class EventsControllerTest < ActionController::TestCase
       assert_equal @approved, @events
     end
 
-    should "return a list of good approved events when type good=1 is specified" do
+    it "return a list of good approved events when type good=1 is specified" do
       get :index, project_name: "bf_project_test", format: :json, type: Hash["good" => 1]
       assert_response :success
       @events = assigns(:events)
@@ -45,12 +45,12 @@ class EventsControllerTest < ActionController::TestCase
     end
   end
 
-  context "on POST to :create" do
-    setup do
+  describe "on POST to :create" do
+    before do
       @event = Fabricate.build(:event, name: "All the tests pass party!")
     end
 
-    should "return unprocessable_entity and a json object with validation errors when event is invalid" do
+    it "return unprocessable_entity and a json object with validation errors when event is invalid" do
       @event.name = ""
       assert_no_difference('Event.count') do
         post :create, project_name: "bf_project_test", format: :json, event: @event.as_json
@@ -60,7 +60,7 @@ class EventsControllerTest < ActionController::TestCase
       assert_equal Hash["name" => ["can't be blank"]], json_response
     end
 
-    should "return json object if a evente is valid" do
+    it "return json object if a evente is valid" do
       assert_difference('Event.count') do
         post :create, project_name: "bf_project_test", format: :json, event: @event.as_json
       end
