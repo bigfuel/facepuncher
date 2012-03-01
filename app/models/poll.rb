@@ -11,11 +11,12 @@ class Poll
 
   attr_accessible :question, :start_date, :end_date
 
-  embeds_many :choices
   belongs_to :project
 
+  embeds_many :choices, cascade_callbacks: true
+  accepts_nested_attributes_for :choices, reject_if: proc { |attributes| attributes[:content].blank? }, allow_destroy: true
+
   validates :question, presence: true
-  accepts_nested_attributes_for :choices, reject_if: -> choice { choice[:content].blank? }, allow_destroy: true
 
   scope :active, where(state: "active")
   scope :inactive, where(state: "inactive")
