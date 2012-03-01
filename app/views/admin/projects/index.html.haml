@@ -1,6 +1,6 @@
 %p
   = link_to '<i class="icon-plus"></i> New Project'.html_safe, new_admin_project_path, class: "btn", title: "New"
-  = link_to '<i class="icon-list-alt"></i> Queue Deploy'.html_safe, queue_deploy_admin_project_path("queue", format: :json), remote: true, confirm: 'Are you sure?', class: "btn deploy", title: "Queue Deploy"
+  = link_to '<i class="icon-list-alt"></i> Queue Deploy'.html_safe, queue_deploy_admin_projects_path(format: :json), remote: true, method: :post, confirm: 'Are you sure?', class: "btn deploy", title: "Queue Deploy"
 
 = paginate @projects
 
