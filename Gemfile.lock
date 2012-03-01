@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/hone/resque.git
+  remote: git@github.com:hone/resque.git
   revision: f8f105461d5b622d391e092cc594621b4dd98ef6
   branch: heroku
   specs:
@@ -9,15 +9,33 @@ GIT
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
 
+GIT
+  remote: git@github.com:kamui/redis-store.git
+  revision: d9b2822f557c03fa2a25c07f67d20229a21b716b
+  specs:
+    redis-actionpack (3.2.2)
+      actionpack (= 3.2.2)
+      redis-rack (~> 1.4.0)
+      redis-store (~> 1.1.0)
+    redis-activesupport (3.2.2)
+      activesupport (= 3.2.2)
+      redis-store (~> 1.1.0)
+    redis-rails (3.2.2)
+      redis-actionpack (~> 3.2.2)
+      redis-activesupport (~> 3.2.2)
+      redis-store (~> 1.1.0)
+    redis-store (1.1.0)
+      redis (~> 2.2.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    actionmailer (3.2.1)
-      actionpack (= 3.2.1)
+    actionmailer (3.2.2)
+      actionpack (= 3.2.2)
       mail (~> 2.4.0)
-    actionpack (3.2.1)
-      activemodel (= 3.2.1)
-      activesupport (= 3.2.1)
+    actionpack (3.2.2)
+      activemodel (= 3.2.2)
+      activesupport (= 3.2.2)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       journey (~> 1.0.1)
@@ -25,18 +43,18 @@ GEM
       rack-cache (~> 1.1)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.2)
-    activemodel (3.2.1)
-      activesupport (= 3.2.1)
+    activemodel (3.2.2)
+      activesupport (= 3.2.2)
       builder (~> 3.0.0)
-    activerecord (3.2.1)
-      activemodel (= 3.2.1)
-      activesupport (= 3.2.1)
-      arel (~> 3.0.0)
+    activerecord (3.2.2)
+      activemodel (= 3.2.2)
+      activesupport (= 3.2.2)
+      arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.1)
-      activemodel (= 3.2.1)
-      activesupport (= 3.2.1)
-    activesupport (3.2.1)
+    activeresource (3.2.2)
+      activemodel (= 3.2.2)
+      activesupport (= 3.2.2)
+    activesupport (3.2.2)
       i18n (~> 0.6)
       multi_json (~> 1.0)
     acts_as_list_mongoid (0.2.5.1)
@@ -146,8 +164,8 @@ GEM
     hike (1.2.1)
     i18n (0.6.0)
     journey (1.0.3)
-    jquery-rails (2.0.0)
-      railties (>= 3.2.0.beta, < 5.0)
+    jquery-rails (2.0.1)
+      railties (>= 3.2.0, < 5.0)
       thor (~> 0.14)
     json (1.6.5)
     kaminari (0.13.0)
@@ -214,14 +232,14 @@ GEM
       rack
     rack-test (0.6.1)
       rack (>= 1.0)
-    rails (3.2.1)
-      actionmailer (= 3.2.1)
-      actionpack (= 3.2.1)
-      activerecord (= 3.2.1)
-      activeresource (= 3.2.1)
-      activesupport (= 3.2.1)
+    rails (3.2.2)
+      actionmailer (= 3.2.2)
+      actionpack (= 3.2.2)
+      activerecord (= 3.2.2)
+      activeresource (= 3.2.2)
+      activesupport (= 3.2.2)
       bundler (~> 1.0)
-      railties (= 3.2.1)
+      railties (= 3.2.2)
     rails_best_practices (1.8.0)
       activesupport
       colored
@@ -229,9 +247,9 @@ GEM
       i18n
       progressbar
       sexp_processor
-    railties (3.2.1)
-      actionpack (= 3.2.1)
-      activesupport (= 3.2.1)
+    railties (3.2.2)
+      actionpack (= 3.2.2)
+      activesupport (= 3.2.2)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
@@ -242,24 +260,11 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     redis (2.2.2)
-    redis-actionpack (3.2.1)
-      actionpack (= 3.2.1)
-      redis-rack (~> 1.4.0)
-      redis-store (~> 1.1.0)
-    redis-activesupport (3.2.1)
-      activesupport (= 3.2.1)
-      redis-store (~> 1.1.0)
     redis-namespace (1.0.3)
       redis (< 3.0.0)
     redis-rack (1.4.1)
       rack (= 1.4.1)
       redis-store (~> 1.1.0)
-    redis-rails (3.2.1)
-      redis-actionpack (~> 3.2.1)
-      redis-activesupport (~> 3.2.1)
-      redis-store (~> 1.1.0)
-    redis-store (1.1.0)
-      redis (~> 2.2.0)
     resque-loner (1.2.0)
       resque (~> 1.0)
     resque-scheduler (1.9.9)
@@ -372,11 +377,11 @@ DEPENDENCIES
   mongoid_taggable_with_context
   profanity_filter
   pry-rails
-  rails (= 3.2.1)
+  rails (= 3.2.2)
   rails_best_practices
   rb-fsevent
   redis-rails
-  redis-store
+  redis-store!
   resque!
   resque-loner
   resque-scheduler
