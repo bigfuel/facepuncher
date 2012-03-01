@@ -1,44 +1,48 @@
-require "test_helper"
+require "minitest_helper"
 
-class ImageTest < ActiveSupport::TestCase
-  should validate_presence_of(:image)
+describe Image do
+  it "should have validations" do
+    image = Fabricate.build(:image)
+    image.must have_valid(:image)
+    image.wont have_valid(:image).when(nil)
+  end
 
-  context Image do
-    setup do
+  describe "An image" do
+    before do
       @project = Fabricate(:project)
-      @image = Fabricate(:image)
+      @image = Fabricate(:image, project: @project)
     end
 
-    should "be valid" do
-      assert @image.valid?
+    it "should be valid" do
+      @image.must_be :valid?
     end
 
-    should "start in a pending state" do
-      assert @image.pending?
+    it "starts in a pending state" do
+      @image.must_be :pending?
     end
 
-    should "return cached_results" do
+    it "has cached_results" do
       results = @project.images.order_by([:created_at, :asc]).entries
-      assert_equal results, @project.images.cached_results
+      @project.images.cached_results.must_equal results
     end
 
-    should "return as_json" do
-      flunk
+    it "returns as_json" do
+      skip
     end
   end
 
-  context "Unpersisted image" do
-    setup do
+  describe "An unpersisted image" do
+    before do
       @image = Fabricate.build(:image)
     end
 
-    should "return the image attribute when serialized to json" do
-      refute_nil @image.as_json['image']
+    it "returns the image attribute when serialized to json" do
+      @image.as_json['image'].wont_be_nil
     end
   end
 
-  context "Images" do
-    setup do
+  describe "Images" do
+    before do
       @pending = Array.new
       @denied = Array.new
       @approved = Array.new
@@ -58,22 +62,16 @@ class ImageTest < ActiveSupport::TestCase
       end
     end
 
-    should "find all pending images" do
-      images = Image.pending
-      assert_equal 1, images.count
-      assert_empty @pending - images
+    it "finds all pending" do
+      (Image.pending.entries - @pending).must_be_empty
     end
 
-    should "find all denied image" do
-      images = Image.denied
-      assert_equal 2, images.count
-      assert_empty @denied - images
+    it "finds all denied" do
+      (Image.denied.entries - @denied).must_be_empty
     end
 
-    should "find all approved images" do
-      images = Image.approved
-      assert_equal 3, images.count
-      assert_empty @approved - images
+    it "finds all approved" do
+      (Image.approved.entries - @approved).must_be_empty
     end
   end
 end

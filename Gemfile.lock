@@ -1,4 +1,24 @@
 GIT
+  remote: git://github.com/mojombo/grit.git
+  revision: 3fc864f3c637e06e2fa7a81f6b48a5df58a9bc5b
+  specs:
+    grit (2.4.1)
+      diff-lcs (~> 1.1)
+      mime-types (~> 1.15)
+      posix-spawn (~> 0.3.6)
+
+GIT
+  remote: git://github.com/rawongithub/minitest-rails.git
+  revision: 6396a48b5719a86d2299af39aefcf5e5dec7cf1e
+  branch: gemspec
+  specs:
+    minitest-rails (0.0.5)
+      actionpack (~> 3.1)
+      activesupport (~> 3.1)
+      minitest (~> 2.10)
+      railties (~> 3.1)
+
+GIT
   remote: git@github.com:hone/resque.git
   revision: f8f105461d5b622d391e092cc594621b4dd98ef6
   branch: heroku
@@ -216,6 +236,7 @@ GEM
     nokogiri (1.5.0)
     orm_adapter (0.0.6)
     polyglot (0.3.3)
+    posix-spawn (0.3.6)
     profanity_filter (0.1.1)
     progressbar (0.10.0)
     pry (0.9.8.4)
@@ -367,7 +388,7 @@ DEPENDENCIES
   ffaker
   fog
   foreman
-  grit
+  grit!
   guard
   guard-minitest
   haml
