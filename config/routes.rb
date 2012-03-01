@@ -8,10 +8,11 @@ Facepuncher::Application.routes.draw do
     resources :users
 
     resources :projects do
+      post 'queue_deploy', on: :collection
+
       member do
         get 'activate'
         get 'deactivate'
-        get 'queue_deploy'
       end
 
       resources :signups
@@ -81,7 +82,6 @@ Facepuncher::Application.routes.draw do
     root to: 'projects#show'
     match "index" => "projects#show"
     match 'deauthorize' => 'projects#deauthorize'
-    match 'signed' => 'projects#signed'
 
     resources :signups, only: [:create]
     resources :events, only: [:create, :index]
