@@ -55,15 +55,17 @@ gem 'bootstrap-sass'
 gem 'unicorn'
 
 group :test do
-  # Pretty printed test output
-  gem 'turn', require: false
+  gem 'turn'
   gem 'minitest'
-  gem 'rr'
   gem 'ffaker'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'simplecov', require: false
   gem 'guard-minitest'
+  gem 'minitest-rails', git: 'git://github.com/kamui/minitest-rails.git', branch: 'gemspec'
+  gem 'capybara_minitest_spec'
+  gem 'minitest-matchers'
+  gem 'valid_attribute'
 end
 
 group :development do
@@ -77,8 +79,6 @@ end
 
 group :development, :test do
   gem 'awesome_print'
-  gem 'shoulda-context'
-  gem 'shoulda-matchers'
   gem 'fabrication'
   gem 'guard'
   gem 'rb-fsevent'

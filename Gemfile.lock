@@ -79,6 +79,9 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
+    capybara_minitest_spec (0.2.1.1)
+      capybara
+      minitest (~> 2.0)
     carmen (0.2.12)
     carrierwave (0.5.8)
       activesupport (~> 3.0)
@@ -185,6 +188,8 @@ GEM
     mini_magick (3.4)
       subexec (~> 0.2.1)
     minitest (2.11.3)
+    minitest-matchers (1.2.0)
+      minitest (>= 2.5.0)
     mongo (1.5.2)
       bson (= 1.5.2)
     mongoid (2.4.6)
@@ -274,7 +279,6 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     retriable (1.3.1)
-    rr (1.0.4)
     ruby-graphviz (1.0.5)
     ruby-hmac (0.4.0)
     ruby-prof (0.10.8)
@@ -329,6 +333,7 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    valid_attribute (1.2.0)
     validates_timeliness (3.0.8)
       timeliness (~> 0.3.4)
     vegas (0.1.11)
@@ -349,6 +354,7 @@ DEPENDENCIES
   bootstrap-sass
   bson_ext
   capybara
+  capybara_minitest_spec
   carmen
   carrierwave
   carrierwave-mongoid
@@ -372,6 +378,8 @@ DEPENDENCIES
   koala
   mini_magick
   minitest
+  minitest-matchers
+  minitest-rails!
   mongoid
   mongoid_embedded_helper
   mongoid_taggable_with_context
@@ -386,18 +394,16 @@ DEPENDENCIES
   resque-loner
   resque-scheduler
   retriable
-  rr
   ruby-graphviz
   ruby-prof
   ruby_gntp
   sass
   sass-rails (~> 3.2.3)
-  shoulda-context
-  shoulda-matchers
   simplecov
   sinatra
   state_machine
   turn
   uglifier (>= 1.0.3)
   unicorn
+  valid_attribute
   validates_timeliness
