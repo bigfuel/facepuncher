@@ -3,7 +3,7 @@
 
 .row
   .span6
-    = form_for [:admin, @project, @poll], html: { class: "form-horizontal"} do |f|
+    = form_for [:admin, @project, @poll], html: {multipart: true, class: "form-horizontal"} do |f|
       - if @poll.errors.any?
         .alert.alert-error
           %p

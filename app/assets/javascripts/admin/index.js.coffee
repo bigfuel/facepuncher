@@ -67,18 +67,8 @@ jQuery ->
   ).on "ajax:error", ".deny", (e) ->
     addAlert()
 
-  # $(".go-live").live "click", ->
-  #   $(this).bind("ajax:beforeSend", ->
-  #     removeAlert()
-  #   ).bind("ajax:success", ->
-  #     newLink = $(this).attr("href").replace("enable", "disable")
-  #     $(this).text("Disable").removeClass("enable").addClass("disable").attr "href", newLink
-  #     $(this).parents("tr").removeClass("disabled").addClass "enabled"
-  #   ).bind "ajax:error", ->
-  #     addAlert()
-
   # Admin - Poll form
-  $.template "newChoice", "<p class=\"choice\"> <input id=\"poll_choices_attributes_${count}_content\" name=\"poll[choices_attributes][${count}][content]\" size=\"30\" type=\"text\"> <a href=\"#\" class=\"btn remove\"><i class=\"icon-minus\"></i></a> <input id=\"poll_choices_attributes_${count}_image\" name=\"poll[choices_attributes][${count}][image]\" type=\"file\"></p>"
+  $.template "newChoice", "<p class=\"choice\"> <input id=\"poll_choices_attributes_${count}_content\" name=\"poll[choices_attributes][${count}][content]\" size=\"30\" type=\"text\"> <a href=\"#\" class=\"btn remove-poll-choice\"><i class=\"icon-minus\"></i></a> <input id=\"poll_choices_attributes_${count}_image\" name=\"poll[choices_attributes][${count}][image]\" type=\"file\"></p>"
 
   $("#content").on("click", ".add-poll-choice", (e) ->
     choice = count: $(".choice").size() + 1
@@ -126,7 +116,7 @@ jQuery ->
     callback = ((loc) ->
       $("#location_latitude").val loc.lat()
       $("#location_longitude").val loc.lng()
-      $(".event-form").submit()
+      $("#new_event").submit()
     )
     fp.maps.find address, callback
     e.preventDefault()

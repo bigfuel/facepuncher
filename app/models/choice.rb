@@ -10,5 +10,6 @@ class Choice
   embedded_in :poll
 
   validates :content, presence: true
+
   mount_uploader :image, ImageUploader
 end
