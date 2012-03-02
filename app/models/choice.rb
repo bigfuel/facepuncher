@@ -5,7 +5,7 @@ class Choice
   field :content, type: String
   field :votes, type: Integer, default: 0
 
-  attr_accessible :content
+  attr_accessible :content, :image
 
   embedded_in :poll
 
