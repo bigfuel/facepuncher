@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   protected
   def load_project
-    @project = params[:project_name] && Project.active.where(name: params[:project_name]).first
+    @project = params[:project_name] && Project.active.find_by_name(params[:project_name])
   end
 
   def not_found
