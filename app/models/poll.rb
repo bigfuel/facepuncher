@@ -9,7 +9,7 @@ class Poll
   field :start_date, type: DateTime
   field :end_date, type: DateTime
 
-  attr_accessible :question, :start_date, :end_date
+  attr_accessible :question, :start_date, :end_date, :choices_attributes
 
   belongs_to :project
 
@@ -17,6 +17,7 @@ class Poll
   accepts_nested_attributes_for :choices, reject_if: proc { |attributes| attributes[:content].blank? }, allow_destroy: true
 
   validates :question, presence: true
+  validates_associated :choices
 
   scope :active, where(state: "active")
   scope :inactive, where(state: "inactive")

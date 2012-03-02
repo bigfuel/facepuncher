@@ -28,20 +28,13 @@ class Admin::PollsController < AdminController
 
   def create
     @poll = @project.polls.new(params[:poll])
-    @poll.choices.build(params[:poll][:choices_attributes])
 
     respond_to do |format|
       if @poll.save
-        # hack to fix embedded documents saving images
-        # @poll.choices.each_with_index do |c, i|
-        #   c.image = params[:poll][:choices_attributes][i]
-        #   c.save!
-        # end
         @poll.move_to_top
         format.html { redirect_to [:admin, @project, @poll], notice: 'Poll was successfully created.' }
         format.json { render json: @poll }
       else
-        # binding.pry
         format.html { render action: "new" }
         format.json { render json: @poll.errors, status: :unprocessable_entity }
       end
@@ -53,10 +46,6 @@ class Admin::PollsController < AdminController
 
     respond_to do |format|
       if @poll.update_attributes(params[:poll])
-        # hack to fix embedded documents saving images
-        # @poll.choices.each_with_index do |c, i|
-        #   c.update_attributes!(params[:poll][:choices_attributes][i])
-        # end
         format.html { redirect_to [:admin, @project, @poll], notice: 'Poll was successfully updated.' }
         format.json { head :ok }
       else
