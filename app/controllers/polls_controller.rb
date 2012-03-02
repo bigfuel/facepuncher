@@ -1,4 +1,6 @@
 class PollsController < ApplicationController
+  respond_to :json, :html
+
   def vote
     poll = @project.polls.active.find(params[:id])
 
@@ -17,5 +19,7 @@ class PollsController < ApplicationController
 
   def show
     @poll = @project.polls.active.find(params[:id])
+
+    respond_with @poll
   end
 end

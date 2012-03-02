@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git://github.com/rawongithub/minitest-rails.git
-  revision: 6396a48b5719a86d2299af39aefcf5e5dec7cf1e
+  revision: b8997a7044b41d4c372b7a071927f376864b8104
   branch: gemspec
   specs:
     minitest-rails (0.0.5)
@@ -204,12 +204,15 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     method_source (0.7.1)
+    metaclass (0.0.1)
     mime-types (1.17.2)
     mini_magick (3.4)
       subexec (~> 0.2.1)
     minitest (2.11.3)
     minitest-matchers (1.2.0)
       minitest (>= 2.5.0)
+    mocha (0.10.5)
+      metaclass (~> 0.0.1)
     mongo (1.5.2)
       bson (= 1.5.2)
     mongoid (2.4.6)
@@ -401,6 +404,7 @@ DEPENDENCIES
   minitest
   minitest-matchers
   minitest-rails!
+  mocha
   mongoid
   mongoid_embedded_helper
   mongoid_taggable_with_context

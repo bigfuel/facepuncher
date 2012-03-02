@@ -4,6 +4,7 @@ SimpleCov.start 'rails'
 require "minitest/matchers"
 require "minitest/autorun"
 require "minitest/rails"
+require "mocha"
 require "turn"
 
 # Uncomment if you want awesome colorful output
@@ -45,6 +46,12 @@ end
 class MiniTest::Rails::Controller
   # Add methods to be used by controller specs here
   include Devise::TestHelpers
+
+  def load_project
+    project = Fabricate.build(:project, name: "bf_project_test")
+    Project.stubs(active: stub(find_by_name: project))
+    project
+  end
 
   def json_response
     ActiveSupport::JSON.decode @response.body

@@ -1,7 +1,7 @@
 require 'minitest_helper'
 
 describe AdminController do
-  describe ":load_project" do
+  describe "loaded project" do
     before do
       @project = Fabricate(:project, name: "bf_project_test")
       @project.activate

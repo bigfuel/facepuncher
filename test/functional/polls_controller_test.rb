@@ -2,35 +2,38 @@ require 'minitest_helper'
 
 describe PollsController do
   before do
-    @project = Fabricate(:project, name: 'bf_project_test')
-    @project.activate
+    @project = load_project
   end
 
-  describe "persisted poll" do
+  describe "on GET to :show" do
     before do
-      @poll = Fabricate(:poll, project: @project)
-      @poll.activate
+      Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll))))
+      get :show, project_name: @project.name, id: "1", format: :json
     end
 
-    describe "show action" do
-      it "render show template" do
-        get :show, project_name: @project.name, id: @poll.id
-        assert_template 'show'
-      end
+    it "returns a poll object" do
+      must_respond_with :success
+      poll = assigns(:poll)
+      poll.wont_be_nil
+    end
+  end
+
+  describe "on GET to :vote" do
+    before do
+      @poll = Fabricate.build(:poll, project: @project)
     end
 
-    describe "vote action" do
-      it "render edit template when poll is invalid" do
-        put :vote, project_name: @project.name, id: @poll.id
-        assert_redirected_to '/500.html'
-      end
+    it "with a valid poll should redirect to referrer" do
+      Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll))))
+      referrer = 'http://example.com'
+      @request.env['HTTP_REFERER'] = referrer
+      put :vote, project_name: @project.name, id: "1", choice: { id: @poll.choices.first.id }
+      must_redirect_to referrer
+    end
 
-      it "redirect when poll is valid" do
-        referrer = 'http://whatever'
-        @request.env['HTTP_REFERER'] = referrer
-        put :vote, project_name: @project.name, id: @poll.id, choice: { id: @poll.choices.first.id }
-        assert_redirected_to referrer
-      end
+    it "with an empty choice should render 500 template" do
+      put :vote, project_name: @project.name, id: "1"
+      must_redirect_to '/500.html'
     end
   end
 end
