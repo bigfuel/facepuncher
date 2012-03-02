@@ -7,3 +7,12 @@ en:
       default: "%Y-%m-%d %r"
       longer: "%a %b %d, %Y %r"
       custom: "%m/%d/%y %I:%M %p"
+  flash:
+    actions:
+      create:
+        notice: "{resource_name} was successfully created"
+      update:
+        notice: "{resource_name} was successfully updated"
+      destroy:
+        notice: "{resource_name} was successfully destroyed"
+        alert: "{resource_name} could not be destroyed"

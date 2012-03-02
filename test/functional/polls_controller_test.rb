@@ -22,6 +22,7 @@ describe PollsController do
     before do
       Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll, project: @project))))
     end
+  end
 
     it "with a valid poll" do
       Poll.any_instance.stubs(vote: true)
