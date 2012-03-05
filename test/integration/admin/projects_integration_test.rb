@@ -10,15 +10,15 @@ describe "Projects Integration Test" do
       @project = Fabricate(:project, name: "bf_project_test")
     end
 
-    it "shows project's name :html" do
+    it "shows correct url and project's name :html" do
       visit admin_projects_path
-      page.current_url.must_include('projects')
+      page.current_url.must_include('/projects')
       page.must_have_content "bf_project_test"
     end
 
-    it "shows project's name :json" do
+    it "shows correct url and project's name :json" do
       visit admin_projects_path(format: :json)
-      page.current_url.must_include('json')
+      page.current_url.must_include('/projects.json')
       page.must_have_content "bf_project_test"
     end
   end
@@ -94,21 +94,16 @@ describe "Projects Integration Test" do
       @project = Fabricate(:project, name: "bf_project_test")
     end
 
-    it "shows the correct url" do
+    it "shows correct url and project info :html" do
       visit admin_project_path(@project)
       page.current_url.must_include('/bf_project_test')
-    end
-
-    it "shows project's name and repo :html" do
-      visit admin_project_path(@project)
-      page.current_url.must_include('bf_project_test')
       page.must_have_content "bf_project_test"
       page.must_have_content @project.repo
     end
 
-    it "shows project's name and repo :json" do
+    it "shows correct url and project info :json" do
       visit admin_project_path(@project, format: :json)
-      page.current_url.must_include('json')
+      page.current_url.must_include('/bf_project_test.json')
       page.must_have_content "bf_project_test"
       page.must_have_content @project.repo
     end
@@ -152,6 +147,7 @@ describe "Projects Integration Test" do
       page.fill_in "Name", with: "new_project_name"
       page.fill_in "Repo", with: "new_project_repo"
       page.click_on "Save"
+      page.must_have_flash_message('Project was successfully updated.')
       page.must_have_content "Project was successfully updated."
       page.must_have_content "new_project_name"
       page.must_have_content "new_project_repo"
@@ -240,7 +236,7 @@ describe "Projects Integration Test" do
       @project = Fabricate(:project, name: "bf_project_test")
     end
 
-    it "sucessfully queues deploy projects" do
+    it "sucessfully queues deploy projects :json" do
       visit admin_projects_path
       page.driver.post queue_deploy_admin_projects_path(format: :json)
       page.current_url.must_include('/queue_deploy.json')
