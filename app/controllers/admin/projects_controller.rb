@@ -1,11 +1,9 @@
 class Admin::ProjectsController < AdminController
+  respond_to :html, :json, except: :queue_deploy
+
   def index
     @projects = Project.order_by([sort_column, sort_direction]).page(params[:page])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @projects }
-    end
+    respond_with(@projects)
   end
 
   def new
@@ -18,76 +16,48 @@ class Admin::ProjectsController < AdminController
 
   def show
     @project = Project.where(name: params[:id]).first
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @project }
-    end
+    respond_with(@project)
   end
 
   def create
     @project = Project.new(params[:project])
-
-    respond_to do |format|
-      if @project.save
-        format.html { redirect_to([:admin, @project], notice: 'Project was successfully created.') }
-        format.json { render json: @project }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
-      end
-    end
+    @project.save
+    respond_with(@project, location: [:admin, @project])
   end
 
   def update
     @project = Project.where(name: params[:id]).first
-
-    respond_to do |format|
-      if @project.update_attributes(params[:project])
-        format.html { redirect_to([:admin, @project], notice: 'Project was successfully updated.') }
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @project.errors, status: :unprocessable_entity }
-      end
-    end
+    @project.update_attributes(params[:project])
+    respond_with(@project, location: [:admin, @project])
   end
 
   def destroy
     @project = Project.where(name: params[:id]).first
     @project.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(admin_projects_url) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with(@project, location: admin_projects_url) do |format|
+      format.json { render json: '{ "status": "success" }', status: :ok }
     end
   end
 
   def activate
     @project = Project.where(name: params[:id]).first
     @project.activate
-
-    respond_to do |format|
-      format.html { redirect_to(admin_projects_url) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with(@project, location: admin_projects_url) do |format|
+      format.json { render json: '{ "status": "success" }', status: :ok }
     end
   end
 
   def deactivate
     @project = Project.where(name: params[:id]).first
     @project.deactivate
-
-    respond_to do |format|
-      format.html { redirect_to(admin_projects_url) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with(@project, location: admin_projects_url) do |format|
+      format.json { render json: '{ "status": "success" }', status: :ok }
     end
   end
 
   def queue_deploy
     DeployProject.queue_active
-
-    respond_to do |format|
-      format.html { redirect_to(admin_projects_url) }
+    respond_with(@project, location: admin_projects_url) do |format|
       format.json { render json: '{ "status": "success" }',  status: :ok }
     end
   end
