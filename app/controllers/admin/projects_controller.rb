@@ -35,30 +35,32 @@ class Admin::ProjectsController < AdminController
     @project = Project.where(name: params[:id]).first
     @project.destroy
     respond_with(@project, location: admin_projects_url) do |format|
-      format.json { render json: '{ "status": "success" }', status: :ok }
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
   def activate
     @project = Project.where(name: params[:id]).first
     @project.activate
-    respond_with(@project, location: admin_projects_url) do |format|
-      format.json { render json: '{ "status": "success" }', status: :ok }
+    respond_with(@project) do |format|
+      format.html { redirect_to admin_projects_url }
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
   def deactivate
     @project = Project.where(name: params[:id]).first
     @project.deactivate
-    respond_with(@project, location: admin_projects_url) do |format|
-      format.json { render json: '{ "status": "success" }', status: :ok }
+    respond_with(@project) do |format|
+      format.html { redirect_to admin_projects_url }
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
   def queue_deploy
     DeployProject.queue_active
     respond_with(@project, location: admin_projects_url) do |format|
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+      format.json { render json: '{ "status":"success" }',  status: :ok }
     end
   end
 end
