@@ -50,6 +50,7 @@ gem 'carmen'
 gem 'retriable'
 gem 'pry-rails'
 gem 'bootstrap-sass'
+gem 'responders'
 
 # Use unicorn as the web server
 gem 'unicorn'
