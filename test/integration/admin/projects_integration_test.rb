@@ -29,8 +29,8 @@ describe "Projects Integration Test" do
       visit new_admin_project_path(@project)
     end
 
-    it "should show the correct url" do
-      page.current_url.must_include('new')
+    it "shows the correct url" do
+      page.current_url.must_include('/new')
     end
 
     it "has form field name" do
@@ -72,8 +72,8 @@ describe "Projects Integration Test" do
       visit edit_admin_project_path(@project)
     end
 
-    it "should show the correct url" do
-      page.current_url.must_include('edit')
+    it "shows the correct url" do
+      page.current_url.must_include('/edit')
     end
 
     it "has form field with project name" do
@@ -92,6 +92,11 @@ describe "Projects Integration Test" do
   describe "on GET to :show" do
     before do
       @project = Fabricate(:project, name: "bf_project_test")
+    end
+
+    it "shows the correct url" do
+      visit admin_project_path(@project)
+      page.current_url.must_include('/bf_project_test')
     end
 
     it "shows project's name and repo :html" do
@@ -176,8 +181,7 @@ describe "Projects Integration Test" do
     it "sucessfully deletes a new project :html" do
       visit admin_projects_path
       page.must_have_content "bf_project_test"
-      page.save_and_open_page
-      page.click_on "Delete" # to do: make sure this is project delete follow, not admin signout
+      page.click_on "Delete"
       visit admin_projects_path
       page.wont_have_content "bf_project_test"
     end
@@ -239,7 +243,7 @@ describe "Projects Integration Test" do
     it "sucessfully queues deploy projects" do
       visit admin_projects_path
       page.driver.post queue_deploy_admin_projects_path(format: :json)
-      page.current_url.must_include('queue_deploy.json')
+      page.current_url.must_include('/queue_deploy.json')
       page.must_have_content "success"
     end
   end
