@@ -10,13 +10,13 @@ describe "Projects Integration Test" do
       @project = Fabricate(:project, name: "bf_project_test")
     end
 
-    it "shows correct url and project's name :html" do
+    it "shows correct url and project name :html" do
       visit admin_projects_path
       page.current_url.must_include('/projects')
       page.must_have_content "bf_project_test"
     end
 
-    it "shows correct url and project's name :json" do
+    it "shows correct url and project name :json" do
       visit admin_projects_path(format: :json)
       page.current_url.must_include('/projects.json')
       page.must_have_content "bf_project_test"
@@ -25,7 +25,6 @@ describe "Projects Integration Test" do
 
   describe "on GET to :new" do
     before do
-      @project = Fabricate(:project, name: "bf_project_test")
       visit new_admin_project_path(@project)
     end
 
@@ -68,7 +67,7 @@ describe "Projects Integration Test" do
 
   describe "on GET to :edit" do
     before do
-      @project = Fabricate(:project, name: "bf_project_test")
+      @project = Fabricate(:project, name: "bf_project_test", repo: "git@git.bf_project_test.git")
       visit edit_admin_project_path(@project)
     end
 
@@ -81,7 +80,7 @@ describe "Projects Integration Test" do
     end
 
     it "has form field with project repo value" do
-      page.must_have_field :repo, with: @project.repo
+      page.must_have_field :repo, with: "git@git.bf_project_test.git"
     end
 
     it "has blank submit button" do
@@ -91,23 +90,22 @@ describe "Projects Integration Test" do
 
   describe "on GET to :show" do
     before do
-      @project = Fabricate(:project, name: "bf_project_test")
+      @project = Fabricate(:project, name: "bf_project_test", repo: "git@git.bf_project_test.git")
     end
 
     it "shows correct url and project info :html" do
       visit admin_project_path(@project)
       page.current_url.must_include('/bf_project_test')
       page.must_have_content "bf_project_test"
-      page.must_have_content @project.repo
+      page.must_have_content "git@git.bf_project_test.git"
     end
 
     it "shows correct url and project info :json" do
       visit admin_project_path(@project, format: :json)
       page.current_url.must_include('/bf_project_test.json')
-      page.must_have_content "bf_project_test"
-      page.must_have_content @project.repo
+      page.must_have_content '"name":"bf_project_test"'
+      page.must_have_content '"repo":"git@git.bf_project_test.git"'
     end
-
   end
 
   describe "on POST to :create" do
@@ -147,7 +145,6 @@ describe "Projects Integration Test" do
       page.fill_in "Name", with: "new_project_name"
       page.fill_in "Repo", with: "new_project_repo"
       page.click_on "Save"
-      page.must_have_flash_message('Project was successfully updated.')
       page.must_have_content "Project was successfully updated."
       page.must_have_content "new_project_name"
       page.must_have_content "new_project_repo"
@@ -174,7 +171,7 @@ describe "Projects Integration Test" do
       @project = Fabricate(:project, name: "bf_project_test")
     end
 
-    it "sucessfully deletes a new project :html" do
+    it "sucessfully deletes a project :html" do
       visit admin_projects_path
       page.must_have_content "bf_project_test"
       page.click_on "Delete"
@@ -182,7 +179,7 @@ describe "Projects Integration Test" do
       page.wont_have_content "bf_project_test"
     end
 
-    it "sucessfully deletes a new project :json" do
+    it "sucessfully deletes a project :json" do
       visit admin_projects_path
       page.must_have_content "bf_project_test"
       page.driver.delete admin_project_path(@project, format: :json)
@@ -207,7 +204,7 @@ describe "Projects Integration Test" do
     it "sucessfully activates a project :json" do
       visit activate_admin_project_path(@project, format: :json)
       page.current_url.must_include('/activate.json')
-      page.must_have_content "success"
+      page.must_have_content '"status":"success"'
     end
   end
 
@@ -216,7 +213,7 @@ describe "Projects Integration Test" do
       @project = Fabricate(:project, name: "bf_project_test", state: "active")
     end
 
-    it "sucessfully deactivates a project :html" do
+    it "successfully deactivates a project :html" do
       visit admin_project_path(@project)
       page.must_have_content "active"
       page.driver.get deactivate_admin_project_path(@project)
@@ -224,10 +221,10 @@ describe "Projects Integration Test" do
       page.must_have_content "inactive"
     end
 
-    it "sucessfully deactivates a project :json" do
+    it "successfully deactivates a project :json" do
       visit deactivate_admin_project_path(@project, format: :json)
       page.current_url.must_include('/deactivate.json')
-      page.must_have_content "success"
+      page.must_have_content '"status":"success"'
     end
   end
 
@@ -240,7 +237,7 @@ describe "Projects Integration Test" do
       visit admin_projects_path
       page.driver.post queue_deploy_admin_projects_path(format: :json)
       page.current_url.must_include('/queue_deploy.json')
-      page.must_have_content "success"
+      page.must_have_content '"status":"success"'
     end
   end
 end
