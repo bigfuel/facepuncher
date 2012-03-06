@@ -1,12 +1,13 @@
 require 'csv'
 
 class Admin::SignupsController < AdminController
+  respond_to :html, :json
+  respond_to :csv, only: :index
+
   def index
     @signups = @project.signups.order_by([sort_column, sort_direction]).page(params[:page])
 
-    respond_to do |format|
-      format.html
-      format.json { render json: @signups }
+    respond_with(@signups) do |format|
       format.csv do
         @signups = @project.signups
         csv_string = CSV.generate do |csv|
@@ -44,16 +45,8 @@ class Admin::SignupsController < AdminController
 
   def create
     @signup = @project.signups.new(params[:signup])
-
-    respond_to do |format|
-      if @signup.save
-        format.html { redirect_to [:admin, @project, @signup], notice: 'Signup was successfully created.' }
-        format.json { render json: @signup, status: :created, location: @signup }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @signup.errors, status: :unprocessable_entity }
-      end
-    end
+    @signup.save
+    respond_with(@signup, location: [:admin, @project, @signup])
   end
 
   def edit
@@ -62,29 +55,20 @@ class Admin::SignupsController < AdminController
 
   def update
     @signup = @project.signups.find(params[:id])
-
-    respond_to do |format|
-      if @signup.update_attributes(params[:signup])
-        format.html { redirect_to [:admin, @project, @signup], notice: 'Signup was successfully updated.' }
-        format.json { render json: @signup.as_json(methods: :image_url) }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @signup.errors, status: :unprocessable_entity }
-      end
-    end
+    @signup.update_attributes(params[:signup])
+    respond_with(@signup, location: [:admin, @project, @signup])
   end
 
   def show
     @signup = @project.signups.find(params[:id])
+    respond_with(@signup)
   end
 
   def destroy
     @signup = @project.signups.find(params[:id])
     @signup.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_project_signups_url(@project) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with(@signup, location: admin_project_signups_url) do |format|
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 end
