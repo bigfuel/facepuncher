@@ -22,7 +22,7 @@ describe PostsController do
     end
   end
 
-  describe "on GET to :index" do
+  describe "on GET to :show" do
     before do
       Project.any_instance.stubs(posts: stub(approved: stub(find: Fabricate.build(:post, project: @project))))
       get :show, project_id: @project, id: "1", format: :json
