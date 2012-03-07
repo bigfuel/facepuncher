@@ -5,10 +5,13 @@
   = link_to 'Back', admin_project_videos_path(@project), title: "Back", class: "btn btn-inverse"
   = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_video_path(@project), title: "New", class: "btn"
   = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_video_path(@project), title: "Edit", class: "btn"
-  - if @video.state == 'approved'
-    = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, @video, format: :json), remote: true, class: "deny btn"
-  - elsif
-    = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, @video, format: :json), remote: true, class: "approve btn"
+  - if @video.state == 'pending'
+    = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, @video), remote: false, class: "approve btn", title: "Approve"
+    = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, @video), remote: false, class: "deny btn", title: "Deny"
+  - elsif @video.state == 'denied'
+    = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, @video), remote: false, class: "approve btn", title: "Approve"
+  - elsif @video.state == 'approved'
+    = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, @video), remote: false, class: "deny btn", title: "Deny"
 .row
   .span6
     %table.table.table-bordered
