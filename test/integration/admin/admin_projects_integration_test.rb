@@ -1,6 +1,6 @@
 require "minitest_helper"
 
-describe "Projects Integration Test" do
+describe "Admin Projects Integration Test" do
   before do
     sign_in Fabricate(:user)
   end
@@ -33,35 +33,35 @@ describe "Projects Integration Test" do
     end
 
     it "has form field name" do
-      page.must_have_field :name
+      page.must_have_field "project_name"
     end
 
     it "has form field description" do
-      page.must_have_field :description
+      page.must_have_field "project_description"
     end
 
     it "has form field facebook app id" do
-      page.must_have_field :facebook_app_id
+      page.must_have_field "project_facebook_app_id"
     end
 
     it "has form field facebook app secret" do
-      page.must_have_field :facebook_app_secret
+      page.must_have_field "project_facebook_app_secret"
     end
 
     it "has form field google analytics tracking code" do
-      page.must_have_field :google_analytics_tracking_code
+      page.must_have_field "project_google_analytics_tracking_code"
     end
 
     it "has form field prodcution url" do
-      page.must_have_field :production_url
+      page.must_have_field "project_production_url"
     end
 
     it "has form field repo" do
-      page.must_have_field :repo
+      page.must_have_field "project_repo"
     end
 
-    it "has submit button" do
-      page.must_have_button :submit
+    it "has save button" do
+      page.must_have_button "Save"
     end
   end
 
@@ -76,15 +76,15 @@ describe "Projects Integration Test" do
     end
 
     it "has form field with project name" do
-      page.must_have_field :name, with: "bf_project_test"
+      page.must_have_field "project_name", with: "bf_project_test"
     end
 
     it "has form field with project repo value" do
-      page.must_have_field :repo, with: "git@git.bf_project_test.git"
+      page.must_have_field "project_repo", with: "git@git.bf_project_test.git"
     end
 
-    it "has blank submit button" do
-      page.must_have_button :submit
+    it "has save button" do
+      page.must_have_button "Save"
     end
   end
 
@@ -142,8 +142,8 @@ describe "Projects Integration Test" do
     end
 
     it "sucessfully update a project :html" do
-      page.fill_in "Name", with: "new_project_name"
-      page.fill_in "Repo", with: "new_project_repo"
+      page.fill_in "project_name", with: "new_project_name"
+      page.fill_in "project_repo", with: "new_project_repo"
       page.click_on "Save"
       page.must_have_content "Project was successfully updated."
       page.must_have_content "new_project_name"
@@ -155,8 +155,8 @@ describe "Projects Integration Test" do
     end
 
     it "fails to update a project" do
-      page.fill_in "Name", with: ""
-      page.fill_in "Repo", with: ""
+      page.fill_in "project_name", with: ""
+      page.fill_in "project_repo", with: ""
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
     end
@@ -188,7 +188,7 @@ describe "Projects Integration Test" do
     end
   end
 
-  describe "on GET to :activate" do
+  describe "on GET project to :activate" do
     before do
       @project = Fabricate(:project, name: "bf_project_test")
     end
@@ -208,7 +208,7 @@ describe "Projects Integration Test" do
     end
   end
 
-  describe "on GET to :deactivate" do
+  describe "on GET project to :deactivate" do
     before do
       @project = Fabricate(:project, name: "bf_project_test", state: "active")
     end
