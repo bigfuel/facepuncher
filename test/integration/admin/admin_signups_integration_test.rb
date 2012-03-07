@@ -1,6 +1,6 @@
 require "minitest_helper"
 
-describe "Signups Integration Test" do
+describe "Admin Signups Integration Test" do
   before do
     sign_in Fabricate(:user)
     @project = Fabricate(:project, name: "bf_project_test")
@@ -30,39 +30,39 @@ describe "Signups Integration Test" do
     end
 
     it "shows the correct url" do
-      page.current_url.must_include('/new')
+      page.current_url.must_include('/signups/new')
     end
 
     it "has form field first name" do
-      page.must_have_field :first_name
+      page.must_have_field "signup_first_name"
     end
 
     it "has form field last name" do
-      page.must_have_field :last_name
+      page.must_have_field "signup_last_name"
     end
 
     it "has form field address" do
-      page.must_have_field :address
+      page.must_have_field "signup_address"
     end
 
     it "has form field city" do
-      page.must_have_field :city
+      page.must_have_field "signup_city"
     end
 
     it "has form field state" do
-      page.must_have_field :state_province
+      page.must_have_field "signup_state_province"
     end
 
     it "has form field zip code" do
-      page.must_have_field :zip_code
+      page.must_have_field "signup_zip_code"
     end
 
     it "has form field email" do
-      page.must_have_field :email
+      page.must_have_field "signup_email"
     end
 
-    it "has submit button" do
-      page.must_have_button :submit
+    it "has save button" do
+      page.must_have_button "Save"
     end
   end
 
@@ -77,19 +77,19 @@ describe "Signups Integration Test" do
     end
 
     it "has form field with first name" do
-      page.must_have_field :first_name, with: "Daisy"
+      page.must_have_field "signup_first_name", with: "Daisy"
     end
 
     it "has form field with last name" do
-      page.must_have_field :last_name, with: "Lin"
+      page.must_have_field "signup_last_name", with: "Lin"
     end
 
     it "has form field with email" do
-      page.must_have_field :email, with: "daisy@asdf.com"
+      page.must_have_field "signup_email", with: "daisy@asdf.com"
     end
 
-    it "has blank submit button" do
-      page.must_have_button :submit
+    it "has save button" do
+      page.must_have_button "Save"
     end
   end
 
@@ -153,9 +153,9 @@ describe "Signups Integration Test" do
     end
 
     it "sucessfully update a signup :html" do
-      page.fill_in "First name", with: "new_name"
-      page.fill_in "Last name", with: "new_last_name"
-      page.fill_in "Email", with: "new_email@new_email.com"
+      page.fill_in "signup_first_name", with: "new_name"
+      page.fill_in "signup_last_name", with: "new_last_name"
+      page.fill_in "signup_email", with: "new_email@new_email.com"
       page.click_on "Save"
       page.must_have_content "Signup was successfully updated."
       page.must_have_content "new_name"
@@ -168,8 +168,8 @@ describe "Signups Integration Test" do
     end
 
     it "fails to update a signup" do
-      page.fill_in "First name", with: ""
-      page.fill_in "Last name", with: ""
+      page.fill_in "signup_first_name", with: ""
+      page.fill_in "signup_last_name", with: ""
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
     end
