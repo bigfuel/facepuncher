@@ -47,7 +47,7 @@ class Event
   def as_json(options={})
     results = super({ method: location }.merge(options))
     results['start_date'] = start_date.strftime("%a %b %d, %Y %I:%M %p")
-    results['end_date'] = end_date.strftime("%a %b %d, %Y %I:%M %p")
+    results['end_date'] = end_date.strftime("%a %b %d, %Y %I:%M %p") if end_date
     results
   end
 end

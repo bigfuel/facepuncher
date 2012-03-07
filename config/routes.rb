@@ -78,15 +78,11 @@ Facepuncher::Application.routes.draw do
     end
   end
 
-  scope ':project_name' do
-    root to: 'projects#show'
-    match "index" => "projects#show"
-    match 'deauthorize' => 'projects#deauthorize'
-
-    resources :signups, only: [:create]
-    resources :events, only: [:create, :index]
-    resources :videos, only: [:create]
-    resources :images, only: [:create]
+  resources :project do
+    resources :signups
+    resources :events
+    resources :videos
+    resources :images
     resources :feeds
     resources :posts
 

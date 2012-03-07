@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
 
   protected
   def load_project
-    @project = params[:project_name] && Project.active.find_by_name(params[:project_name])
+    @project = params[:project_id] && Project.active.find_by_name(params[:project_id])
   end
 
   def not_found

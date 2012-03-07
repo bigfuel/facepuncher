@@ -7,9 +7,12 @@ describe PostsController do
 
   describe "on GET to :index" do
     before do
-      posts = [Fabricate.build(:post), Fabricate.build(:post), Fabricate.build(:post)]
+      posts = []
+      3.times do
+        posts << Fabricate.attributes_for(:post, project: @project)
+      end
       Project.any_instance.stubs(posts: stub(approved: stub(page: posts)))
-      get :index, project_name: @project.name, format: :json
+      get :index, format: :json, project_id: @project
     end
 
     it "returns a list of approved posts" do
@@ -20,9 +23,9 @@ describe PostsController do
   end
 
   describe "on GET to :show" do
-      before do
-      Project.any_instance.stubs(posts: stub(approved: stub(find: Fabricate.build(:post))))
-      get :show, project_name: @project.name, id: "1", format: :json
+    before do
+      Project.any_instance.stubs(posts: stub(approved: stub(find: Fabricate.build(:post, project: @project))))
+      get :show, project_id: @project, id: "1", format: :json
     end
 
     it "returns a post object" do

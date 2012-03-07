@@ -1,25 +1,16 @@
 class PollsController < ApplicationController
-  respond_to :json, :html
+  respond_to :json
 
   def vote
     poll = @project.polls.active.find(params[:id])
+    poll.vote(params['choice']['id'])
 
-    respond_to do |format|
-      begin
-        poll.vote(params['choice']['id'])
-        format.html { redirect_to params[:redirect_to] ? "/#{@project.name}/#{params[:redirect_to]}" : :back }
-        format.json { render json: poll }
-      rescue Exception => e
-        logger.error e.message
-        format.html { redirect_to '/500.html' }
-        format.json { render json: poll.errors, status: :unprocessable_entity }
-      end
-    end
+    respond_with @project, @poll
   end
 
   def show
     @poll = @project.polls.active.find(params[:id])
 
-    respond_with @poll
+    respond_with @project, @poll
   end
 end

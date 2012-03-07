@@ -4,6 +4,6 @@ class VideosController < ApplicationController
   def create
     @video = @project.videos.new(params[:video])
     @video.save
-    respond_with(@video)
+    respond_with(@project, @video)
   end
 end

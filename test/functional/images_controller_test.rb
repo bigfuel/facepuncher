@@ -2,41 +2,21 @@ require 'minitest_helper'
 
 describe ImagesController do
   before do
-    @project = Fabricate(:project, name: "chevy")
-    @project.activate
+    @project = load_project
   end
 
   describe "on POST to :create" do
-    before do
-      @image = Fabricate.build(:image, name: "logo")
-      @signed_request = "crap"
-      @redirect_to = "poop"
+    it "with an invalid image, will return the image with error validations " do
+      post :create, format: :json, project_id: @project, image: Image.new
+      must_respond_with :unprocessable_entity
+      json_response["errors"]["image"].must_include "can't be blank"
     end
 
-    it "return unprocessable_entity and a json object with validation errors when image is invalid" do
-      skip
-    end
-
-    it "redirect to an error page when image is invalid" do
-      @image.image = nil
-      assert_no_difference('Image.count') do
-        post :create, project_name: "chevy", image: @image, signed_request: @signed_request, redirect_to: @redirect_to
-      end
-      assert assigns(:image)
-      assert_redirected_to "poop?error=true&signed_request=crap"
-    end
-
-    it "return json object if a image is valid" do
-      skip
-    end
-
-    it "redirect with image_id defined when image is valid" do
-      assert_difference('Image.count') do
-        post :create, project_name: "chevy", image: @image.attributes.merge({ image: fixture_file_upload(Rails.root.join('test', 'support', 'Desktop.jpg'), 'image/jpg') }), signed_request: @signed_request, redirect_to: @redirect_to
-      end
+    it "with a valid image will return an image" do
+      post :create, format: :json, project_id: @project, image: Fabricate.attributes_for(:image, name: "logo", project: nil)
       image = assigns(:image)
-      assert image
-      assert_redirected_to "poop?image_id=#{image.id}&signed_request=crap"
+      must_respond_with :success
+      json_response['name'].must_equal "logo"
     end
   end
 end

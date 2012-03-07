@@ -1,4 +1,7 @@
 class Poll
+  class InvalidChoiceError < StandardError; end
+  class ChoiceRequiredError < StandardError; end
+
   include Mongoid::Document
   include Mongoid::Timestamps
   include ActsAsList::Mongoid
@@ -37,8 +40,21 @@ class Poll
   end
 
   def vote(choice_id)
-    raise "choice_id required" unless choice_id
-    choice = self.choices.find(choice_id)
+    begin
+      self.vote!(choice_id)
+    rescue InvalidChoiceError, ChoiceRequiredError => e
+      self.errors.add :choices, e.message
+      false
+    end
+  end
+
+  def vote!(choice_id)
+    raise ChoiceRequiredError, "choice required" if choice_id.blank?
+    begin
+      choice = self.choices.find(choice_id)
+    rescue Mongoid::Errors::DocumentNotFound
+      raise InvalidChoiceError, "choice_id could not be found"
+    end
     choice.votes += 1
     choice.save
   end
