@@ -78,7 +78,7 @@ Facepuncher::Application.routes.draw do
     end
   end
 
-  resources :project do
+  resources :projects do
     resources :signups
     resources :events
     resources :videos
