@@ -5,15 +5,13 @@ class Admin::EventsController < AdminController
 
   def index
     @events = @project.events.order_by([sort_column, sort_direction]).page(params[:page])
-
-    respond_with @events
+    respond_with(@events)
   end
 
   def new
     @event = @project.events.new
     @event.build_location
     @start_lat, @start_lng = 40.742264, -73.99134079999999
-    respond_with @event
   end
 
   def edit
@@ -23,24 +21,18 @@ class Admin::EventsController < AdminController
 
   def show
     @event = @project.events.find(params[:id])
-
-    respond_with @event
+    respond_with(@event)
   end
 
   def create
     @event = @project.events.new(params[:event])
-
-    if @event.save
-      @event.move_to_top
-    end
+    @event.move_to_top if @event.save
     respond_with(@event, location: [:admin, @project, @event])
   end
 
   def update
     @event = @project.events.find(params[:id])
-
     @event.update_attributes(params[:event])
-    @event.location.update_attributes(params[:event][:location_attributes])
     respond_with(@event, location: [:admin, @project, @event])
   end
 
@@ -58,7 +50,7 @@ class Admin::EventsController < AdminController
     @event.approve
 
     respond_with @event do |format|
-      format.html { redirect_to(admin_project_events_url(@project)) }
+      format.html { redirect_to [:admin, @project, @event] }
       format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
@@ -68,7 +60,7 @@ class Admin::EventsController < AdminController
     @event.deny
 
     respond_with @event do |format|
-      format.html { redirect_to(admin_project_events_url(@project)) }
+      format.html { redirect_to [:admin, @project, @event] }
       format.json { render json: '{ "status":"success" }',  status: :ok }
     end
   end
