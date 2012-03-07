@@ -3,13 +3,13 @@ class Signup
   include Mongoid::Timestamps
   include ProjectCacheable
 
+  field :state, type: String, default: 'pending'
   field :email, type: String
   field :first_name, type: String
   field :last_name, type: String
   field :address, type: String
   field :city, type: String
   field :state_province, type: String
-  field :state, type: String, default: 'pending'
   field :zip_code, type: String
 
   attr_accessible :email, :first_name, :last_name, :address, :city, :state_province, :zip_code, :email_confirmation

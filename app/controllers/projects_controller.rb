@@ -1,5 +1,5 @@
 class ProjectsController < PageController
-  respond_to :html, :json
+  respond_to :html, :json, :xml
 
   prepend_view_path APP_CONFIG['project_path'] if Rails.env.development?
 

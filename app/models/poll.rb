@@ -7,8 +7,8 @@ class Poll
   include ActsAsList::Mongoid
   include ProjectCacheable
 
-  field :question, type: String
   field :state, type: String, default: 'inactive'
+  field :question, type: String
   field :start_date, type: DateTime
   field :end_date, type: DateTime
 

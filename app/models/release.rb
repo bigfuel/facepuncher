@@ -2,10 +2,12 @@ class Release
   include Mongoid::Document
   include Mongoid::Timestamps
 
+  field :state, type: String, default: "staged"
   field :description, type: String
   field :branch, type: String, default: "master"
   field :live_date, type: Time, default: Time.current
   field :state, type: String, default: "staged"
+  field :live_date, type: Time
   field :status, type: String
 
   attr_accessible :description, :branch, :live_date, :status

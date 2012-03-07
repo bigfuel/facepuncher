@@ -5,9 +5,9 @@ class Project
   include Mongoid::Timestamps
   include Mongoid::CarrierwaveFix
 
+  field :state, type: String, default: 'inactive'
   field :name, type: String
   field :description, type: String
-  field :state, type: String, default: 'inactive'
   field :facebook_app_id, type: String
   field :facebook_app_secret, type: String
   field :google_analytics_tracking_code, type: String

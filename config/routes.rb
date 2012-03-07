@@ -82,20 +82,24 @@ Facepuncher::Application.routes.draw do
     member do
       match '/index' => 'projects#show'
     end
+  end
 
-    resources :signups
-    resources :events
-    resources :videos
-    resources :images
-    resources :feeds
-    resources :posts
+  namespace :api do
+    resources :project do
+      resources :signups
+      resources :events
+      resources :videos
+      resources :images
+      resources :feeds
+      resources :posts
 
-    resources :polls do
-      put 'vote', on: :member
-    end
+      resources :polls do
+        put 'vote', on: :member
+      end
 
-    resources :submissions do
-      post 'submit', on: :member
+      resources :submissions do
+        post 'submit', on: :member
+      end
     end
   end
 
