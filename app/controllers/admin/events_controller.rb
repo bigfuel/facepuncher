@@ -49,7 +49,7 @@ class Admin::EventsController < AdminController
   def approve
     @event = @project.events.find(params[:id])
     @event.approve
-    respond_with(@project) do |format|
+    respond_with(@event) do |format|
       format.html { redirect_to admin_project_events_url }
       format.json { render json: '{ "status":"success" }', status: :ok }
     end
@@ -58,7 +58,7 @@ class Admin::EventsController < AdminController
   def deny
     @event = @project.events.find(params[:id])
     @event.deny
-    respond_with(@project) do |format|
+    respond_with(@event) do |format|
       format.html { redirect_to admin_project_events_url }
       format.json { render json: '{ "status":"success" }', status: :ok }
     end
