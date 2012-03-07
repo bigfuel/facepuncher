@@ -124,65 +124,75 @@ describe "Admin Events Integration Test" do
     end
   end
 
-#   describe "on POST to :create" do
-#     it "sucessfully create a new event :html" do
-#       visit new_admin_project_event_path(@project)
-#       page.fill_in "Name", with: "bf_event_test"
-#       page.fill_in "YouTube event ID", with: "1v2i3d4e5o"
-#       page.fill_in "Description", with: "event test 1"
-#       page.click_on "Save"
-#       page.must_have_content "event was successfully created."
-#       page.must_have_content 'bf_event_test'
-#       page.must_have_content "1v2i3d4e5o"
-#       page.must_have_content "event test 1"
-#     end
+  describe "on POST to :create" do
+    it "sucessfully create a new event :html" do
+      skip "Save button is a link and requires javascript"
+      # visit new_admin_project_event_path(@project)
+      # page.fill_in "event_name", with: "bf_event_test"
+      # page.fill_in "event_start_date", with: "11/11/03 04:00 am"
+      # page.fill_in "event_location_attributes_name", with: "location123"
+      # page.fill_in "location_address", with: "123 street"
+      # page.fill_in "location_latitude", with: 40.742264
+      # page.fill_in "location_longitude", with: -73.9913408
+      # page.click_on "Save"
+      # page.must_have_content "Event was successfully created."
+      # page.must_have_content 'bf_event_test'
+      # page.must_have_content "location123"
+      # page.must_have_content "40.742264"
+    end
 
-#     it "sucessfully create a new event :json" do
-#       skip
-#     end
+    it "sucessfully create a new event :json" do
+      skip
+    end
 
-#     it "fails to create a new event" do
-#       visit new_admin_project_event_path(@project)
-#       page.fill_in "Name", with: "bf_event_test"
-#       page.click_on "Save"
-#       page.must_have_content "prohibited this project from being saved"
-#     end
+    it "fails to create a new event" do
+      skip "Save button is a link and requires javascript"
+      # visit new_admin_project_event_path(@project)
+      # page.fill_in "Name", with: "bf_event_test"
+      # page.click_on "Save"
+      # page.must_have_content "prohibited this project from being saved"
+    end
 
-#     it "fails to create a new event :json" do
-#       skip
-#     end
-#   end
+    it "fails to create a new event :json" do
+      skip
+    end
+  end
 
-  # describe "on PUT to :update" do
-  #   before do
-  #     location = Fabricate.build(:location)
-  #     @event = Fabricate(:event, location: location, project: @project, name: "bf_event_test", url: "http://newurl.com")
-  #     visit edit_admin_project_event_path(@project, @event)
-  #   end
+  describe "on PUT to :update" do
+    before do
+      location = Fabricate.build(:location)
+      @event = Fabricate(:event, location: location, project: @project, name: "bf_event_test", url: "http://newurl.com")
+      visit edit_admin_project_event_path(@project, @event)
+    end
 
-  #   it "sucessfully update a event :html" do
-  #     page.fill_in "event_name", with: "new_name"
-  #     page.fill_in "event_url", with: "http://newurl.com"
-  #     page.click_on "Save"
-  #     page.must_have_content "Event was successfully updated."
-  #     page.must_have_content "new_name"
-  #     page.must_have_content "http://newurl.com"
-  #   end
+    it "sucessfully update a event :html" do
+      skip "Save button is a link and requires javascript"
+      # page.fill_in "event_name", with: "new_name"
+      # page.fill_in "event_url", with: "http://newurl.com"
+      # page.fill_in "event_location_attributes_name", with: "100 mott street, new york"
+      # page.click_on "Save"
+      # page.must_have_content "Event was successfully updated."
+      # page.must_have_content "new_name"
+      # page.must_have_content "http://newurl.com"
+      # page.must_have_content "100 mott street, new york"
+    end
 
-  #   it "sucessfully update a event :json" do
-  #     skip
-  #   end
+    it "sucessfully update a event :json" do
+      skip
+    end
 
-  #   it "fails to update a event" do
-  #     page.fill_in "event_name", with: ""
-  #     page.click_on "Save"
-  #     page.must_have_content "prohibited this project from being saved"
-  #   end
+    it "fails to update a event" do
+      skip "Save button is a link and requires javascript"
+      # page.fill_in "event_name", with: ""
+      # page.click_on "Save"
+      # page.save_and_open_page
+      # page.must_have_content "prohibited this project from being saved"
+    end
 
-  #   it "fails to update a event :json" do
-  #     skip
-  #   end
-  # end
+    it "fails to update a event :json" do
+      skip
+    end
+  end
 
   describe "on POST to :delete" do
     before do
