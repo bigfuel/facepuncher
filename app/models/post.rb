@@ -4,6 +4,7 @@ class Post
   include Mongoid::TaggableWithContext
   include ActsAsList::Mongoid
 
+  field :state, type: String, default: 'pending'
   field :title, type: String
   field :content, type: String
   field :url, type: String

@@ -1,9 +1,9 @@
-class FeedsController < ApplicationController
-  respond_to :json
+class Api::FeedsController < ApplicationController
+  respond_to :json, :xml
   PER_PAGE = 5
 
-  def index
-    feed = @project.feeds.where(name: params[:name]).first
+  def show
+    feed = @project.feeds.where(name: params[:id]).first
     @response = Hash.new
     entries = RssFeed.get(@project.name, feed.name) || []
     entries = entries.take(feed.limit)
@@ -19,8 +19,6 @@ class FeedsController < ApplicationController
 
     @response[:entries] = entries
 
-    respond_with do |format|
-      format.json { render json: @response }
-    end
+    respond_with @response
   end
 end

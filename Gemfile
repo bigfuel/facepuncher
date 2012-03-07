@@ -52,6 +52,8 @@ gem 'pry-rails'
 gem 'bootstrap-sass'
 gem 'responders'
 gem 'ace-rails-ap'
+gem 'rabl'
+gem 'yajl-ruby'
 
 # Use unicorn as the web server
 gem 'unicorn'
@@ -69,6 +71,7 @@ group :test do
   gem 'minitest-matchers'
   gem 'valid_attribute'
   gem 'mocha', require: false
+  gem 'pry-nav'
 end
 
 group :development do

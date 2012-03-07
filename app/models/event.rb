@@ -4,8 +4,8 @@ class Event
   include ActsAsList::Mongoid
   include ProjectCacheable
 
-  field :name, type: String
   field :state, type: String, default: 'pending'
+  field :name, type: String
   field :type, type: String
   field :start_date, type: DateTime
   field :end_date, type: DateTime

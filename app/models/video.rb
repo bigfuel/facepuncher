@@ -5,6 +5,7 @@ class Video
   include ProjectCacheable
 
   field :youtube_id, type: String
+  field :state, type: String, default: 'pending'
   field :name, type: String
   field :description, type: String
 
