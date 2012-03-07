@@ -21,10 +21,6 @@ describe FacebookAlbum do
       @album.must_be :valid?
     end
 
-    it "has cached results" do
-      @project.facebook_albums.cached_results.wont_be_nil
-    end
-
     it "raise Koala exception instead of Cacheable exception if bad set_id" do
       lambda do
         album = Fabricate.build(:facebook_album, set_id: 123123, project: @project)

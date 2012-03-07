@@ -22,12 +22,16 @@ describe Poll do
     end
 
     it "validates presence of choice_id when voting" do
-      lambda { @poll.vote }.must_raise ArgumentError
-      lambda { @poll.vote("") }.must_raise ::Poll::ChoiceRequiredError
+      lambda { @poll.vote! }.must_raise ArgumentError
+      lambda { @poll.vote!("") }.must_raise ::Poll::ChoiceRequiredError
+      @poll.vote("")
+      @poll.errors["choices"].must_include "choice required"
     end
 
     it "validates choice_id can't be found when voting" do
-      lambda { @poll.vote(99) }.must_raise ::Poll::InvalidChoiceError
+      lambda { @poll.vote!(99) }.must_raise ::Poll::InvalidChoiceError
+      @poll.vote(99)
+      @poll.errors["choices"].must_include "choice_id could not be found"
     end
 
     it "increments vote count when voting" do
@@ -41,12 +45,7 @@ describe Poll do
       @poll.save!
       @poll.choices.first.image.wont_be_nil
       @poll.choices.first.image.filename.must_equal 'Desktop.jpg'
-      Digest::MD5.hexdigest(File.read(@poll.choices.first.image.current_path)).must_equal Digest::MD5.hexdigest(File.read(file))
-    end
-
-    it "has cached_results" do
-      results = @project.polls.where(state: "active").order_by([:created_at, :asc]).entries
-      @project.polls.cached_results.must_equal results
+      Digest::MD5.hexdigest(File.read(open(@poll.choices.first.image.url))).must_equal Digest::MD5.hexdigest(File.read(file))
     end
   end
 

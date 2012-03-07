@@ -14,7 +14,7 @@ describe Admin::VideosController do
     end
 
     it "return a list of videos" do
-      get :index, project_id: @project.to_param
+      get :index, project_id: @project
       assert_response :success
       assert assigns(:videos)
     end
@@ -22,7 +22,7 @@ describe Admin::VideosController do
 
   describe "on GET to :new" do
     it "render the new template" do
-      get :new, project_id: @project.to_param
+      get :new, project_id: @project
       assert_response :success
       assert_template :new
     end
@@ -31,12 +31,12 @@ describe Admin::VideosController do
   describe "on POST to :create" do
     it "create a video" do
       assert_difference('Video.count') do
-        post :create, project_id: @project.to_param, video: Fabricate(:video, name: "boo")
+        post :create, project_id: @project, video: Fabricate(:video, name: "boo")
       end
 
       video = assigns(:video)
       assert_equal "boo", video.name
-      assert_redirected_to admin_project_video_path(@project.to_param, video)
+      assert_redirected_to admin_project_video_path(@project, video)
     end
   end
 
@@ -46,7 +46,7 @@ describe Admin::VideosController do
     end
 
     it "show a video" do
-      get :show, project_id: @project.to_param, id: @video.id
+      get :show, project_id: @project, id: @video.id
       assert_response :success
       assert_equal "54321", assigns(:video).youtube_id
     end
@@ -58,7 +58,7 @@ describe Admin::VideosController do
     end
 
     it "render the edit template" do
-      get :edit, project_id: @project.to_param, id: @video.id
+      get :edit, project_id: @project, id: @video.id
       assert_response :success
       assert_template :edit
     end
@@ -70,9 +70,9 @@ describe Admin::VideosController do
     end
 
     it "update a video" do
-      put :update, project_id: @project.to_param, id: @video.id, video: @video.attributes.merge({ screencap: fixture_file_upload(Rails.root.join('test', 'support', 'QR.png'), 'image/png') })
+      put :update, project_id: @project, id: @video.id, video: @video.attributes.merge({ screencap: fixture_file_upload(Rails.root.join('test', 'support', 'QR.png'), 'image/png') })
       assert_equal "QR.png", assigns(:video).screencap_identifier
-      assert_redirected_to admin_project_video_url(@project.to_param, assigns(:video))
+      assert_redirected_to admin_project_video_url(@project, assigns(:video))
     end
   end
 
@@ -83,10 +83,10 @@ describe Admin::VideosController do
 
     it "destroy a video" do
       assert_difference('Video.count', -1) do
-        delete :destroy, project_id: @project.to_param, id: @video.id
+        delete :destroy, project_id: @project, id: @video.id
       end
 
-      assert_redirected_to admin_project_videos_url(@project.to_param)
+      assert_redirected_to admin_project_videos_url(@project)
     end
   end
 end

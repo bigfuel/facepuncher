@@ -1,7 +1,6 @@
 class FacebookAlbum
   include Mongoid::Document
   include Mongoid::Timestamps
-  include ProjectCacheable
 
   field :name, type: String
   field :set_id, type: Integer

@@ -31,33 +31,20 @@ describe Submission do
       @submission.must_be :pending?
     end
 
-    it "should be submitted" do
-      @submission.submit
-      @submission.must_be :submitted?
-    end
-
     it "should be approved" do
-      @submission.submit
       @submission.approve
       @submission.must_be :approved?
     end
 
     it "should be denied" do
-      @submission.submit
       @submission.deny
       @submission.must_be :denied?
-    end
-
-    it "has cached_results" do
-      results = @project.submissions.order_by([:created_at, :asc]).entries
-      @project.submissions.cached_results.must_equal results
     end
   end
 
   describe "Submissions" do
     before do
       @pending = Array.new
-      @submitted = Array.new
       @approved = Array.new
       @denied = Array.new
 
@@ -65,20 +52,12 @@ describe Submission do
 
       2.times do
         s = Fabricate(:submission)
-        s.submit
-        @submitted << s
-      end
-
-      3.times do
-        s = Fabricate(:submission)
-        s.submit
         s.approve
         @approved << s
       end
 
-      4.times do
+      3.times do
         s = Fabricate(:submission)
-        s.submit
         s.deny
         @denied << s
       end
@@ -88,11 +67,7 @@ describe Submission do
       (Submission.pending.entries - @pending).must_be_empty
     end
 
-    it "find all submitted submissions" do
-      (Submission.submitted.entries - @submitted).must_be_empty
-    end
-
-    it "find all approved submissions" do
+       it "find all approved submissions" do
       (Submission.approved.entries - @approved).must_be_empty
     end
 

@@ -104,6 +104,5 @@ Facepuncher::Application.routes.draw do
   end
 
   match '/admin' => 'admin/projects#index', as: 'user_root'
-  match '/index' => 'page#index'
-  root to: 'page#index'
+  root to: 'projects#show'
 end

@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     @project = params[:project_id] && Project.active.find_by_name(params[:project_id])
   end
 
+  def check_for_project
+    not_found unless @project
+  end
+
   def not_found
     raise ActionController::RoutingError.new('Not Found')
   end

@@ -1,4 +1,6 @@
 class Api::SubmissionsController < ApplicationController
+  before_filter :load_project, :check_for_project
+
   respond_to :json, :xml
 
   def index
@@ -22,13 +24,6 @@ class Api::SubmissionsController < ApplicationController
   def update
     @submission = @project.submissions.find(params[:id])
     @submission.update_attributes(params[:submission])
-    respond_with :api, @project, @submission
-  end
-
-  def submit
-    @submission = Submission.find(params[:id])
-    @project = @submission.project
-    @submission.submit
     respond_with :api, @project, @submission
   end
 end

@@ -1,32 +1,53 @@
 require 'minitest_helper'
 
-describe EventsController do
+describe Api::EventsController do
   before do
     @project = load_project
   end
 
   describe "on GET to :index" do
     before do
-      events = []
+      @events = []
       3.times do
-        events << Fabricate.build(:event, project: @project)
+        event = Fabricate(:event, project: @project)
+        event.approve
+        @events << event
       end
-      events.stubs(any_in: [Fabricate.build(:event)])
-      Project.any_instance.stubs(events: stub(future: stub(approved: events)))
+      event = Fabricate(:event, type: 'good', project: @project)
+      event.approve
+      @events << event
     end
 
     it "return a list of approved events" do
       get :index, format: :json, project_id: @project
       must_respond_with :success
+      must_render_template "api/events/index"
       events = assigns(:events)
-      events.wont_be_empty
+      (events - @events).must_be_empty
     end
 
     it "return a list of good approved events when type good=1 is specified" do
       get :index, format: :json, project_id: @project, type: { good: 1 }
       must_respond_with :success
+      must_render_template "api/events/index"
       events = assigns(:events)
       events.wont_be_empty
+    end
+  end
+
+  describe "on GET to :show" do
+    before do
+      event = Fabricate(:event, project: @project)
+      event.approve
+      @event = event
+    end
+
+    it "return an event" do
+      get :show, format: :json, project_id: @project, id: @event.id
+      must_respond_with :success
+      must_render_template "api/events/show"
+      event = assigns(:event)
+      event.must_equal @event
     end
   end
 

@@ -1,7 +1,6 @@
 class Submission
   include Mongoid::Document
   include Mongoid::Timestamps
-  include ProjectCacheable
 
   field :state, type: String, default: 'pending'
   field :facebook_name, type: String
@@ -31,9 +30,5 @@ class Submission
     event :deny do
       transition [:pending, :approved] => :denied
     end
-  end
-
-  def self.cached_results
-    order_by([:created_at, :asc]).entries
   end
 end

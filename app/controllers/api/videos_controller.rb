@@ -1,4 +1,6 @@
 class Api::VideosController < ApplicationController
+  before_filter :load_project, :check_for_project
+
   respond_to :json, :xml
 
   def index
@@ -16,7 +18,6 @@ class Api::VideosController < ApplicationController
   def create
     @video = @project.videos.new(params[:video])
     @video.save
-
     respond_with :api, @project, @video
   end
 end

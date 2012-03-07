@@ -1,7 +1,6 @@
 class FacebookEvent
   include Mongoid::Document
   include Mongoid::Timestamps
-  include ProjectCacheable
 
   field :name, type: String
   field :limit, type: Integer, default: 10
