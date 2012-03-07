@@ -2,7 +2,6 @@ class Image
   include Mongoid::Document
   include Mongoid::Timestamps
   include ActsAsList::Mongoid
-  include ProjectCacheable
 
   field :state, type: String, default: 'pending'
   field :name, type: String
@@ -28,13 +27,5 @@ class Image
     event :deny do
       transition [:pending, :approved] => :denied
     end
-  end
-
-  def self.cached_results
-    order_by([:created_at, :asc]).entries
-  end
-
-  def as_json(options={})
-    super({ methods: :image }.merge(options))
   end
 end

@@ -2,7 +2,6 @@ class Event
   include Mongoid::Document
   include Mongoid::Timestamps
   include ActsAsList::Mongoid
-  include ProjectCacheable
 
   field :state, type: String, default: 'pending'
   field :name, type: String
@@ -38,10 +37,6 @@ class Event
     event :deny do
       transition [:pending, :approved] => :denied
     end
-  end
-
-  def self.cached_results
-    where(state: "approved").order_by([:created_at, :asc]).entries
   end
 
   def as_json(options={})

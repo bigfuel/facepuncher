@@ -2,7 +2,6 @@ class Video
   include Mongoid::Document
   include Mongoid::Timestamps
   include ActsAsList::Mongoid
-  include ProjectCacheable
 
   field :youtube_id, type: String
   field :state, type: String, default: 'pending'
@@ -29,9 +28,5 @@ class Video
     event :deny do
       transition [:pending, :approved] => :denied
     end
-  end
-
-  def self.cached_results
-    where(state: "approved").order_by([:created_at, :asc]).entries
   end
 end

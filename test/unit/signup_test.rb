@@ -69,11 +69,6 @@ describe Signup do
       signup.errors.must_include :email
       signup.errors.messages[:email].must_include "is invalid"
     end
-
-    it "return cached_results" do
-      results = @project.signups.order_by([:created_at, :asc]).entries
-      @project.signups.cached_results.must_equal results
-    end
   end
 
   describe "Signups" do

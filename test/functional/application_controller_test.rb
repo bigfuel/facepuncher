@@ -3,31 +3,27 @@ require 'minitest_helper'
 describe ApplicationController do
   describe "#load_project" do
     before do
-      @project = Fabricate(:project, name: "page")
-      @project.activate
+      @project = Fabricate(:project, name: "fp_test")
+      Fabricate(:view_template, path: 'fp_test/index', project: @project)
     end
 
-    it "return nil if the project is inactive" do
-      @controller = PageController.new
-      @project.deactivate
-      lambda do
-        get :index
-      end.must_raise ActionController::RoutingError
+    it "return not found if the project is inactive" do
+      @controller = Api::PostsController.new
+      lambda { get :index, format: :json, project_id: @project }.must_raise ActionController::RoutingError
       assigns(:project).must_be_nil
     end
 
-    it "load the first matching active project" do
-      @controller = PageController.new
-      get :index
+    it "load active project" do
+      @project.activate
+      @controller = Api::PostsController.new
+      get :index, format: :json, project_id: @project
       controller_project = assigns(:project)
       controller_project.must_equal @project
     end
   end
 
   it "return a routing error when not_found is called" do
-    @controller = PageController.new
-    lambda do
-      get :index
-    end.must_raise ActionController::RoutingError
+    @controller = ProjectsController.new
+    lambda { get :show, id: "" }.must_raise ActionController::RoutingError
   end
 end

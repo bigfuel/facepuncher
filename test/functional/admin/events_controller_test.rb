@@ -20,7 +20,7 @@ describe Admin::EventsController do
     end
 
     it "return a list of events in json format" do
-      get :index, project_id: @project.to_param, format: :json
+      get :index, project_id: @project, format: :json
       assert_response :success
       events = assigns(:events)
       assert events
@@ -28,7 +28,7 @@ describe Admin::EventsController do
     end
 
     it "return a list of events in html format" do
-      get :index, project_id: @project.to_param, format: :html
+      get :index, project_id: @project, format: :html
       assert_response :success
       assert_template :index
       events = assigns(:events)
@@ -44,7 +44,7 @@ describe Admin::EventsController do
     end
 
     it "set event to approved state" do
-      put :approve, project_id: @project.to_param, format: :json, id: @event.id, event: @event.as_json
+      put :approve, project_id: @project, format: :json, id: @event.id, event: @event.as_json
       assert_response :success
       assert assigns(:event)
       assert :approved?
@@ -57,7 +57,7 @@ describe Admin::EventsController do
     end
 
     it "set event to approved state" do
-      put :deny, project_id: @project.to_param, format: :json, id: @event.id, event: @event.as_json
+      put :deny, project_id: @project, format: :json, id: @event.id, event: @event.as_json
       assert_response :success
       assert assigns(:event)
       assert :denied?
@@ -66,7 +66,7 @@ describe Admin::EventsController do
 
   describe "on GET to :new" do
     it "render the new template" do
-      get :new, project_id: @project.to_param
+      get :new, project_id: @project
       assert_response :success
       assert_template :new
     end
@@ -79,7 +79,7 @@ describe Admin::EventsController do
     end
 
     it "render the edit event" do
-      get :edit, project_id: @project.to_param, id: @event.id
+      get :edit, project_id: @project, id: @event.id
       assert_response :success
       assert_template :edit
     end
@@ -92,14 +92,14 @@ describe Admin::EventsController do
     end
 
     it "return a event in the json format" do
-      get :show, project_id: @project.to_param, id: @event.id, format: :json
+      get :show, project_id: @project, id: @event.id, format: :json
       assert_response :success
       @event = assigns(:event)
       assert @event
     end
 
     it "render the show template" do
-      get :show, project_id: @project.to_param, id: @event.id, format: :html
+      get :show, project_id: @project, id: @event.id, format: :html
       assert_response :success
       assert_template :show
     end
@@ -114,7 +114,7 @@ describe Admin::EventsController do
     it "return unprocessable_entity and a json object with validation errors when event is invalid" do
       @event.name = ""
       assert_no_difference('Event.count') do
-        post :create, project_id: @project.to_param, format: :json, event: @event.as_json
+        post :create, project_id: @project, format: :json, event: @event.as_json
       end
       assert_response :unprocessable_entity
       assert assigns(:event)
@@ -123,7 +123,7 @@ describe Admin::EventsController do
 
     it "return json object if a event is valid" do
       assert_difference('Event.count') do
-        post :create, project_id: @project.to_param, format: :json, event: @event.as_json
+        post :create, project_id: @project, format: :json, event: @event.as_json
       end
       assert_response :success
       assert assigns(:event)
@@ -139,7 +139,7 @@ describe Admin::EventsController do
     it "return re-render edit template if update is invalid" do
       @event.name = ""
       assert_no_difference('Event.count') do
-        put :update, project_id: @project.to_param, id: @event.id, event: @event.attributes
+        put :update, project_id: @project, id: @event.id, event: @event.attributes
       end
       assert assigns(:event)
       assert_template :edit
@@ -148,29 +148,29 @@ describe Admin::EventsController do
     it "return unprocessable_entity if update is invalid" do
       @event.name = ""
       assert_no_difference('Event.count') do
-        put :update, project_id: @project.to_param, format: :json, id: @event.id, event: @event.attributes
+        put :update, project_id: @project, format: :json, id: @event.id, event: @event.attributes
       end
       assert_response :unprocessable_entity
       assert assigns(:event)
-      assert_equal Hash["name" => ["can't be blank"]], json_response
+      json_response["errors"]["name"].must_include "can't be blank"
     end
 
     it "return json object if a event update is valid" do
       @event.name = "Name Updated"
       assert_no_difference('Event.count') do
-        put :update, project_id: @project.to_param, format: :json, id: @event.id, event: @event.as_json
+        put :update, project_id: @project, format: :json, id: @event.id, event: @event.as_json
       end
       assert_response :success
       assert assigns(:event)
-      assert_equal "Name Updated", json_response['name']
+      json_response["name"].must_include "Name Updated"
     end
 
     it "return html if a event update is valid" do
       @event.name = "Name Updated"
       assert_no_difference('Event.count') do
-        put :update, project_id: @project.to_param, id: @event.id, event: @event.attributes
+        put :update, project_id: @project, id: @event.id, event: @event.attributes
       end
-      assert_redirected_to admin_project_event_url(@project.to_param)
+      assert_redirected_to admin_project_event_url(@project)
       assert assigns(:event)
     end
   end
@@ -182,13 +182,13 @@ describe Admin::EventsController do
 
     it "destroy event and return html" do
       assert_difference('Event.count', -1) do
-        delete :destroy, project_id: @project.to_param, id: @event.id, format: :html
+        delete :destroy, project_id: @project, id: @event.id, format: :html
       end
-      assert_redirected_to admin_project_events_url(@project.to_param)
+      assert_redirected_to admin_project_events_url(@project)
     end
     it "destroy event and return json" do
       assert_difference('Event.count', -1) do
-        delete :destroy, project_id: @project.to_param, id: @event.id, format: :json
+        delete :destroy, project_id: @project, id: @event.id, format: :json
       end
       assert_response :success
       assert assigns(:event)

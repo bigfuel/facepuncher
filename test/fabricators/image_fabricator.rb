@@ -1,4 +1,4 @@
 Fabricator(:image) do
-  image File.open(Rails.root.join('test', 'support', 'Desktop.jpg'))
+  image   { Rack::Test::UploadedFile.new(Rails.root.join('test', 'support', 'Desktop.jpg').to_s, 'image/jpeg', true) }
   project
 end

@@ -14,6 +14,10 @@ describe Video do
       @video = Fabricate(:video)
     end
 
+    it "must be valid" do
+      @video.must_be :valid?
+    end
+
     it "start in a pending state" do
       @video.must_be :pending?
     end
@@ -26,11 +30,6 @@ describe Video do
     it "be denied" do
       @video.deny
       @video.must_be :denied?
-    end
-
-    it "has cached_results" do
-      results = @project.videos.where(state: "approved").order_by([:created_at, :asc]).entries
-      @project.videos.cached_results.must_equal results
     end
   end
 

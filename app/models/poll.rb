@@ -5,7 +5,6 @@ class Poll
   include Mongoid::Document
   include Mongoid::Timestamps
   include ActsAsList::Mongoid
-  include ProjectCacheable
 
   field :state, type: String, default: 'inactive'
   field :question, type: String
@@ -33,10 +32,6 @@ class Poll
     event :deactivate do
       transition all => :inactive
     end
-  end
-
-  def self.cached_results
-    where(state: "active").order_by([:created_at, :asc]).entries
   end
 
   def vote(choice_id)

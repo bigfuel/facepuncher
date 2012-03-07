@@ -20,15 +20,6 @@ describe Image do
     it "starts in a pending state" do
       @image.must_be :pending?
     end
-
-    it "has cached_results" do
-      results = @project.images.order_by([:created_at, :asc]).entries
-      @project.images.cached_results.must_equal results
-    end
-
-    it "returns as_json" do
-      skip
-    end
   end
 
   describe "An unpersisted image" do

@@ -1,6 +1,6 @@
 require 'minitest_helper'
 
-describe PostsController do
+describe Api::PostsController do
   before do
     @project = load_project
   end

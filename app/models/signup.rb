@@ -1,7 +1,6 @@
 class Signup
   include Mongoid::Document
   include Mongoid::Timestamps
-  include ProjectCacheable
 
   field :state, type: String, default: 'pending'
   field :email, type: String
@@ -34,9 +33,5 @@ class Signup
     event :complete do
       transition :pending => :completed
     end
-  end
-
-  def self.cached_results
-    order_by([:created_at, :asc]).entries
   end
 end
