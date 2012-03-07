@@ -7,7 +7,7 @@ class Image
   field :name, type: String
   field :description, type: String
 
-  attr_accessible :name, :description
+  attr_accessible :name, :description, :image
 
   belongs_to :project
 
