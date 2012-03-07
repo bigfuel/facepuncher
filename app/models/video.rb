@@ -8,7 +8,7 @@ class Video
   field :name, type: String
   field :description, type: String
 
-  attr_accessible :youtube_id, :name, :description
+  attr_accessible :youtube_id, :name, :description, :screencap
 
   belongs_to :project
 
