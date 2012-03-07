@@ -11,12 +11,12 @@ class EventsController < ApplicationController
     else
       @events = @project.events.future.approved
     end
-    respond_with(@events)
+    respond_with @project, @events
   end
 
   def create
     @event = @project.events.new(params[:event])
     @event.save
-    respond_with(@event)
+    respond_with @project, @event
   end
 end

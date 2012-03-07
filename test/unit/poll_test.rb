@@ -23,7 +23,11 @@ describe Poll do
 
     it "validates presence of choice_id when voting" do
       lambda { @poll.vote }.must_raise ArgumentError
-      lambda { @poll.vote(nil) }.must_raise RuntimeError
+      lambda { @poll.vote("") }.must_raise ::Poll::ChoiceRequiredError
+    end
+
+    it "validates choice_id can't be found when voting" do
+      lambda { @poll.vote(99) }.must_raise ::Poll::InvalidChoiceError
     end
 
     it "increments vote count when voting" do

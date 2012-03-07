@@ -7,8 +7,8 @@ describe PollsController do
 
   describe "on GET to :show" do
     before do
-      Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll))))
-      get :show, project_name: @project.name, id: "1", format: :json
+      Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll, project: @project))))
+      get :show, format: :json, project_id: @project, id: "1"
     end
 
     it "returns a poll object" do
@@ -20,20 +20,23 @@ describe PollsController do
 
   describe "on GET to :vote" do
     before do
-      @poll = Fabricate.build(:poll, project: @project)
+      Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll, project: @project))))
     end
 
-    it "with a valid poll should redirect to referrer" do
-      Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll))))
-      referrer = 'http://example.com'
-      @request.env['HTTP_REFERER'] = referrer
-      put :vote, project_name: @project.name, id: "1", choice: { id: @poll.choices.first.id }
-      must_redirect_to referrer
+    it "with a valid poll" do
+      Poll.any_instance.stubs(vote: true)
+      put :vote, format: :json, project_id: @project, id: "1", choice: { id: "100" }
+      must_respond_with :success
     end
 
-    it "with an empty choice should render 500 template" do
-      put :vote, project_name: @project.name, id: "1"
-      must_redirect_to '/500.html'
+    it "with a blank choice should return a validation error" do
+      put :vote, format: :json, project_id: @project, id: "1", choice: { id: "" }
+      must_respond_with :unprocessable_entity
+    end
+
+    it "with a nonexistant choice should return a validation error" do
+      put :vote, format: :json, project_id: @project, id: "1", choice: { id: "400000000000000000000000" }
+      must_respond_with :unprocessable_entity
     end
   end
 end

@@ -38,6 +38,10 @@ class Post
     end
   end
 
+  def as_json(options={})
+    results = super({ method: image_url }.merge(options))
+  end
+
   private
   # TODO: re-evaluate this method
   def init_list

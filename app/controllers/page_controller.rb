@@ -1,5 +1,4 @@
 class PageController < ApplicationController
-  before_filter :load_project
   around_filter :load_digests
   prepend_view_path ViewTemplate.resolver
 

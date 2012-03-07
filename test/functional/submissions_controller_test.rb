@@ -2,25 +2,21 @@ require 'minitest_helper'
 
 describe SubmissionsController do
   before do
-    @project = Fabricate(:project, name: 'bf_project_test')
-    @project.activate
+    @project = load_project
   end
 
   describe "on POST to :create" do
-    it "render new template when submission is invalid" do
-      assert_no_difference('Submission.count') do
-        post :create, project_name: @project.name
-      end
-      assert_redirected_to '/500.html'
+    it "on invalid submission, return submission with validation errors" do
+      post :create, format: :json, project_id: @project, submission: Submission.new
+      must_respond_with :unprocessable_entity
+      json_response["errors"]["facebook_name"].must_include "can't be blank"
     end
 
-    it "redirect when submission is valid" do
-      submission = Fabricate.build(:submission)
-      assert_difference('Submission.count') do
-        post :create, project_name: @project.name, submission: submission.attributes.merge({photo: fixture_file_upload(Rails.root.join('test', 'support', 'Desktop.jpg'), 'image/jpg')})
-      end
-      assert assigns(:submission)
-      assert_redirected_to "/chevy?submission_id=#{assigns(:submission).id}"
+    it "with a valid submission, return the saved submission" do
+      submission = Fabricate.attributes_for(:submission, project: nil)
+      post :create, format: :json, project_id: @project, submission: submission.as_json
+      must_respond_with :success
+      json_response['facebook_name'].wont_be_blank
     end
   end
 end

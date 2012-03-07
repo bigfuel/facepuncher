@@ -1,4 +1,5 @@
 class FeedsController < ApplicationController
+  respond_to :json
   PER_PAGE = 5
 
   def index
@@ -18,7 +19,7 @@ class FeedsController < ApplicationController
 
     @response[:entries] = entries
 
-    respond_to do |format|
+    respond_with do |format|
       format.json { render json: @response }
     end
   end

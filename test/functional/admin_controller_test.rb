@@ -3,21 +3,20 @@ require 'minitest_helper'
 describe AdminController do
   describe "loaded project" do
     before do
-      @project = Fabricate(:project, name: "bf_project_test")
-      @project.activate
+      @project = load_project
     end
 
     it "set a nil project if it doesn't exist" do
       @project.name = "shamwow"
       @controller = Admin::EventsController.new
-      get :index, project_id: @project.to_param
-      assert_nil assigns(:project)
+      get :index, project_id: @project
+      assigns(:project).must_be_nil
     end
 
     it "load the project" do
       @controller = Admin::EventsController.new
-      get :index, project_id: @project.to_param
-      assert_equal @project, assigns(:project)
+      get :index, project_id: @project
+      assigns(:project).must_equal @project
     end
   end
 
