@@ -68,7 +68,7 @@ describe "Admin Signups Integration Test" do
 
   describe "on GET to :edit" do
     before do
-      @signup = Fabricate(:signup, project: @project, first_name: "Daisy", last_name: "Lin", email: "daisy@asdf.com")
+      @signup = Fabricate(:signup, project: @project, first_name: "Daisy", last_name: "Lin", email: "signup@test.com")
       visit edit_admin_project_signup_path(@project, @signup)
     end
 
@@ -76,16 +76,16 @@ describe "Admin Signups Integration Test" do
       page.current_url.must_include('/edit')
     end
 
-    it "has form field with first name" do
+    it "has form field with submitted first name" do
       page.must_have_field "signup_first_name", with: "Daisy"
     end
 
-    it "has form field with last name" do
+    it "has form field with submitted last name" do
       page.must_have_field "signup_last_name", with: "Lin"
     end
 
-    it "has form field with email" do
-      page.must_have_field "signup_email", with: "daisy@asdf.com"
+    it "has form field with submitted email" do
+      page.must_have_field "signup_email", with: "signup@test.com"
     end
 
     it "has save button" do
@@ -95,7 +95,7 @@ describe "Admin Signups Integration Test" do
 
   describe "on GET to :show" do
     before do
-      @signup = Fabricate(:signup, project: @project, first_name: "Daisy", last_name: "Lin", email: "daisy@asdf.com")
+      @signup = Fabricate(:signup, project: @project, first_name: "Daisy", last_name: "Lin", email: "signup@test.com")
     end
 
     it "shows correct url and project signup info :html" do
@@ -104,7 +104,7 @@ describe "Admin Signups Integration Test" do
       page.current_url.must_include('/signups/' + path_id)
       page.must_have_content 'Daisy'
       page.must_have_content "Lin"
-      page.must_have_content "daisy@asdf.com"
+      page.must_have_content "signup@test.com"
     end
 
     it "shows correct url and project signup info :json" do
@@ -113,7 +113,7 @@ describe "Admin Signups Integration Test" do
       page.current_url.must_include('/signups/' + path_id + '.json')
       page.must_have_content '"first_name":"Daisy"'
       page.must_have_content '"last_name":"Lin"'
-      page.must_have_content '"email":"daisy@asdf.com"'
+      page.must_have_content '"email":"signup@test.com"'
     end
   end
 
@@ -122,12 +122,12 @@ describe "Admin Signups Integration Test" do
       visit new_admin_project_signup_path(@project)
       page.fill_in "First name", with: "Daisy"
       page.fill_in "Last name", with: "Lin"
-      page.fill_in "Email", with: "daisy@asdf.com"
+      page.fill_in "Email", with: "signup@test.com"
       page.click_on "Save"
       page.must_have_content "Signup was successfully created."
       page.must_have_content 'Daisy'
       page.must_have_content "Lin"
-      page.must_have_content "daisy@asdf.com"
+      page.must_have_content "signup@test.com"
     end
 
     it "sucessfully create a new signup :json" do
@@ -148,7 +148,7 @@ describe "Admin Signups Integration Test" do
 
   describe "on PUT to :update" do
     before do
-      @signup = Fabricate(:signup, project: @project, first_name: "Daisy", last_name: "Lin", email: "daisy@asdf.com")
+      @signup = Fabricate(:signup, project: @project, first_name: "Daisy", last_name: "Lin", email: "signup@test.com")
       visit edit_admin_project_signup_path(@project, @signup)
     end
 

@@ -64,16 +64,20 @@ describe "Admin videos Integration Test" do
       page.current_url.must_include('/edit')
     end
 
-    it "has form field with name" do
+    it "has form field with submitted  name" do
       page.must_have_field "video_name", with: "bf_video_test"
     end
 
-    it "has form field with youtube id" do
+    it "has form field with submitted youtube id" do
       page.must_have_field "video_youtube_id", with: "1v2i3d4e5o"
     end
 
-    it "has form field with description" do
+    it "has form field with submitted description" do
       page.must_have_field "video_description", with: "video test 1"
+    end
+
+    it "has form field with submitted screencap" do
+      page.must_have_xpath("//img[contains(@src,\"Desktop.jpg\")]")
     end
 
     it "has save button" do
@@ -93,6 +97,7 @@ describe "Admin videos Integration Test" do
       page.must_have_content 'bf_video_test'
       page.must_have_content "1v2i3d4e5o"
       page.must_have_content "video test 1"
+      page.must_have_xpath("//img[contains(@src,\"Desktop.jpg\")]")
     end
 
     it "shows correct url and project video info :json" do
@@ -102,6 +107,7 @@ describe "Admin videos Integration Test" do
       page.must_have_content '"name":"bf_video_test"'
       page.must_have_content '"youtube_id":"1v2i3d4e5o"'
       page.must_have_content '"description":"video test 1"'
+      page.must_have_content 'Desktop.jpg'
     end
   end
 
@@ -111,11 +117,13 @@ describe "Admin videos Integration Test" do
       page.fill_in "video_name", with: "bf_video_test"
       page.fill_in "video_youtube_id", with: "1v2i3d4e5o"
       page.fill_in "video_description", with: "video test 1"
+      page.attach_file("video_screencap", File.join(::Rails.root, ('test/support/Desktop.jpg')))
       page.click_on "Save"
       page.must_have_content "Video was successfully created."
       page.must_have_content 'bf_video_test'
       page.must_have_content "1v2i3d4e5o"
       page.must_have_content "video test 1"
+      page.must_have_xpath("//img[contains(@src,\"Desktop.jpg\")]")
     end
 
     it "sucessfully create a new video :json" do
@@ -144,11 +152,13 @@ describe "Admin videos Integration Test" do
       page.fill_in "Name", with: "new_name"
       page.fill_in "YouTube Video ID", with: "new12351236"
       page.fill_in "Description", with: "new_description"
+      page.attach_file("video_screencap", File.join(::Rails.root, ('test/support/QR.png')))
       page.click_on "Save"
       page.must_have_content "Video was successfully updated."
       page.must_have_content "new_name"
       page.must_have_content "new12351236"
       page.must_have_content "new_description"
+      page.must_have_xpath("//img[contains(@src,\"QR.png\")]")
     end
 
     it "sucessfully update a video :json" do

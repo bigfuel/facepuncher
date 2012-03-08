@@ -60,16 +60,16 @@ describe "Admin images Integration Test" do
       page.current_url.must_include('/edit')
     end
 
-    it "has form field with name" do
+    it "has form field with submitted name" do
       page.must_have_field "image_name", with: "bf_image_test"
     end
 
-    it "has form field with description" do
+    it "has form field with submitted description" do
       page.must_have_field "image_description", with: "image test 1"
     end
 
-    it "is displaying image" do
-      page.must_have_selector('img', visible: true)
+    it "has form field with submitted image" do
+      page.must_have_xpath("//img[contains(@src,\"Desktop.jpg\")]")
     end
 
      it "has save button" do
@@ -88,7 +88,7 @@ describe "Admin images Integration Test" do
       page.current_url.must_include('/images/' + path_id)
       page.must_have_content 'bf_image_test'
       page.must_have_content "image test 1"
-      page.must_have_selector('img', visible: true)
+      page.must_have_xpath("//img[contains(@src,\"Desktop.jpg\")]")
     end
 
     it "shows correct url and project image info :json" do
@@ -97,7 +97,7 @@ describe "Admin images Integration Test" do
       page.current_url.must_include('/images/' + path_id + '.json')
       page.must_have_content '"name":"bf_image_test"'
       page.must_have_content '"description":"image test 1"'
-      page.must_have_content @image.image.url
+      page.must_have_content 'Desktop.jpg'
     end
   end
 
@@ -106,7 +106,7 @@ describe "Admin images Integration Test" do
       visit new_admin_project_image_path(@project)
       page.fill_in "image_name", with: "bf_image_test"
       page.fill_in "image_description", with: "image test 1"
-      page.attach_file("Image", File.open(Rails.root.join('test', 'support', 'Desktop.jpg')))
+      page.attach_file("image_image", File.join(::Rails.root, ('test/support/QR.png')))
       page.click_on "Save"
       page.must_have_content "Image was successfully created."
       page.must_have_content 'bf_image_test'
@@ -139,7 +139,7 @@ describe "Admin images Integration Test" do
     it "sucessfully update an image :html" do
       page.fill_in "Name", with: "new_name"
       page.fill_in "Description", with: "new_description"
-      page.attach_file("Image", File.open(Rails.root.join('test', 'support', 'QR.png')))
+      page.attach_file("image_image", File.join(::Rails.root, ('test/support/QR.png')))
       page.click_on "Save"
       page.must_have_content "Image was successfully updated."
       page.must_have_content "new_name"
@@ -153,6 +153,8 @@ describe "Admin images Integration Test" do
 
     it "fails to update an image" do
       skip
+      # page.click_on "Save"
+      # page.must_have_content "prohibited this project from being saved"
     end
 
     it "fails to update an image :json" do
@@ -187,7 +189,7 @@ describe "Admin images Integration Test" do
       @image = Fabricate(:image, project: @project)
     end
 
-    it "sucessfully activates a project :html" do
+    it "sucessfully activates an image :html" do
       visit admin_project_image_path(@project, @image)
       page.must_have_content "pending"
       page.driver.get approve_admin_project_image_path(@project, @image)
@@ -195,7 +197,7 @@ describe "Admin images Integration Test" do
       page.must_have_content "approved"
     end
 
-    it "sucessfully activates a project :json" do
+    it "sucessfully activates an image :json" do
       visit approve_admin_project_image_path(@project, @image, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
@@ -207,16 +209,15 @@ describe "Admin images Integration Test" do
       @image = Fabricate(:image, project: @project)
     end
 
-    it "successfully deactivates a project :html" do
+    it "successfully deactivates an image :html" do
       visit admin_project_image_path(@project, @image)
       page.must_have_content "pending"
-      page.save_and_open_page
       page.driver.get deny_admin_project_image_path(@project, @image)
       visit admin_project_image_path(@project, @image)
       page.must_have_content "denied"
     end
 
-    it "successfully deactivates a project :json" do
+    it "successfully deactivates an image :json" do
       visit deny_admin_project_image_path(@project, @image, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'
