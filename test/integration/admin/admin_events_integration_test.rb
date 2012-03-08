@@ -88,11 +88,11 @@ describe "Admin Events Integration Test" do
       page.current_url.must_include('/edit')
     end
 
-    it "has form field with name" do
+    it "has form field with submitted name" do
       page.must_have_field "event_name", with: "bf_event_test"
     end
 
-    it "has form field with start date" do
+    it "has form field with submitted start date" do
       page.must_have_field "event_start_date", with: "2003-11-11 04:00:00 AM"
     end
 

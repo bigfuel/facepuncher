@@ -75,11 +75,11 @@ describe "Admin Projects Integration Test" do
       page.current_url.must_include('/edit')
     end
 
-    it "has form field with project name" do
+    it "has form field with submitted project name" do
       page.must_have_field "project_name", with: "bf_project_test"
     end
 
-    it "has form field with project repo value" do
+    it "has form field with submitted project repo value" do
       page.must_have_field "project_repo", with: "git@git.bf_project_test.git"
     end
 
