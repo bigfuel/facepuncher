@@ -18,23 +18,18 @@ class Submission
   paginates_per 10
 
   scope :pending, where(state: 'pending')
-  scope :submitted, where(state: 'submitted')
   scope :approved, where(state: 'approved')
   scope :denied, where(state: 'denied')
 
   validates :facebook_name, :facebook_id, :facebook_email, :photo, presence: true, if: -> { !Rails.env.development? }
 
   state_machine initial: :pending do
-    event :submit do
-      transition pending: :submitted
-    end
-
     event :approve do
-      transition [:submitted, :denied] => :approved
+      transition [:pending, :denied] => :approved
     end
 
     event :deny do
-      transition [:submitted, :approved] => :denied
+      transition [:pending, :approved] => :denied
     end
   end
 
