@@ -5,6 +5,13 @@
   = link_to 'Back', admin_project_submissions_path(@project), title: "Back", class: "btn btn-inverse"
   = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_submission_path(@project), title: "New", class: "btn"
   = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_submission_path(@project), title: "Edit", class: "btn"
+  - if @submission.state == 'pending'
+    = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_submission_path(@project, @submission), remote: false, class: "approve btn", title: "Approve"
+    = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_submission_path(@project, @submission), remote: false, class: "deny btn", title: "Deny"
+  - elsif @submission.state == 'denied'
+    = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_submission_path(@project, @submission), remote: false, class: "approve btn", title: "Approve"
+  - elsif @submission.state == 'approved'
+    = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_submission_path(@project, @submission), remote: false, class: "deny btn", title: "Deny"
 
 .row
   .span6
