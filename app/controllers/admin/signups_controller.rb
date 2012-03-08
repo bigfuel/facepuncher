@@ -7,7 +7,7 @@ class Admin::SignupsController < AdminController
   def index
     @signups = @project.signups.order_by([sort_column, sort_direction]).page(params[:page])
 
-    respond_with(@signups) do |format|
+    respond_with @signups do |format|
       format.csv do
         @signups = @project.signups
         csv_string = CSV.generate do |csv|
@@ -46,7 +46,7 @@ class Admin::SignupsController < AdminController
   def create
     @signup = @project.signups.new(params[:signup])
     @signup.save
-    respond_with(@signup, location: [:admin, @project, @signup])
+    respond_with @signup, location: [:admin, @project, @signup]
   end
 
   def edit
@@ -56,18 +56,19 @@ class Admin::SignupsController < AdminController
   def update
     @signup = @project.signups.find(params[:id])
     @signup.update_attributes(params[:signup])
-    respond_with(@signup, location: [:admin, @project, @signup])
+    respond_with @signup, location: [:admin, @project, @signup]
   end
 
   def show
     @signup = @project.signups.find(params[:id])
-    respond_with(@signup)
+    respond_with @signup
   end
 
   def destroy
     @signup = @project.signups.find(params[:id])
     @signup.destroy
-    respond_with(@signup, location: admin_project_signups_url) do |format|
+    
+    respond_with @signup, location: admin_project_signups_url do |format|
       format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end

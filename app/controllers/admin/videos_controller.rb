@@ -3,7 +3,7 @@ class Admin::VideosController < AdminController
 
   def index
     @videos = @project.videos.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with(@videos)
+    respond_with @videos
   end
 
   def new
@@ -16,25 +16,26 @@ class Admin::VideosController < AdminController
 
   def show
     @video = @project.videos.find(params[:id])
-    respond_with(@video)
+    respond_with @video
   end
 
   def create
     @video = @project.videos.new(params[:video])
     @video.save
-    respond_with(@video, location: [:admin, @project, @video])
+    respond_with @video, location: [:admin, @project, @video]
   end
 
   def update
     @video = @project.videos.find(params[:id])
     @video.update_attributes(params[:video])
-    respond_with(@video, location: [:admin, @project, @video])
+    respond_with @video, location: [:admin, @project, @video]
   end
 
   def destroy
     @video = @project.videos.find(params[:id])
     @video.destroy
-    respond_with(@signup, location: admin_project_videos_url) do |format|
+
+    respond_with(@video, location: admin_project_videos_url) do |format|
       format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
@@ -42,6 +43,7 @@ class Admin::VideosController < AdminController
   def approve
     @video = @project.videos.find(params[:id])
     @video.approve
+
     respond_with(@project) do |format|
       format.html { redirect_to admin_project_videos_url }
       format.json { render json: '{ "status":"success" }', status: :ok }
@@ -51,6 +53,7 @@ class Admin::VideosController < AdminController
   def deny
     @video = @project.videos.find(params[:id])
     @video.deny
+
     respond_with(@project) do |format|
       format.html { redirect_to admin_project_videos_url }
       format.json { render json: '{ "status":"success" }', status: :ok }

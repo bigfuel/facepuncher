@@ -1,11 +1,9 @@
 class Admin::SubmissionsController < AdminController
+  respond_to :html, :json
+
   def index
     @submissions = @project.submissions.order_by([sort_column, sort_direction]).page(params[:page])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @submissions }
-    end
+    respond_with @submissions
   end
 
   def new
@@ -14,16 +12,8 @@ class Admin::SubmissionsController < AdminController
 
   def create
     @submission = @project.submissions.new(params[:submission])
-
-    respond_to do |format|
-      if @submission.save
-        format.html { redirect_to [:admin, @project, @submission], notice: 'Submission was successfully created.' }
-        format.json { render json: @submission, status: :created, location: @submission }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @submission.errors, status: :unprocessable_entity }
-      end
-    end
+    @submission.save
+    respond_with @submission, location: [:admin, @project, @submission]
   end
 
   def edit
@@ -32,34 +22,21 @@ class Admin::SubmissionsController < AdminController
 
   def update
     @submission = @project.submissions.find(params[:id])
-
-    respond_to do |format|
-      if @submission.update_attributes(params[:submission])
-        format.html { redirect_to [:admin, @project, @submission], notice: 'Submission was successfully updated.' }
-        format.json { render json: @submission.as_json(methods: :image_url) }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @submission.errors, status: :unprocessable_entity }
-      end
-    end
+    @submission.update_attributes(params[:submission])
+    respond_with @submission, location: [:admin, @project, @submission]
   end
 
   def show
     @submission = @project.submissions.find(params[:id])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @submission }
-    end
+    respond_with @submission
   end
 
   def destroy
     @submission = @project.submissions.find(params[:id])
     @submission.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_project_submissions_url(@project) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    
+    respond_with @submission, location: admin_project_submissions_url do |format|
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
@@ -67,9 +44,9 @@ class Admin::SubmissionsController < AdminController
     @submission = @project.submissions.find(params[:id])
     @submission.approve
 
-    respond_to do |format|
-      format.html { redirect_to admin_project_submissions_url(@project) }
-      format.json { head :ok }
+    respond_with @submission do |format|
+      format.html { redirect_to [:admin, @project, @submission] }
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
@@ -77,9 +54,9 @@ class Admin::SubmissionsController < AdminController
     @submission = @project.submissions.find(params[:id])
     @submission.deny
 
-    respond_to do |format|
-      format.html { redirect_to admin_project_submissions_url(@project) }
-      format.json { head :ok }
+    respond_with @submission do |format|
+      format.html { redirect_to [:admin, @project, @submission] }
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 end

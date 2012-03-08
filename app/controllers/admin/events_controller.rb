@@ -5,7 +5,7 @@ class Admin::EventsController < AdminController
 
   def index
     @events = @project.events.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with(@events)
+    respond_with @events
   end
 
   def new
@@ -21,26 +21,25 @@ class Admin::EventsController < AdminController
 
   def show
     @event = @project.events.find(params[:id])
-    respond_with(@event)
+    respond_with @event
   end
 
   def create
     @event = @project.events.new(params[:event])
     @event.move_to_top if @event.save
-    respond_with(@event, location: [:admin, @project, @event])
+    respond_with @event, location: [:admin, @project, @event]
   end
 
   def update
     @event = @project.events.find(params[:id])
     @event.update_attributes(params[:event])
-    respond_with(@event, location: [:admin, @project, @event])
+    respond_with @event, location: [:admin, @project, @event]
   end
 
   def destroy
     @event = @project.events.find(params[:id])
     @event.destroy
-
-    respond_with(@event, location: admin_project_events_url) do |format|
+    respond_with @event, location: admin_project_events_url do |format|
       format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
@@ -58,7 +57,7 @@ class Admin::EventsController < AdminController
   def deny
     @event = @project.events.find(params[:id])
     @event.deny
-
+    
     respond_with @event do |format|
       format.html { redirect_to [:admin, @project, @event] }
       format.json { render json: '{ "status":"success" }',  status: :ok }
