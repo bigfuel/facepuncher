@@ -21,12 +21,12 @@
           .actions
             = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, video], class: "btn", title: "Edit"
             - if video.state == 'pending'
-              = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, video), remote: false, class: "approve btn", title: "Approve"
-              = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, video), remote: false, class: "deny btn", title: "Deny"
+              = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, video, format: :json), remote: true, class: "approve btn", title: "Approve"
+              = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, video, format: :json), remote: true, class: "deny btn", title: "Deny"
             - elsif video.state == 'denied'
-              = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, video), remote: false, class: "approve btn", title: "Approve"
+              = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_video_path(@project, video, format: :json), remote: true, class: "approve btn", title: "Approve"
             - elsif video.state == 'approved'
-              = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, video), remote: false, class: "deny btn", title: "Deny"
+              = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_video_path(@project, video, format: :json), remote: true, class: "deny btn", title: "Deny"
             = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, video], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
         %td= video.state
         %td= video.youtube_id
