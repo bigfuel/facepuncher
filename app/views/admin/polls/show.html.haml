@@ -8,7 +8,7 @@
 
 .row
   .span6
-    = form_tag vote_poll_path(@project.name, @poll), class: "form-horizontal", method: :put do
+    = form_tag vote_project_poll_path(@project.name, @poll), class: "form-horizontal", method: :put do
       %fieldset
         %legend= @poll.question
         - @poll.choices.each do |choice|
@@ -39,6 +39,11 @@
           .control-label Updated At
           .controls
             .uneditable-input= @poll.updated_at
+
+        .control-group
+          .control-label State
+          .controls
+            .uneditable-input= @poll.state
 
         .form-actions
           = submit_tag "Vote", class: 'btn btn-primary'
