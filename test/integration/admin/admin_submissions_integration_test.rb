@@ -209,7 +209,7 @@ describe "Admin Submissions Integration Test" do
       @submission = Fabricate(:submission, project: @project)
     end
 
-    it "sucessfully activates a project :html" do
+    it "sucessfully approves a project :html" do
       visit admin_project_submission_path(@project, @submission)
       page.must_have_content "pending"
       page.driver.get approve_admin_project_submission_path(@project, @submission)
@@ -217,7 +217,7 @@ describe "Admin Submissions Integration Test" do
       page.must_have_content "approved"
     end
 
-    it "sucessfully activates a project :json" do
+    it "sucessfully approves a project :json" do
       visit approve_admin_project_submission_path(@project, @submission, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
@@ -229,7 +229,7 @@ describe "Admin Submissions Integration Test" do
       @submission = Fabricate(:submission, project: @project)
     end
 
-    it "successfully deactivates a project :html" do
+    it "successfully denies a project :html" do
       visit admin_project_submission_path(@project, @submission)
       page.must_have_content "pending"
       page.driver.get deny_admin_project_submission_path(@project, @submission)
@@ -237,7 +237,7 @@ describe "Admin Submissions Integration Test" do
       page.must_have_content "denied"
     end
 
-    it "successfully deactivates a project :json" do
+    it "successfully denies a project :json" do
       visit deny_admin_project_submission_path(@project, @submission, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'

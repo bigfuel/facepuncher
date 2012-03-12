@@ -203,7 +203,7 @@ describe "Admin videos Integration Test" do
       @video = Fabricate(:video, project: @project)
     end
 
-    it "sucessfully activates a project :html" do
+    it "sucessfully approves a project :html" do
       visit admin_project_video_path(@project, @video)
       page.must_have_content "pending"
       page.driver.get approve_admin_project_video_path(@project, @video)
@@ -211,7 +211,7 @@ describe "Admin videos Integration Test" do
       page.must_have_content "approved"
     end
 
-    it "sucessfully activates a project :json" do
+    it "sucessfully approves a project :json" do
       visit approve_admin_project_video_path(@project, @video, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
@@ -223,7 +223,7 @@ describe "Admin videos Integration Test" do
       @video = Fabricate(:video, project: @project)
     end
 
-    it "successfully deactivates a project :html" do
+    it "successfully denies a project :html" do
       visit admin_project_video_path(@project, @video)
       page.must_have_content "pending"
       page.driver.get deny_admin_project_video_path(@project, @video)
@@ -231,7 +231,7 @@ describe "Admin videos Integration Test" do
       page.must_have_content "denied"
     end
 
-    it "successfully deactivates a project :json" do
+    it "successfully denies a project :json" do
       visit deny_admin_project_video_path(@project, @video, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'
