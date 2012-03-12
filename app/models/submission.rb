@@ -9,7 +9,7 @@ class Submission
   field :facebook_email, type: String
   field :description, type: String
 
-  attr_accessible :facebook_name, :facebook_id, :facebook_email, :description
+  attr_accessible :facebook_name, :facebook_id, :facebook_email, :description, :photo
 
   belongs_to :project
 
