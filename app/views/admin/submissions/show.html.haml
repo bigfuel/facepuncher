@@ -41,4 +41,4 @@
         %td Image
         %td
           - unless @submission.photo.blank?
-            = submission_tag @submission.photo.url
+            = image_tag @submission.photo.url
