@@ -189,7 +189,7 @@ describe "Admin images Integration Test" do
       @image = Fabricate(:image, project: @project)
     end
 
-    it "sucessfully activates an image :html" do
+    it "sucessfully approves an image :html" do
       visit admin_project_image_path(@project, @image)
       page.must_have_content "pending"
       page.driver.get approve_admin_project_image_path(@project, @image)
@@ -197,7 +197,7 @@ describe "Admin images Integration Test" do
       page.must_have_content "approved"
     end
 
-    it "sucessfully activates an image :json" do
+    it "sucessfully approves an image :json" do
       visit approve_admin_project_image_path(@project, @image, format: :json)
       page.current_url.must_include('/approve.json')
       page.must_have_content '"status":"success"'
@@ -209,7 +209,7 @@ describe "Admin images Integration Test" do
       @image = Fabricate(:image, project: @project)
     end
 
-    it "successfully deactivates an image :html" do
+    it "successfully denies an image :html" do
       visit admin_project_image_path(@project, @image)
       page.must_have_content "pending"
       page.driver.get deny_admin_project_image_path(@project, @image)
@@ -217,7 +217,7 @@ describe "Admin images Integration Test" do
       page.must_have_content "denied"
     end
 
-    it "successfully deactivates an image :json" do
+    it "successfully denies an image :json" do
       visit deny_admin_project_image_path(@project, @image, format: :json)
       page.current_url.must_include('/deny.json')
       page.must_have_content '"status":"success"'
