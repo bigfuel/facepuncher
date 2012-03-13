@@ -10,7 +10,7 @@ class Post
 
   taggable
 
-  attr_accessible :title, :content, :url
+  attr_accessible :title, :content, :url, :tags, :image
 
   belongs_to :project
 
@@ -36,6 +36,10 @@ class Post
     event :deny do
       transition [:pending, :approved] => :denied
     end
+  end
+
+  def as_json(options={})
+    results = super({ method: image_url }.merge(options))
   end
 
   private

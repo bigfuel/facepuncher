@@ -1,16 +1,22 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class ReleaseTest < ActiveSupport::TestCase
-  should validate_presence_of(:branch)
-  should validate_presence_of(:live_date)
+describe Release do
+  it "should have validations" do
+    release = Fabricate.build(:release)
+    release.must have_valid(:branch)
+    release.wont have_valid(:branch).when(nil)
 
-  context Release do
-    setup do
-      @project = Fabricate(:release)
+    release.must have_valid(:live_date)
+    release.wont have_valid(:live_date).when(Time.now - 10.minutes)
+  end
+
+  describe "A release" do
+    before do
+      @release = Fabricate(:release)
     end
 
-    should "be valid" do
-      assert @project.valid?
+    it "should be valid" do
+      @release.must_be :valid?
     end
   end
 end

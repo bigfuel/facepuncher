@@ -1,36 +1,42 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class PollsControllerTest < ActionController::TestCase
-  setup do
-    @project = Fabricate(:project, name: 'bf_project_test')
-    @project.activate
+describe PollsController do
+  before do
+    @project = load_project
   end
 
-  context "persisted poll" do
-    setup do
-      @poll = Fabricate(:poll, project: @project)
-      @poll.activate
+  describe "on GET to :show" do
+    before do
+      Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll, project: @project))))
+      get :show, format: :json, project_id: @project, id: "1"
     end
 
-    context "show action" do
-      should "render show template" do
-        get :show, project_name: @project.name, id: @poll.id
-        assert_template 'show'
-      end
+    it "returns a poll object" do
+      must_respond_with :success
+      poll = assigns(:poll)
+      poll.wont_be_nil
+    end
+  end
+
+  describe "on GET to :vote" do
+    before do
+      Project.any_instance.stubs(polls: stub(active: stub(find: Fabricate.build(:poll, project: @project))))
     end
 
-    context "vote action" do
-      should "render edit template when poll is invalid" do
-        put :vote, project_name: @project.name, id: @poll.id
-        assert_redirected_to '/500.html'
-      end
+    it "with a valid poll" do
+      Poll.any_instance.stubs(vote: true)
+      put :vote, format: :json, project_id: @project, id: "1", choice: { id: "100" }
+      must_respond_with :success
+    end
 
-      should "redirect when poll is valid" do
-        referrer = 'http://whatever'
-        @request.env['HTTP_REFERER'] = referrer
-        put :vote, project_name: @project.name, id: @poll.id, choice: { id: @poll.choices.first.id }
-        assert_redirected_to referrer
-      end
+    it "with a blank choice should return a validation error" do
+      put :vote, format: :json, project_id: @project, id: "1", choice: { id: "" }
+      must_respond_with :unprocessable_entity
+    end
+
+    it "with a nonexistant choice should return a validation error" do
+      put :vote, format: :json, project_id: @project, id: "1", choice: { id: "400000000000000000000000" }
+      must_respond_with :unprocessable_entity
     end
   end
 end

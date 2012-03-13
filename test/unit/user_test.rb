@@ -1,15 +1,20 @@
-require "test_helper"
+require "minitest_helper"
 
-class UserTest < ActiveSupport::TestCase
-  should validate_presence_of(:email)
+describe User do
+  it "should have validations" do
+    user = Fabricate.build(:user)
 
-  context User do
-    setup do
+    user.must have_valid(:email).when("test@example.com")
+    user.wont have_valid(:email).when("")
+  end
+
+  describe "A user" do
+    before do
       @user = Fabricate(:user)
     end
 
-    should "must be valid" do
-      assert @user.valid?
+    it "must be valid" do
+      @user.must_be :valid?
     end
   end
 end

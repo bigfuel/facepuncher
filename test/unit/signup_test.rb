@@ -1,75 +1,83 @@
-require "test_helper"
+require "minitest_helper"
 
-class SignupTest < ActiveSupport::TestCase
-  should validate_presence_of(:email)
-  should validate_presence_of(:first_name)
-  should validate_presence_of(:last_name)
-  should validate_presence_of(:zip_code)
-  should_not allow_value("blah").for(:email)
-  should allow_value("a@b.com").for(:email)
+describe Signup do
+  it "should have validations" do
+    signup = Fabricate.build(:signup)
 
-  context Signup do
-    setup do
+    signup.must have_valid(:first_name)
+    signup.wont have_valid(:first_name).when(nil)
+
+    signup.must have_valid(:last_name)
+    signup.wont have_valid(:last_name).when(nil)
+
+    signup.must have_valid(:email)
+    signup.wont have_valid(:email).when(nil)
+    signup.wont have_valid(:email).when("blah")
+    signup.wont have_valid(:email).when("blah@example")
+  end
+
+  describe "A signup" do
+    before do
       @project = Fabricate(:project)
       @signup = Fabricate(:signup, project: @project)
     end
 
-    should "be valid" do
-      assert @signup.valid?
+    it "be valid" do
+      @signup.must_be :valid?
     end
 
-    should "belong to a project" do
-      assert_equal @project, @signup.project
+    it "belong to a project" do
+      @signup.project.must_equal @project
     end
 
-    should "start in a pending state" do
-      assert_equal 'pending', @signup.state
+    it "starts in a pending state" do
+      @signup.must_be :pending?
     end
 
-    should "be uploaded" do
+    it "should be uploaded" do
       @signup.upload
-      assert_equal 'uploaded', @signup.state
+      @signup.must_be :uploaded?
     end
 
-    should "be complete" do
+    it "should be complete" do
       @signup.complete
-      assert_equal 'completed', @signup.state
+      @signup.must_be :completed?
     end
 
-    should "do conditional validation based on project" do
-      flunk
+    it "do conditional validation based on project" do
+      skip
     end
 
-    should "have a unique email per project" do
+    it "have a unique email per project" do
       same_project_signup = Fabricate.build(:signup, email: @signup.email, project: @signup.project)
       same_project_signup.save
-      refute same_project_signup.valid?
-      assert_includes same_project_signup.errors, :email
-      assert_includes same_project_signup.errors.messages[:email], "has already been used to sign up."
+      same_project_signup.wont_be :valid?
+      same_project_signup.errors.must_include :email
+      same_project_signup.errors.messages[:email].must_include "has already been used to sign up."
 
       different_project = Fabricate(:project)
       different_project_signup = Fabricate.build(:signup, project: different_project, email: @signup.email)
       different_project_signup.save
-      assert different_project_signup.valid?
+      different_project_signup.must_be :valid?
     end
 
-    should "have a valid email format" do
-      assert_match /^([^\s]+)((?:[-a-z0-9]\.)[a-z]{2,})$/i, @signup.email
+    it "have a valid email format" do
+      @signup.email.must_match /^([^\s]+)((?:[-a-z0-9]\.)[a-z]{2,})$/i
       signup = Fabricate.build(:signup, email: 'whatthefuck')
       signup.save
-      refute signup.valid?
-      assert_includes signup.errors, :email
-      assert_includes signup.errors.messages[:email], "is invalid"
+      signup.wont_be :valid?
+      signup.errors.must_include :email
+      signup.errors.messages[:email].must_include "is invalid"
     end
 
-    should "return cached_results" do
+    it "return cached_results" do
       results = @project.signups.order_by([:created_at, :asc]).entries
-      assert_equal results, @project.signups.cached_results
+      @project.signups.cached_results.must_equal results
     end
   end
 
-  context "Signups" do
-    setup do
+  describe "Signups" do
+    before do
       @pending = Array.new
       @uploaded = Array.new
 
@@ -82,16 +90,12 @@ class SignupTest < ActiveSupport::TestCase
       end
     end
 
-    should "find all pending signups" do
-      signups = Signup.pending
-      assert_equal 1, signups.count
-      assert_empty @pending - signups
+    it "should find all pending signups" do
+      (Signup.pending.entries - @pending).must_be_empty
     end
 
-    should "find all uploaded signups" do
-      signups = Signup.uploaded
-      assert_equal 2, signups.count
-      assert_empty @uploaded - signups
+    it "should find all uploaded signups" do
+      (Signup.pending.uploaded - @uploaded).must_be_empty
     end
   end
 end

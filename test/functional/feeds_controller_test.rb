@@ -1,14 +1,13 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class FeedsControllerTest < ActionController::TestCase
-  setup do
-    @project = Fabricate(:project, name: "bf_project_test")
-    @project.activate
+describe FeedsController do
+  before do
+    @project = load_project
   end
 
-  context "on GET to :index" do
-    should "return a list of feed entries in json format" do
-      flunk
+  describe "on GET to :index" do
+    it "returns a list of feed entries in json format" do
+      skip
     end
   end
 end

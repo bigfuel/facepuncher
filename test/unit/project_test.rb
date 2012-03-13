@@ -1,69 +1,68 @@
-require "test_helper"
+require "minitest_helper"
 
-class ProjectTest < ActiveSupport::TestCase
-  should validate_presence_of(:name)
-  should validate_presence_of(:repo)
-
-  context Project do
-    setup do
+describe Project do
+  describe "A project" do
+    before do
       @project = Fabricate(:project, name: "bf_project_test")
     end
 
-    should "be valid" do
-      assert @project.valid?
+    it "should have validations" do
+      new_project = Fabricate.build(:project)
+      new_project.must have_valid(:name).when("new_project")
+      new_project.wont have_valid(:name).when(@project.name)
+      new_project.wont have_valid(:name).when("")
+
+      @project.must have_valid(:repo).when("git@bitbucket.org:bigfuel/bf_project_test.git")
+      @project.wont have_valid(:repo).when("")
     end
 
-    should "start in a inactive state" do
-      assert @project.inactive?
+    it "must be valid" do
+      @project.must_be :valid?
     end
 
-    should "activate a project" do
+    it "starts in a inactive state" do
+      @project.must_be :inactive?
+    end
+
+    it "should be activated" do
       @project.activate
-      assert @project.active?
+      @project.must_be :active?
     end
 
-    should "deactivate a project" do
+    it "should be deactivated" do
       @project.activate
       @project.deactivate
-      assert @project.inactive?
+      @project.must_be :inactive?
     end
 
-    should "have a unique project name" do
-      new_project = Fabricate.build(:project, name: @project.name)
-      new_project.save
-      refute new_project.valid?
-      assert_includes new_project.errors, :name
-      assert_includes new_project.errors.messages[:name], 'is already taken'
+    it "touched, should save" do
+      @project.touch.must_equal @project.save
     end
 
-    should "touch" do
-      assert_equal @project.save, @project.touch
+    it "returns name" do
+      @project.to_param.must_equal "bf_project_test"
     end
 
-    should "return name" do
-      assert_equal @project.name, @project.to_param
-    end
-
-    should "find project by name" do
-      assert_equal @project, Project.find_by_name("bf_project_test")
+    it "find project by name" do
+      Project.find_by_name("bf_project_test").must_equal @project
     end
   end
 
-  context "Unperisted project" do
-    setup do
+  describe "An unperisted project" do
+    before do
       @project = Fabricate.build(:project, name: 'Shabuttie')
     end
 
-    should "return the project name on to_param" do
-      assert_equal 'Shabuttie', @project.to_param
+    it "returns the project name on to_param" do
+      @project.to_param.must_equal 'Shabuttie'
     end
   end
 
-  context 'Projects' do
-    setup do
+  describe "Projects" do
+    before do
       @inactive = Array.new
       @active = Array.new
-      
+
       @inactive << Fabricate(:project)
 
       p = Fabricate(:project)
@@ -79,16 +78,12 @@ class ProjectTest < ActiveSupport::TestCase
       @active << p
     end
 
-    should 'find all active projects' do
-      projects = Project.active
-      assert_equal 2, projects.count
-      assert_empty @active - projects
+    it 'should find all active projects' do
+      (Project.active.entries - @active).must_be_empty
     end
 
-    should 'find all inactive projects' do
-      projects = Project.inactive
-      assert_equal 2, projects.count
-      assert_empty @inactive - projects
+    it 'should find all inactive projects' do
+      (Project.inactive.entries - @inactive).must_be_empty
     end
   end
 end

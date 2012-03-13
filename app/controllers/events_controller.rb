@@ -1,4 +1,6 @@
 class EventsController < ApplicationController
+  respond_to :json
+
   def index
     if params[:type]
       types = params[:type].delete_if {|k, v| v == "0"}.keys
@@ -9,21 +11,12 @@ class EventsController < ApplicationController
     else
       @events = @project.events.future.approved
     end
-    respond_to do |format|
-      format.json { render json: @events }
-    end
+    respond_with @project, @events
   end
 
   def create
     @event = @project.events.new(params[:event])
-    @event.build_location(params[:event][:location_attributes])
-
-    respond_to do |format|
-      if @event.save
-        format.json { render json: @event }
-      else
-        format.json { render json: @event.errors, status: :unprocessable_entity }
-      end
-    end
+    @event.save
+    respond_with @project, @event
   end
 end

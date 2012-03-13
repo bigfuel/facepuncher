@@ -1,15 +1,15 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class Admin::EventsControllerTest < ActionController::TestCase
-  setup do
+describe Admin::EventsController do
+  before do
     @user = Fabricate(:user)
     sign_in @user
     @project = Fabricate(:project, name: "bf_project_test")
     @project.activate
   end
 
-  context "on GET to :index" do
-    setup do
+  describe "on GET to :index" do
+    before do
       3.times do
         location = Fabricate.build(:location)
         @project.events << Fabricate.build(:event, location: location, project: @project)
@@ -19,7 +19,7 @@ class Admin::EventsControllerTest < ActionController::TestCase
       @events = @project.events
     end
 
-    should "return a list of events in json format" do
+    it "return a list of events in json format" do
       get :index, project_id: @project.to_param, format: :json
       assert_response :success
       events = assigns(:events)
@@ -27,7 +27,7 @@ class Admin::EventsControllerTest < ActionController::TestCase
       assert_empty @events - events
     end
 
-    should "return a list of events in html format" do
+    it "return a list of events in html format" do
       get :index, project_id: @project.to_param, format: :html
       assert_response :success
       assert_template :index
@@ -37,13 +37,13 @@ class Admin::EventsControllerTest < ActionController::TestCase
     end
   end
 
-  context "on PUT to :approve" do
-    setup do
+  describe "on PUT to :approve" do
+    before do
       location = Fabricate.build(:location)
       @event = Fabricate(:event, location: location, project: @project)
     end
 
-    should "set event to approved state" do
+    it "set event to approved state" do
       put :approve, project_id: @project.to_param, format: :json, id: @event.id, event: @event.as_json
       assert_response :success
       assert assigns(:event)
@@ -51,12 +51,12 @@ class Admin::EventsControllerTest < ActionController::TestCase
     end
   end
 
-  context "on PUT to :deny" do
-    setup do
+  describe "on PUT to :deny" do
+    before do
       @event = Fabricate(:event, project: @project)
     end
 
-    should "set event to approved state" do
+    it "set event to approved state" do
       put :deny, project_id: @project.to_param, format: :json, id: @event.id, event: @event.as_json
       assert_response :success
       assert assigns(:event)
@@ -64,54 +64,54 @@ class Admin::EventsControllerTest < ActionController::TestCase
     end
   end
 
-  context "on GET to :new" do
-    should "render the new template" do
+  describe "on GET to :new" do
+    it "render the new template" do
       get :new, project_id: @project.to_param
       assert_response :success
       assert_template :new
     end
   end
 
-  context "on GET to :edit" do
-    setup do
+  describe "on GET to :edit" do
+    before do
       location = Fabricate.build(:location)
       @event = Fabricate(:event, location: location, project: @project)
     end
 
-    should "render the edit event" do
+    it "render the edit event" do
       get :edit, project_id: @project.to_param, id: @event.id
       assert_response :success
       assert_template :edit
     end
   end
 
-  context "on GET to :show" do
-    setup do
+  describe "on GET to :show" do
+    before do
       location = Fabricate.build(:location)
       @event = Fabricate(:event, location: location, project: @project)
     end
 
-    should "return a event in the json format" do
+    it "return a event in the json format" do
       get :show, project_id: @project.to_param, id: @event.id, format: :json
       assert_response :success
       @event = assigns(:event)
       assert @event
     end
 
-    should "render the show template" do
+    it "render the show template" do
       get :show, project_id: @project.to_param, id: @event.id, format: :html
       assert_response :success
       assert_template :show
     end
   end
 
-  context "on POST to :create" do
-    setup do
+  describe "on POST to :create" do
+    before do
       location = Fabricate.build(:location)
       @event = Fabricate.build(:event, location: location, project: @project)
     end
 
-    should "return unprocessable_entity and a json object with validation errors when event is invalid" do
+    it "return unprocessable_entity and a json object with validation errors when event is invalid" do
       @event.name = ""
       assert_no_difference('Event.count') do
         post :create, project_id: @project.to_param, format: :json, event: @event.as_json
@@ -121,7 +121,7 @@ class Admin::EventsControllerTest < ActionController::TestCase
       assert_equal Hash["name" => ["can't be blank"]], json_response
     end
 
-    should "return json object if a event is valid" do
+    it "return json object if a event is valid" do
       assert_difference('Event.count') do
         post :create, project_id: @project.to_param, format: :json, event: @event.as_json
       end
@@ -130,13 +130,13 @@ class Admin::EventsControllerTest < ActionController::TestCase
     end
   end
 
-  context "on PUT to :update" do
-    setup do
+  describe "on PUT to :update" do
+    before do
       location = Fabricate.build(:location)
       @event = Fabricate(:event, location: location, project: @project)
     end
 
-    should "return re-render edit template if update is invalid" do
+    it "return re-render edit template if update is invalid" do
       @event.name = ""
       assert_no_difference('Event.count') do
         put :update, project_id: @project.to_param, id: @event.id, event: @event.attributes
@@ -145,7 +145,7 @@ class Admin::EventsControllerTest < ActionController::TestCase
       assert_template :edit
     end
 
-    should "return unprocessable_entity if update is invalid" do
+    it "return unprocessable_entity if update is invalid" do
       @event.name = ""
       assert_no_difference('Event.count') do
         put :update, project_id: @project.to_param, format: :json, id: @event.id, event: @event.attributes
@@ -155,7 +155,7 @@ class Admin::EventsControllerTest < ActionController::TestCase
       assert_equal Hash["name" => ["can't be blank"]], json_response
     end
 
-    should "return json object if a event update is valid" do
+    it "return json object if a event update is valid" do
       @event.name = "Name Updated"
       assert_no_difference('Event.count') do
         put :update, project_id: @project.to_param, format: :json, id: @event.id, event: @event.as_json
@@ -165,7 +165,7 @@ class Admin::EventsControllerTest < ActionController::TestCase
       assert_equal "Name Updated", json_response['name']
     end
 
-    should "return html if a event update is valid" do
+    it "return html if a event update is valid" do
       @event.name = "Name Updated"
       assert_no_difference('Event.count') do
         put :update, project_id: @project.to_param, id: @event.id, event: @event.attributes
@@ -175,18 +175,18 @@ class Admin::EventsControllerTest < ActionController::TestCase
     end
   end
 
-  context "on DELETE to :destroy" do
-    setup do
+  describe "on DELETE to :destroy" do
+    before do
       @event = Fabricate(:event, project: @project)
     end
 
-    should "destroy event and return html" do
+    it "destroy event and return html" do
       assert_difference('Event.count', -1) do
         delete :destroy, project_id: @project.to_param, id: @event.id, format: :html
       end
       assert_redirected_to admin_project_events_url(@project.to_param)
     end
-    should "destroy event and return json" do
+    it "destroy event and return json" do
       assert_difference('Event.count', -1) do
         delete :destroy, project_id: @project.to_param, id: @event.id, format: :json
       end

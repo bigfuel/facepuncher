@@ -1,47 +1,54 @@
-require "test_helper"
+require "minitest_helper"
 
-class EventTest < ActiveSupport::TestCase
-  should validate_presence_of(:name)
-  should validate_presence_of(:start_date)
+describe Event do
+  it "should have validations" do
+    location = Fabricate.build(:location)
+    event = Fabricate.build(:event, location: location)
+    event.must have_valid(:name)
+    event.wont have_valid(:name).when(nil)
 
-  context Event do
-    setup do
+    event.must have_valid(:start_date)
+    event.wont have_valid(:start_date).when(nil)
+  end
+
+  describe "An event" do
+    before do
       location = Fabricate.build(:location)
       @event = Fabricate(:event, location: location)
     end
 
-    should "be valid" do
-      assert @event.valid?
+    it "should be valid" do
+      @event.must_be :valid?
     end
 
-    should "approve an event" do
+    it "should be approved" do
       @event.approve
-      assert @event.approved?
+      @event.must_be :approved?
     end
 
-    should "deny an event" do
+    it "should be denied" do
       @event.deny
-      assert @event.denied?
+      @event.must_be :denied?
     end
 
-    should "start in a pending state" do
-      assert @event.pending?
+    it "starts in a pending state" do
+      @event.must_be :pending?
     end
   end
 
-  context "Unperisted event" do
-    setup do
+  describe "An unperisted event" do
+    before do
       @event = Fabricate.build(:event, start_date: "2013-05-11", end_date: "2013-05-13")
     end
 
-    should "format the start and end date in its json representation" do
-      assert_equal 'Sat May 11, 2013 12:00 AM', @event.as_json['start_date']
-      assert_equal 'Mon May 13, 2013 12:00 AM', @event.as_json['end_date']
+    it "formats the start and end date in its json representation" do
+      @event.as_json['start_date'].must_equal 'Sat May 11, 2013 12:00 AM'
+      @event.as_json['end_date'].must_equal 'Mon May 13, 2013 12:00 AM'
     end
   end
 
-  context "Events" do
-    setup do
+  describe "Events" do
+    before do
       @pending = Array.new
       @denied = Array.new
       @approved = Array.new
@@ -73,28 +80,20 @@ class EventTest < ActiveSupport::TestCase
       end
     end
 
-    should "find all pending events" do
-      events = Event.pending
-      assert_equal 3, events.count
-      assert_empty @pending - events
+    it "finds all pending" do
+      (Event.pending.entries - @pending).must_be_empty
     end
 
-    should "find all denied events" do
-      events = Event.denied
-      assert_equal 2, events.count
-      assert_empty @denied - events
+    it "finds all denied" do
+      (Event.denied.entries - @denied).must_be_empty
     end
 
-    should "find all approved events" do
-      events = Event.approved
-      assert_equal 3, events.count
-      assert_empty @approved - events
+    it "finds all approved" do
+      (Event.approved.entries - @approved).must_be_empty
     end
 
-    should "find all future events" do
-      events = Event.future
-      assert_equal 6, events.count
-      assert_empty @future - events
+    it "finds all future" do
+      (Event.future.entries - @future).must_be_empty
     end
   end
 end

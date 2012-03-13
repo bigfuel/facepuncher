@@ -116,7 +116,7 @@ jQuery ->
     callback = ((loc) ->
       $("#location_latitude").val loc.lat()
       $("#location_longitude").val loc.lng()
-      $("#new_event").submit()
+      $("form").submit()
     )
     fp.maps.find address, callback
     e.preventDefault()

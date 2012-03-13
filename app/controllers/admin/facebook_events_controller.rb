@@ -1,11 +1,9 @@
 class Admin::FacebookEventsController < AdminController
+  respond_to :html, :json
+
   def index
     @facebook_events = @project.facebook_events.order_by([sort_column, sort_direction]).page(params[:page])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @facebook_events }
-    end
+    respond_with @facebook_events
   end
 
   def new
@@ -18,69 +16,27 @@ class Admin::FacebookEventsController < AdminController
 
   def show
     @facebook_event = @project.facebook_events.find(params[:id])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @facebook_event }
-    end
+    respond_with @facebook_event
   end
 
   def create
     @facebook_event = @project.facebook_events.new(params[:facebook_event])
-
-    respond_to do |format|
-      if @facebook_event.save
-        format.html { redirect_to([:admin, @project, @facebook_event], notice: 'Facebook Event was successfully created.') }
-        format.json { render json: @facebook_event, status: :approved }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @facebook_event.errors, status: :unprocessable_entity }
-      end
-    end
+    @facebook_event.save
+    respond_with @facebook_event, location: [:admin, @project, @facebook_event]
   end
 
   def update
     @facebook_event = @project.facebook_events.find(params[:id])
-
-    respond_to do |format|
-      if @facebook_event.update_attributes(params[:facebook_event])
-        format.html { redirect_to [:admin, @project, @facebook_event], notice: 'Facebook Event was successfully updated.' }
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @facebook_event.errors, status: :unprocessable_entity }
-      end
-    end
+    @facebook_event.update_attributes(params[:facebook_event])
+    respond_with @facebook_event, location: [:admin, @project, @facebook_event]
   end
 
   def destroy
     @facebook_event = @project.facebook_events.find(params[:id])
     @facebook_event.destroy
 
-    respond_to do |format|
-      format.html { redirect_to admin_project_facebook_events_url(@project) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
-    end
-  end
-
-
-  def approve
-    @facebook_event = @project.facebook_events.find(params[:id])
-    @facebook_event.approve
-
-    respond_to do |format|
-      format.html { redirect_to(admin_project_facebook_events_url(@project)) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
-    end
-  end
-
-  def deny
-    @facebook_event = @project.facebook_events.find(params[:id])
-    @facebook_event.deny
-
-    respond_to do |format|
-      format.html { redirect_to(admin_project_facebook_events_url(@project)) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with(@facebook_event, location: admin_project_facebook_events_url) do |format|
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 end

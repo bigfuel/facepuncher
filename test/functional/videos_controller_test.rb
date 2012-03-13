@@ -1,33 +1,21 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class VideosControllerTest < ActionController::TestCase
-  setup do
-    @project = Fabricate(:project, name: "chevy")
-    @project.activate
+describe VideosController do
+  before do
+    @project = load_project
   end
 
-  context "on POST to :create" do
-    setup do
-      @video = Fabricate.build(:video, youtube_id: "123456")
+  describe "on POST to :create" do
+    it "with a valid video returns a json object" do
+      post :create, format: :json, project_id: @project, video: Fabricate.attributes_for(:video, youtube_id: "123456", project: nil)
+      must_respond_with :success
+      json_response['youtube_id'].must_equal "123456"
     end
 
-    should "return unprocessable_entity and a json object with validation errors when video is invalid" do
-      @video.youtube_id = ""
-      assert_no_difference('Video.count') do
-        post :create, project_name: "chevy", format: :json, video: @video.as_json
-      end
-      assert_response :unprocessable_entity
-      assert assigns(:video)
-      assert_equal Hash["youtube_id" => ["can't be blank"]], json_response
-    end
-
-    should "return json object if a video is valid" do
-      assert_difference('Video.count') do
-        post :create, project_name: "chevy", format: :json, video: @video.as_json
-      end
-      assert_response :success
-      assert assigns(:video)
-      assert_equal "123456", json_response['youtube_id']
+    it "with an invalid video returns unprocessable_entity and a json object with validation errors" do
+      post :create, format: :json, project_id: @project, video: Video.new
+      must_respond_with :unprocessable_entity
+      json_response["errors"]["youtube_id"].must_include "can't be blank"
     end
   end
 end

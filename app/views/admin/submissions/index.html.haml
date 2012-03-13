@@ -3,29 +3,31 @@
 
 .well
   %h6 Stats
-  #{@project.submissions.all.count} total / #{@project.submissions.submitted.count} submitted
+  #{@project.submissions.all.count} total / #{@project.submissions.pending.count} pending / #{@project.submissions.approved.count} approved / #{@project.submissions.denied.count} denied
 
 = paginate @submissions
 
 %table.table.table-striped.table-bordered
   %tr
-    %th{width: 250}= sort_by "state"
-    - %w{facebook_name facebook_id facebook_email created_at}.each do |c|
+    %th{width: 250}= sort_by "facebook_name"
+    - %w{facebook_id facebook_email created_at}.each do |c|
       %th.sort= sort_by c
     %th Image
 
   - @submissions.each do |submission|
     %tr{class: (submission.state == 'approved' ? nil : "inactive")}
       %td
-        = link_to submission.state, [:admin, @project, submission]
+        = link_to submission.facebook_name, [:admin, @project, submission]
         .actions
           = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, submission], class: "btn", title: "Edit"
-          - if submission.state == 'approved'
-            = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_submission_path(@project, submission, format: :json), remote: true, class: "deny btn", title: "Deny"
-          - elsif
+          - if submission.state == 'pending'
             = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_submission_path(@project, submission, format: :json), remote: true, class: "approve btn", title: "Approve"
+            = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_submission_path(@project, submission, format: :json), remote: true, class: "deny btn", title: "Deny"
+          - elsif submission.state == 'denied'
+            = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_submission_path(@project, submission, format: :json), remote: true, class: "approve btn", title: "Approve"
+          - elsif submission.state == 'approved'
+            = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_submission_path(@project, submission, format: :json), remote: true, class: "deny btn", title: "Deny"
           = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, submission], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-      %td= submission.facebook_name
       %td= submission.facebook_id
       %td= truncate(submission.facebook_email, length: 50)
       %td= l submission.created_at, format: :custom

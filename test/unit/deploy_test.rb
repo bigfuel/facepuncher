@@ -1,50 +1,58 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class DeployTest < ActiveSupport::TestCase
-  context Deploy do
-    setup do
-      @project = Fabricate(:project)
-      @release = Fabricate(:release, project: @project, live_date: Time.current)
+describe Deploy do
+  before do
+    @project = Fabricate(:project)
+    @release = Fabricate(:release, project: @project, live_date: Time.current)
+  end
+
+  describe "clones a repo" do
+    before do
+      @project_path = Deploy::PROJECTS_PATH.join(@project.name)
+      FileUtils.rm_rf(@project_path, secure: true)
     end
 
-    should "clone the repo" do
-      project_path = Deploy::PROJECTS_PATH.join(@project.name)
-      FileUtils.rm_rf(project_path, secure: true)
-
-      assert Deploy.clone_repo(project_path, @project.repo, @release.branch)
-      assert Grit::Repo.new(project_path)
+    it "successfully" do
+      Deploy.clone_repo(@project_path, @project.repo, @release.branch)[0].must_equal 0
+      Grit::Repo.new(@project_path).must_be_instance_of Grit::Repo
     end
 
-    should "copy assets to rails asset projects path" do
-      flunk
+    it "unsuccessfully" do
+      lambda { Deploy.clone_repo(@project_path, nil, @release.branch) }.must_raise Grit::Git::CommandFailed
+      lambda { Deploy.clone_repo(@project_path, "git@git.example.com/example.git", @release.branch) }.must_raise Grit::Git::CommandFailed
+      lambda { Grit::Repo.new(@project_path) }.must_raise Grit::InvalidGitRepositoryError
+    end
+  end
+
+  it "copy assets to rails asset projects path" do
+    skip
+  end
+
+  it "compiles assets" do
+    skip
+  end
+
+  it "generates views" do
+    skip
+  end
+
+  it "deploys active projects" do
+    @project.activate
+
+    if @project.active?
+      DeployProject.queue_active
     end
 
-    should "compile_assets" do
-      flunk
+    Resque.size(:deploy_project).must_equal 1
+  end
+
+  it "queues unique jobs" do
+    @project.activate
+
+    3.times do
+      Resque.enqueue(DeployProject, @project.name)
     end
 
-    should "generate views" do
-      flunk
-    end
-
-    should "deploy active projects" do
-      @project.activate
-
-      if @project.active?
-        DeployProject.queue_active
-      end
-
-      assert_equal 1, Resque.size(:deploy_project)
-    end
-
-    should "queue unique jobs" do
-      @project.activate
-
-      3.times do
-        Resque.enqueue(DeployProject, @project.name)
-      end
-
-      assert_equal 1, Resque.size(:deploy_project)
-    end
+    Resque.size(:deploy_project).must_equal 1
   end
 end

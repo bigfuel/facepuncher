@@ -69,11 +69,10 @@ module Deploy
     # initialize grit
     grit = Grit::Git.new(project_path.to_s)
 
-    result = ""
+    result = nil
     # clone the release repo/branch, retry if it fails
-    retriable on: [Timeout::Error, Grit::Git::GitTimeout], tries: NUM_RETRIES, interval: 1 do
-      result = grit.clone({depth: 1, quiet: false, verbose: true, progress: true, branch: branch}, repo, project_path)
-      raise Timeout::Error, "Couldn't clone repo. Please check the repo and branch and make sure they are correct" unless Dir.exists?(project_path)
+    retriable on: [Grit::Git::CommandFailed, Grit::Git::GitTimeout], tries: NUM_RETRIES, interval: 1 do
+      result = grit.clone({process_info: true, raise: true, progress: true, depth: 1, branch: branch}, repo, project_path)
     end
 
     result

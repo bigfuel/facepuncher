@@ -12,13 +12,13 @@ class Event
   field :url, type: String
   field :details, type: String
 
-  attr_accessible :name, :type, :start_date, :end_date, :url, :details
+  attr_accessible :name, :type, :start_date, :end_date, :url, :details, :location_attributes
 
   embeds_one :location, as: :locationable
 
-  belongs_to :project
-
   accepts_nested_attributes_for :location
+
+  belongs_to :project
 
   paginates_per 20
 
@@ -45,9 +45,9 @@ class Event
   end
 
   def as_json(options={})
-    results = super({}.merge(options))
+    results = super({ method: location }.merge(options))
     results['start_date'] = start_date.strftime("%a %b %d, %Y %I:%M %p")
-    results['end_date'] = end_date.strftime("%a %b %d, %Y %I:%M %p")
+    results['end_date'] = end_date.strftime("%a %b %d, %Y %I:%M %p") if end_date
     results
   end
 end
