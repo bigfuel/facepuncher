@@ -10,7 +10,7 @@ class Post
 
   taggable
 
-  attr_accessible :title, :content, :url
+  attr_accessible :title, :content, :url, :tags, :image
 
   belongs_to :project
 
