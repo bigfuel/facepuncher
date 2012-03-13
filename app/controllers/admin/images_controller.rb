@@ -1,11 +1,9 @@
 class Admin::ImagesController < AdminController
+  respond_to :html, :json
+
   def index
     @images = @project.images.order_by([sort_column, sort_direction]).page(params[:page])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @images }
-    end
+    respond_with @images
   end
 
   def new
@@ -18,60 +16,37 @@ class Admin::ImagesController < AdminController
 
   def show
     @image = @project.images.find(params[:id])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @image }
-    end
+    respond_with @image
   end
 
   def create
     @image = @project.images.new(params[:image])
-
-    respond_to do |format|
-      if @image.save
-        @image.move_to_top
-        format.html { redirect_to([:admin, @project, @image], notice: 'Image was successfully created.') }
-        format.json { render json: @image, status: :approved }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @image.errors, status: :unprocessable_entity }
-      end
-    end
+    @image.save
+    respond_with @image, location: [:admin, @project, @image]
   end
 
   def update
     @image = @project.images.find(params[:id])
-
-    respond_to do |format|
-      if @image.update_attributes(params[:image])
-        format.html { redirect_to [:admin, @project, @image], notice: 'Image was successfully updated.' }
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @image.errors, status: :unprocessable_entity }
-      end
-    end
+    @image.update_attributes(params[:image])
+    respond_with(@image, location: [:admin, @project, @image])
   end
 
   def destroy
     @image = @project.images.find(params[:id])
     @image.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_project_images_url(@project) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    
+    respond_with @image, location: admin_project_images_url do |format|
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
-
 
   def approve
     @image = @project.images.find(params[:id])
     @image.approve
 
-    respond_to do |format|
-      format.html { redirect_to(admin_project_images_url(@project)) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with @project do |format|
+      format.html { redirect_to [:admin, @project, @image] }
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
@@ -79,9 +54,9 @@ class Admin::ImagesController < AdminController
     @image = @project.images.find(params[:id])
     @image.deny
 
-    respond_to do |format|
-      format.html { redirect_to(admin_project_images_url(@project)) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with @project do |format|
+      format.html { redirect_to [:admin, @project, @image] }
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 end

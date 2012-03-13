@@ -1,11 +1,16 @@
+require "application_responder"
+
 class ApplicationController < ActionController::Base
+  self.responder = ApplicationResponder
+  respond_to :html
+
   protect_from_forgery
   before_filter :load_project
   helper :application
 
   protected
   def load_project
-    @project = params[:project_name] && Project.active.where(name: params[:project_name]).first
+    @project = params[:project_id] && Project.active.find_by_name(params[:project_id])
   end
 
   def not_found

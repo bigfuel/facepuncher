@@ -1,50 +1,61 @@
-require "test_helper"
+require "minitest_helper"
 
-class SubmissionTest < ActiveSupport::TestCase
-  should validate_presence_of(:facebook_name)
-  should validate_presence_of(:facebook_id)
-  should validate_presence_of(:facebook_email)
-  should validate_presence_of(:photo)
+describe Submission do
+  it "should have validations" do
+    submission = Fabricate.build(:submission)
 
-  context Submission do
-    setup do
+    submission.must have_valid(:facebook_name)
+    submission.wont have_valid(:facebook_name).when(nil)
+
+    submission.must have_valid(:facebook_id)
+    submission.wont have_valid(:facebook_id).when(nil)
+
+    submission.must have_valid(:facebook_email)
+    submission.wont have_valid(:facebook_email).when(nil)
+
+    submission.must have_valid(:photo)
+    submission.wont have_valid(:photo).when(nil)
+  end
+
+  describe "A submission" do
+    before do
       @project = Fabricate(:project)
       @submission = Fabricate(:submission)
     end
 
-    should "be valid" do
-      assert @submission.valid?
+    it "should be valid" do
+      @submission.must_be :valid?
     end
 
-    should "start in a pending state" do
-      assert @submission.pending?
+    it "starts in a pending state" do
+      @submission.must_be :pending?
     end
 
-    should "be submitted" do
+    it "should be submitted" do
       @submission.submit
-      assert @submission.submitted?
+      @submission.must_be :submitted?
     end
 
-    should "be approved" do
+    it "should be approved" do
       @submission.submit
       @submission.approve
-      assert @submission.approved?
+      @submission.must_be :approved?
     end
 
-    should "be denied" do
+    it "should be denied" do
       @submission.submit
       @submission.deny
-      assert @submission.denied?
+      @submission.must_be :denied?
     end
 
-    should "return cached_results" do
+    it "has cached_results" do
       results = @project.submissions.order_by([:created_at, :asc]).entries
-      assert_equal results, @project.submissions.cached_results
+      @project.submissions.cached_results.must_equal results
     end
   end
 
-  context "Submissions" do
-    setup do
+  describe "Submissions" do
+    before do
       @pending = Array.new
       @submitted = Array.new
       @approved = Array.new
@@ -73,28 +84,20 @@ class SubmissionTest < ActiveSupport::TestCase
       end
     end
 
-    should "find all pending submissions" do
-      submissions = Submission.pending
-      assert_equal 1, submissions.count
-      assert_empty @pending - submissions
+    it "find all pending submissions" do
+      (Submission.pending.entries - @pending).must_be_empty
     end
 
-    should "find all submitted submissions" do
-      submissions = Submission.submitted
-      assert_equal 2, submissions.count
-      assert_empty @submitted - submissions
+    it "find all submitted submissions" do
+      (Submission.submitted.entries - @submitted).must_be_empty
     end
 
-    should "find all approved submissions" do
-      submissions = Submission.approved
-      assert_equal 3, submissions.count
-      assert_empty @approved - submissions
+    it "find all approved submissions" do
+      (Submission.approved.entries - @approved).must_be_empty
     end
 
-    should "find all denied submissions" do
-      submissions = Submission.denied
-      assert_equal 4, submissions.count
-      assert_empty @denied - submissions
+    it "find all denied submissions" do
+      (Submission.denied.entries - @denied).must_be_empty
     end
   end
 end

@@ -1,33 +1,36 @@
-require "test_helper"
+require "minitest_helper"
 
-class FacebookEventTest < ActiveSupport::TestCase
-  should validate_presence_of(:name)
-  should validate_presence_of(:limit)
+describe FacebookEvent do
+  it "should have validations" do
+    event = Fabricate.build(:facebook_event)
 
-  context FacebookEvent do
-    setup do
+    event.must have_valid(:name)
+    event.wont have_valid(:name).when(nil)
+
+    event.must have_valid(:limit)
+    event.wont have_valid(:limit).when(nil)
+  end
+
+  describe "A Facebook event" do
+    before do
       @project = Fabricate(:project)
       @event = Fabricate(:facebook_event, project: @project)
     end
 
-    should "be valid" do
-      assert @event.valid?
+    it "should be valid" do
+      @event.must_be :valid?
     end
 
-    should "have #cached_results method" do
-      assert_respond_to @project.facebook_events, :cached_results
+    it "has cached_results" do
+      @project.facebook_events.cached_results.must_be_nil
     end
 
-    should "return results when #cached_results" do
-      assert_equal false, @project.facebook_events.cached_results.empty?
-    end
-
-    should "raise Koala exception instead of Cacheable exception if bad name" do
-      assert_raise FacebookGraph::Errors::InvalidDataError do
+    it "should raise Koala exception instead of Cacheable exception if bad name" do
+      lambda do
         event = Fabricate.build(:facebook_event, name: "bigfuel", project: @project)
         event.save
         Cacheable.update(@project.name, :facebook_event)
-      end
+      end.must_raise FacebookGraph::Errors::InvalidDataError
     end
   end
 end

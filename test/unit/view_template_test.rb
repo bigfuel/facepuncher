@@ -1,13 +1,13 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class ViewTemplateTest < ActiveSupport::TestCase
-  context ViewTemplate do
-    setup do
-      @vt = Fabricate(:view_template)
+describe ViewTemplate do
+  describe "A view template" do
+    before do
+      @view_template = Fabricate(:view_template)
     end
 
-    should "be valid" do
-      assert @vt.valid?
+    it "should be valid" do
+      @view_template.must_be :valid?
     end
   end
 end

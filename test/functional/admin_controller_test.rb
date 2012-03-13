@@ -1,28 +1,27 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class AdminControllerTest < ActionController::TestCase
-  context ":load_project" do
-    setup do
-      @project = Fabricate(:project, name: "bf_project_test")
-      @project.activate
+describe AdminController do
+  describe "loaded project" do
+    before do
+      @project = load_project
     end
 
-    should "set a nil project if it doesn't exist" do
+    it "set a nil project if it doesn't exist" do
       @project.name = "shamwow"
       @controller = Admin::EventsController.new
-      get :index, project_id: @project.to_param
-      assert_nil assigns(:project)
+      get :index, project_id: @project
+      assigns(:project).must_be_nil
     end
 
-    should "load the project" do
+    it "load the project" do
       @controller = Admin::EventsController.new
-      get :index, project_id: @project.to_param
-      assert_equal @project, assigns(:project)
+      get :index, project_id: @project
+      assigns(:project).must_equal @project
     end
   end
 
-  context "admin not logged in" do
-    should "redirect you to sign in" do
+  describe "admin not logged in" do
+    it "redirect you to sign in" do
       @controller = Admin::ProjectsController.new
       get :index
       assert_redirected_to new_user_session_url

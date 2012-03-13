@@ -1,41 +1,44 @@
-require "test_helper"
+require "minitest_helper"
 
-class FeedTest < ActiveSupport::TestCase
-  setup do
-    @project = Fabricate(:project)
-    @rss = Fabricate(:feed, project: @project)
-  end
-
-  context Feed do
-    should validate_presence_of(:name)
-    should validate_uniqueness_of(:name).scoped_to(:project_id).with_message("has already been used in this project.")
-    should validate_presence_of(:url)
-    should validate_numericality_of(:limit)
-
-    should "be valid" do
-      assert @rss.valid?
+describe Feed do
+  describe "A feed" do
+    before do
+      @project = Fabricate(:project)
+      @rss = Fabricate(:feed, project: @project)
     end
 
-    should "have #cached_results method" do
-      assert_respond_to @project.feeds, :cached_results
+    it "should have validations" do
+      new_rss = Fabricate.build(:feed)
+      new_rss.must have_valid(:name)
+      new_rss.wont have_valid(:name).when(nil)
+
+      new_rss.must have_valid(:url)
+      new_rss.wont have_valid(:url).when(nil)
+
+      new_rss.must have_valid(:limit)
+      new_rss.wont have_valid(:limit).when(nil)
+
+      new_rss.must have_valid(:name).when(@rss.name)
+
+      newer_rss = Fabricate.build(:feed, project: @project)
+      newer_rss.must have_valid(:name).when(new_rss.name)
+      newer_rss.wont have_valid(:name).when(@rss.name)
     end
 
-    should "return true if #cached_results" do
-      assert_equal true, @project.feeds.cached_results
-    end
-  end
-
-  context RssFeed do
-    should "return feed results in a hash if updated" do
-      flunk
+    it "should be valid" do
+      @rss.must_be :valid?
     end
 
-    should "return nil when fetching single feed if it doesn't exist" do
-      assert_equal nil, RssFeed.read(@project.name, "123123123")
+    it "returns feed results in a hash if updated" do
+      skip
     end
 
-    should "return results when fetching single feed" do
-      assert_equal false, RssFeed.get(@project.name, @rss.name).empty?
+    it "returns nil when fetching single feed if it doesn't exist" do
+      RssFeed.read(@project.name, "123123123").must_be_nil
+    end
+
+    it "returns results when fetching single feed" do
+      RssFeed.get(@project.name, @rss.name).wont_be_empty
     end
   end
 end

@@ -1,46 +1,45 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class PostTest < ActiveSupport::TestCase
-  should validate_presence_of(:title)
-  should validate_presence_of(:content)
-  should validate_presence_of(:url)
+describe Post do
+  it "should have validations" do
+    post = Fabricate.build(:post)
+    post.must have_valid(:title)
+    post.wont have_valid(:title).when(nil)
 
-  context Post do
-    setup do
+    post.must have_valid(:content)
+    post.wont have_valid(:content).when(nil)
+
+    post.must have_valid(:url)
+    post.wont have_valid(:url).when(nil)
+  end
+
+  describe "A post" do
+    before do
       @project = Fabricate(:project)
       @post = Fabricate(:post)
     end
 
-    should "be valid" do
-      assert @post.valid?
+    it "should be valid" do
+      @post.must_be :valid?
     end
 
-    should "approve a post" do
+    it "is approved" do
       @post.approve
-      assert @post.approved?
+      @post.must_be :approved?
     end
 
-    should "deny a post" do
+    it "is denied" do
       @post.deny
-      assert @post.denied?
+      @post.must_be :denied?
     end
 
-    should "start in a pending state" do
-      assert @post.pending?
-    end
-
-    should "return cached_results" do
-      results = @project.posts.where(state: "approved").order_by([:created_at, :asc]).entries
-      assert_equal results, @project.posts.cached_results
-    end
-
-    should "init_list" do
-      flunk
+    it "starts in a pending state" do
+      @post.must_be :pending?
     end
   end
 
-  context "Posts" do
-    setup do
+  describe "Posts" do
+    before do
       @pending = Array.new
       @denied = Array.new
       @approved = Array.new
@@ -60,22 +59,16 @@ class PostTest < ActiveSupport::TestCase
       end
     end
 
-    should "find all pending posts" do
-      posts = Post.pending
-      assert_equal 1, posts.count
-      assert_empty @pending - posts
+    it "finds all pending" do
+      (Post.pending.entries - @pending).must_be_empty
     end
 
-    should "find all denied posts" do
-      posts = Post.denied
-      assert_equal 2, posts.count
-      assert_empty @denied - posts
+    it "finds all denied" do
+      (Post.denied.entries - @denied).must_be_empty
     end
 
-    should "find all approved posts" do
-      posts = Post.approved
-      assert_equal 3, posts.count
-      assert_empty @approved - posts
+    it "finds all approved" do
+      (Post.approved.entries - @approved).must_be_empty
     end
   end
 end

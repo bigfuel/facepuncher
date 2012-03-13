@@ -42,7 +42,7 @@ gem 'redis-store', git: 'git@github.com:kamui/redis-store.git'
 gem 'redis-rails'
 gem 'feedzirra'
 gem 'profanity_filter'
-gem 'grit'
+gem 'grit', git: 'git://github.com/mojombo/grit.git' # process_info
 gem 'validates_timeliness'
 gem 'asset_sync'
 gem 'database_views'
@@ -50,20 +50,24 @@ gem 'carmen'
 gem 'retriable'
 gem 'pry-rails'
 gem 'bootstrap-sass'
+gem 'responders'
 
 # Use unicorn as the web server
 gem 'unicorn'
 
 group :test do
-  # Pretty printed test output
-  gem 'turn', require: false
+  gem 'turn'
   gem 'minitest'
-  gem 'rr'
   gem 'ffaker'
   gem 'capybara'
   gem 'database_cleaner'
   gem 'simplecov', require: false
   gem 'guard-minitest'
+  gem 'minitest-rails', git: 'git://github.com/rawongithub/minitest-rails.git', branch: 'gemspec' #rawongithub
+  gem 'capybara_minitest_spec'
+  gem 'minitest-matchers'
+  gem 'valid_attribute'
+  gem 'mocha', require: false
 end
 
 group :development do
@@ -77,8 +81,6 @@ end
 
 group :development, :test do
   gem 'awesome_print'
-  gem 'shoulda-context'
-  gem 'shoulda-matchers'
   gem 'fabrication'
   gem 'guard'
   gem 'rb-fsevent'

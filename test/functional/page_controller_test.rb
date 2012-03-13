@@ -1,24 +1,24 @@
-require 'test_helper'
+require 'minitest_helper'
 
-class PageControllerTest < ActionController::TestCase
-  context PageController do
-    setup do
-      @project = Fabricate(:project, name: "page")
+describe PageController do
+  describe "loaded project" do
+    before do
+      @project = Fabricate(:project, name: "bf_project_test")
       @project.activate
     end
 
-    should "return a routing error if the project is inactive" do
+    it "return a routing error if the project is inactive" do
       @project.deactivate
-      assert_raise ActionController::RoutingError do
+      lambda do
         get :index
-      end
+      end.must_raise ActionController::RoutingError
     end
 
-    should "load the first matching active project" do
+    it "load the first matching active project" do
       get :index
       @controller_project = assigns(:project)
       assert @controller_project
-      assert_equal 'page', @controller_project.name
+      assert_equal 'bf_project_test', @controller_project.name
     end
   end
 end

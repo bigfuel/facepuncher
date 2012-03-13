@@ -33,7 +33,11 @@
 
         .control-group
           = f.label :image, class: "control-label"
-          .controls= f.file_field :image
+          .controls
+            = f.file_field :image
+            %br
+            - unless @post.new_record?
+              = image_tag @post.image.url
 
         .form-actions
           = f.submit 'Save', class: 'btn btn-primary'

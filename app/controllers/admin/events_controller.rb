@@ -1,13 +1,11 @@
 require 'csv'
 
 class Admin::EventsController < AdminController
+  respond_to :html, :json
+
   def index
     @events = @project.events.order_by([sort_column, sort_direction]).page(params[:page])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @events }
-    end
+    respond_with @events
   end
 
   def new
@@ -23,51 +21,26 @@ class Admin::EventsController < AdminController
 
   def show
     @event = @project.events.find(params[:id])
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @event }
-    end
+    respond_with @event
   end
 
   def create
     @event = @project.events.new(params[:event])
-    @event.build_location(params[:event][:location_attributes])
-
-    respond_to do |format|
-      if @event.save
-        @event.move_to_top
-        format.html { redirect_to([:admin, @project, @event], notice: 'Event was successfully created.') }
-        format.json { render json: @event }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @event.errors, status: :unprocessable_entity }
-      end
-    end
+    @event.move_to_top if @event.save
+    respond_with @event, location: [:admin, @project, @event]
   end
 
   def update
     @event = @project.events.find(params[:id])
-
-    respond_to do |format|
-      # Hack to fix mongoid not updating embedded objects with the parent
-      if @event.update_attributes(params[:event]) && @event.location.update_attributes(params[:event][:location_attributes])
-        format.html { redirect_to [:admin, @project, @event], notice: 'Event was successfully updated.' }
-        format.json { render json: @event }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @event.errors, status: :unprocessable_entity }
-      end
-    end
+    @event.update_attributes(params[:event])
+    respond_with @event, location: [:admin, @project, @event]
   end
 
   def destroy
     @event = @project.events.find(params[:id])
     @event.destroy
-
-    respond_to do |format|
-      format.html { redirect_to admin_project_events_url(@project) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with @event, location: admin_project_events_url do |format|
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
@@ -75,19 +48,19 @@ class Admin::EventsController < AdminController
     @event = @project.events.find(params[:id])
     @event.approve
 
-    respond_to do |format|
-      format.html { redirect_to(admin_project_events_url(@project)) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    respond_with @event do |format|
+      format.html { redirect_to [:admin, @project, @event] }
+      format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
   def deny
     @event = @project.events.find(params[:id])
     @event.deny
-
-    respond_to do |format|
-      format.html { redirect_to(admin_project_events_url(@project)) }
-      format.json { render json: '{ "status": "success" }',  status: :ok }
+    
+    respond_with @event do |format|
+      format.html { redirect_to [:admin, @project, @event] }
+      format.json { render json: '{ "status":"success" }',  status: :ok }
     end
   end
 

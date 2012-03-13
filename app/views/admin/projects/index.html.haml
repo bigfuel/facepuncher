@@ -26,7 +26,7 @@
       %td
         - project.releases.each do |release|
           - if release.state == "live"
-            = link_to '<i class="icon-eye-open"></i> '.html_safe + truncate(release.branch, length: 10), "/#{project.name}/", class: "btn", title: "Go to App : branch@#{release.branch}"
+            = link_to '<i class="icon-eye-open"></i> '.html_safe + truncate(release.branch, length: 10), project_path(project), class: "btn", title: "Go to App : branch@#{release.branch}"
 
       %td
         = link_to '<i class="icon-home"></i>'.html_safe, [:admin, project], class: "btn home", title: "Project Summary"

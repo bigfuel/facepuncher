@@ -2,11 +2,16 @@ class PageController < ApplicationController
   before_filter :load_project
   around_filter :load_digests
   prepend_view_path ViewTemplate.resolver
+  append_before_filter :check_for_project
 
   def index
   end
 
   protected
+  def load_project
+    @project = Project.active.find_by_name(params[:id])
+  end
+
   def load_digests
     begin
       digests = Rails.cache.read("digests:#{@project.name}")
@@ -21,8 +26,7 @@ class PageController < ApplicationController
     end
   end
 
-  def load_project
-    @project = params[:project_name] && Project.active.where(name: params[:project_name]).first
+  def check_for_project
     not_found unless @project
   end
 
