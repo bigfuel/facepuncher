@@ -120,9 +120,9 @@ describe "Admin Signups Integration Test" do
   describe "on POST to :create" do
     it "sucessfully create a new signup :html" do
       visit new_admin_project_signup_path(@project)
-      page.fill_in "First name", with: "Daisy"
-      page.fill_in "Last name", with: "Lin"
-      page.fill_in "Email", with: "signup@test.com"
+      page.fill_in "signup_first_name", with: "Daisy"
+      page.fill_in "signup_last_name", with: "Lin"
+      page.fill_in "signup_email", with: "signup@test.com"
       page.click_on "Save"
       page.must_have_content "Signup was successfully created."
       page.must_have_content 'Daisy'
@@ -136,7 +136,7 @@ describe "Admin Signups Integration Test" do
 
     it "fails to create a new signup" do
       visit new_admin_project_signup_path(@project)
-      page.fill_in "First name", with: "Daisy"
+      page.fill_in "signup_first_name", with: "Daisy"
       page.click_on "Save"
       page.must_have_content "prohibited this project from being saved"
     end
