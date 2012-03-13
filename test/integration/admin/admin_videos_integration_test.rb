@@ -1,6 +1,6 @@
 require "minitest_helper"
 
-describe "Admin videos Integration Test" do
+describe "Admin Videos Integration Test" do
   before do
     sign_in Fabricate(:user)
     @project = Fabricate(:project, name: "bf_project_test")
