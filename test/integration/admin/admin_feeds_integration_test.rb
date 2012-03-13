@@ -42,7 +42,7 @@ describe "Admin Feeds Integration Test" do
     end
 
     it "has form field limit" do
-      page.must_have_field "feed_limit"
+      page.must_have_field "feed_limit", with: "10"
     end
 
     it "has save button" do
@@ -52,7 +52,7 @@ describe "Admin Feeds Integration Test" do
 
   describe "on GET to :edit" do
     before do
-      @feed = Fabricate(:feed, project: @project, name: "bf_feed_test", url: "http://feed.test.com")
+      @feed = Fabricate(:feed, project: @project, name: "bf_feed_test", url: "http://feed.test.com", limit: 17)
       visit edit_admin_project_feed_path(@project, @feed)
     end
 
@@ -69,7 +69,7 @@ describe "Admin Feeds Integration Test" do
     end
 
     it "has form field with default limit" do
-      page.must_have_field "feed_limit", with: "10"
+      page.must_have_field "feed_limit", with: "17"
     end
 
     it "has save button" do
