@@ -5,35 +5,35 @@ class Admin::ViewTemplatesController < AdminController
   end
 
   def new
-    @release = @project.view_templates.new
+    @view_template = @project.view_templates.new
   end
 
   def edit
-    @release = @project.view_templates.find(params[:id])
+    @view_template = @project.view_templates.find(params[:id])
   end
 
   def show
-    @release = @project.view_templates.find(params[:id])
-    respond_with @release
+    @view_template = @project.view_templates.find(params[:id])
+    respond_with @view_template
   end
 
   def create
-    @release = @project.view_templates.new(params[:release])
-    @release.save
-    respond_with @release, location: [:admin, @project, @release]
+    @view_template = @project.view_templates.new(params[:view_template])
+    @view_template.save
+    respond_with @view_template, location: [:admin, @project, @view_template]
   end
 
   def update
-    @release = @project.view_templates.find(params[:id])
-    @release.update_attributes(params[:release])
-    respond_with @release, location: [:admin, @project, @release]
+    @view_template = @project.view_templates.find(params[:id])
+    @view_template.update_attributes(params[:view_template])
+    respond_with @view_template, location: [:admin, @project, @view_template]
   end
 
   def destroy
-    @release = @project.view_templates.find(params[:id])
-    @release.destroy
+    @view_template = @project.view_templates.find(params[:id])
+    @view_template.destroy
 
-    respond_with(@release, location: admin_project_view_templates_url) do |format|
+    respond_with(@view_template, location: admin_project_view_templates_url) do |format|
       format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
