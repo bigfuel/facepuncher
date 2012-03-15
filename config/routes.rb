@@ -79,6 +79,10 @@ Facepuncher::Application.routes.draw do
   end
 
   resources :projects do
+    member do
+      match '/index' => 'projects#show'
+    end
+
     resources :signups
     resources :events
     resources :videos
