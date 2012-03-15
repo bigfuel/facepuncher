@@ -1,16 +1,16 @@
 %p
-  = link_to 'Back', admin_project_releases_path(@project), title: "Back", class: "btn btn-inverse"
+  = link_to 'Back', admin_project_view_templates_path(@project), title: "Back", class: "btn btn-inverse"
 
 .row
   .span12
-    = form_for [:admin, @project, @release], html: { multipart: true, class: "form-horizontal"} do |f|
-      - if @release.errors.any?
+    = form_for [:admin, @project, @view_template], html: { multipart: true, class: "form-horizontal"} do |f|
+      - if @view_template.errors.any?
         .alert.alert-error
           %p
             %b
               = "#{pluralize(@project.errors.count, "error")} prohibited this project from being saved:"
           %ul
-            - @release.errors.full_messages.each do |msg|
+            - @view_template.errors.full_messages.each do |msg|
               %li= msg
 
       %fieldset
