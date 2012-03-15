@@ -13,6 +13,7 @@ class PageController < ApplicationController
   end
 
   def load_digests
+    return unless @project
     begin
       digests = Rails.cache.read("digests:#{@project.name}")
       # Todo, also check s3 for manifest.yml
