@@ -16,7 +16,7 @@
     -@view_templates.each do |view_template|
       %tr
         %td
-          = view_template.handlers
+          = link_to view_template.handlers, [:admin, @project, view_template]
           .actions
             = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, view_template], class: "btn", title: "Edit"
             = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, view_template], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
