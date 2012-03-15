@@ -5,7 +5,7 @@ class PollsController < ApplicationController
     poll = @project.polls.active.find(params[:id])
     poll.vote(params['choice']['id'])
 
-    respond_with @project, @poll
+    render json: poll.to_json
   end
 
   def show
