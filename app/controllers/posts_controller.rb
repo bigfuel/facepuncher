@@ -6,7 +6,7 @@ class PostsController < ApplicationController
     @posts = @posts.has_images if params[:has_images]
     @posts = @posts.tags_tagged_with(params[:tags]) if params[:tags]
 
-    respond_with @project, @post
+    respond_with @project, @posts
   end
 
   def show
