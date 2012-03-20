@@ -46,6 +46,16 @@ describe Project do
     it "find project by name" do
       Project.find_by_name("bf_project_test").must_equal @project
     end
+
+    it "must have a master branch release" do
+      @project.releases.count.must_equal 1
+      release = @project.releases.first
+      release.branch.must_equal "master"
+    end
+
+    it "must deploy the release" do
+      Resque.size(:deploy_project).must_equal 1
+    end
   end
 
   describe "An unperisted project" do
