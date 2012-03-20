@@ -1,3 +1,5 @@
+= javascript_include_tag 'admin/view_templates'
+
 %p
   = link_to 'Back', admin_project_view_templates_path(@project), title: "Back", class: "btn btn-inverse"
 
@@ -33,7 +35,8 @@
 
         .control-group
           = f.label :contents, class: "control-label"
-          .controls= f.text_area :contents, style: "width: 95%"
+          = f.text_area :contents
+          #editor.controls
 
         .form-actions
           = f.hidden_field :project_id

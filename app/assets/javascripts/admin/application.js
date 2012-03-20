@@ -1,4 +1,12 @@
 //= require jquery_ujs
 //= require jquery-ui-timepicker-addon
 //= require maps
+//= require ace
+//= require mode-ruby.js
+//= require mode-html.js
+//= require mode-javascript.js
+//= require mode-coffee.js
+//= require mode-css.js
+//= require mode-scss.js
+//= require theme-vibrant_ink.js
 //= require_tree .

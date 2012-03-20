@@ -51,6 +51,7 @@ gem 'retriable'
 gem 'pry-rails'
 gem 'bootstrap-sass'
 gem 'responders'
+gem 'ace-rails-ap'
 
 # Use unicorn as the web server
 gem 'unicorn'
