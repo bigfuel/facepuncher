@@ -4,7 +4,7 @@ class Release
 
   field :description, type: String
   field :branch, type: String, default: "master"
-  field :live_date, type: Time
+  field :live_date, type: Time, default: Time.current
   field :state, type: String, default: "staged"
   field :status, type: String
 
