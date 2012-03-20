@@ -15,6 +15,8 @@ class Project
 
   attr_accessible :name, :description, :facebook_app_id, :facebook_app_secret, :google_analytics_tracking_code, :production_url, :repo
 
+  after_create :generate_master_release
+
   has_many :events, dependent: :destroy
   has_many :signups, dependent: :destroy
   has_many :polls, dependent: :destroy
@@ -66,5 +68,11 @@ class Project
 
   def self.find_by_name(name)
     where(name: name).limit(1).first
+  end
+
+  protected
+  def generate_master_release
+    self.releases.create!
+    Resque.enqueue(DeployProject, self.name)
   end
 end
