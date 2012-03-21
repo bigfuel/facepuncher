@@ -72,7 +72,10 @@ module Deploy
     result = nil
     # clone the release repo/branch, retry if it fails
     retriable on: [Grit::Git::CommandFailed, Grit::Git::GitTimeout], tries: NUM_RETRIES, interval: 1 do
-      result = grit.clone({process_info: true, raise: true, progress: true, depth: 1, branch: branch}, repo, project_path)
+      flags = {process_info: true, raise: true, progress: true, branch: branch}
+      flags[:depth] = 1 unless !!(/^(?:https:).+(?:bitbucket.org)/ =~ repo) # workaround for https://bitbucket.org/site/master/issue/3799/cant-clone-a-repo-using-https-protocol-and
+      result = grit.clone(flags, repo, project_path)
+
     end
 
     result
