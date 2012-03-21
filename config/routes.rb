@@ -1,4 +1,38 @@
+require 'sidekiq/web'
+
 Facepuncher::Application.routes.draw do
+
+  root to: 'projects#show'
+
+  resources :projects do
+    member do
+      match '/index' => 'projects#show'
+    end
+  end
+
+  namespace :api do
+    resources :project do
+      resources :signups
+      resources :events
+      resources :videos
+      resources :images
+      resources :feeds
+      resources :posts
+      resources :facebook_albums
+      resources :facebook_events
+
+      resources :polls do
+        put 'vote', on: :member
+      end
+
+      resources :submissions do
+        post 'submit', on: :member
+      end
+    end
+  end
+
+  match '/admin' => 'admin/projects#index', as: 'user_root'
+
   # ADMIN ROUTES
   devise_for :users
 
@@ -76,35 +110,7 @@ Facepuncher::Application.routes.draw do
         end
       end
     end
+
+    mount Sidekiq::Web => '/sidekiq'
   end
-
-  resources :projects do
-    member do
-      match '/index' => 'projects#show'
-    end
-  end
-
-  namespace :api do
-    resources :project do
-      resources :signups
-      resources :events
-      resources :videos
-      resources :images
-      resources :feeds
-      resources :posts
-      resources :facebook_albums
-      resources :facebook_events
-
-      resources :polls do
-        put 'vote', on: :member
-      end
-
-      resources :submissions do
-        post 'submit', on: :member
-      end
-    end
-  end
-
-  match '/admin' => 'admin/projects#index', as: 'user_root'
-  root to: 'projects#show'
 end

@@ -43,16 +43,17 @@ describe Deploy do
       DeployProject.queue_active
     end
 
-    Resque.size(:deploy_project).must_equal 1
+    Sidekiq::Extensions::DeployProject.jobs.size
+    Sidekiq::Extensions::DeployProject.jobs.size.must_equal 1
   end
 
   it "queues unique jobs" do
     @project.activate
 
     3.times do
-      Resque.enqueue(DeployProject, @project.name)
+      DeployProject.perform_async @project.name
     end
 
-    Resque.size(:deploy_project).must_equal 1
+    Sidekiq::Extensions::DeployProject.jobs.size.must_equal 1
   end
 end

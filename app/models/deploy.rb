@@ -4,8 +4,6 @@ require 'sprockets'
 
 module Deploy
   ASSETS_PATH = Rails.root.join("tmp", "assets")
-  PROJECTS_PATH = Rails.root.join("tmp", "projects")
-  NUM_RETRIES = 3
 
   module Errors
     class Error < StandardError; end
@@ -25,66 +23,53 @@ module Deploy
     release.status = nil
     release.save
 
-    config = Rails.application.config
-
-    # copy ssh keys
-    # TODO: move this to an initializer
-    FileUtils.cp_r(Rails.root.join('vendor', 'support', '.ssh'), ENV['HOME']) unless Dir.exists?(Pathname(ENV['HOME']).join(".ssh"))
-
-    begin
-      # set git clone path
-      project_path = PROJECTS_PATH.join(project.name)
-
-      # clone repo
-      clone_repo(project_path, project.repo, release.branch)
-
-      # TODO: Alert people
-
+    Dir.mktmpdir(project.name) do |project_dir|
       begin
-        copy_assets(project.name, project_path, ASSETS_PATH)
-      rescue Timeout::Error => e
+        # clone repo
+        clone_repo(project_dir, project.repo, release.branch)
+
+        # TODO: Alert people
+
+        begin
+          copy_assets(project.name, project_dir, ASSETS_PATH)
+        rescue Timeout::Error => e
+          release.status = e.message
+          release.save
+          raise
+        end
+
+        compile_assets(project.name)
+
+        self.generate_views(project.name, project_dir)
+
+        release.go_live
+        project.touch
+      rescue => e
         release.status = e.message
         release.save
         raise
       end
-
-      compile_assets(project.name)
-
-      self.generate_views(project.name, project_path)
-
-      release.go_live
-      project.touch
-    rescue => e
-      release.status = e.message
-      release.save
-      raise
     end
   end
 
-  def self.clone_repo(project_path, repo, branch)
-    # clear temp git clone path
-    FileUtils.rm_r(project_path, secure: true) if Dir.exists?(project_path)
-    FileUtils.mkdir_p(project_path)
-
+  def self.clone_repo(path, repo, branch)
     # initialize grit
-    grit = Grit::Git.new(project_path.to_s)
+    grit = Grit::Git.new(path)
 
     result = nil
     # clone the release repo/branch, retry if it fails
-    retriable on: [Grit::Git::CommandFailed, Grit::Git::GitTimeout], tries: NUM_RETRIES, interval: 1 do
+    retriable on: [Grit::Git::CommandFailed, Grit::Git::GitTimeout], tries: 3, interval: 1 do
       flags = {process_info: true, raise: true, progress: true, branch: branch}
       flags[:depth] = 1 unless !!(/^(?:https:).+(?:bitbucket.org)/ =~ repo) # workaround for https://bitbucket.org/site/master/issue/3799/cant-clone-a-repo-using-https-protocol-and
-      result = grit.clone(flags, repo, project_path)
-
+      result = grit.clone(flags, repo, path)
     end
 
     result
   end
 
   def self.copy_assets(project_name, source_root_path, dest_root_path)
-    FileUtils.mkdir_p(ASSETS_PATH)
     ["images", "stylesheets", "javascripts"].each do |dir|
-      dest_path = dest_root_path.join(dir, project_name)
+      dest_path = Pathname.new(dest_root_path).join(dir, project_name)
       FileUtils.rm_r(dest_path, secure: true) if Dir.exists?(dest_path)
       FileUtils.mkdir_p(dest_path)
       source_path = "#{source_root_path}/#{dir}/."
@@ -93,33 +78,33 @@ module Deploy
   end
 
   def self.compile_assets(project_name)
-    config = Rails.application.config
-    public_asset_path = File.join(Rails.public_path, config.assets.prefix)
-    FileUtils.rm_r(public_asset_path, secure: true) if Dir.exists?(public_asset_path)
-    FileUtils.mkdir_p(public_asset_path)
+      config = Rails.application.config
+      public_asset_path = File.join(Rails.public_path, config.assets.prefix)
 
-    manifest_path = config.assets.manifest ? Pathname.new(config.assets.manifest).join(project_name) : Pathname.new(public_asset_path).join(project_name)
-    manifest = File.join(manifest_path, "manifest.yml")
-    compiler = Sprockets::StaticCompiler.new(Rails.application.assets,
-                                             public_asset_path,
-                                             config.assets.precompile,
-                                             manifest_path: manifest_path,
-                                             digest: true,
-                                             manifest: true)
+      manifest_path = config.assets.manifest ? Pathname.new(config.assets.manifest).join(project_name) : Pathname.new(public_asset_path).join(project_name)
+      manifest = File.join(manifest_path, "manifest.yml")
 
-    compiler.compile
+      compiler = Sprockets::StaticCompiler.new(Rails.application.assets,
+                                               public_asset_path,
+                                               config.assets.precompile,
+                                               manifest_path: manifest_path,
+                                               digest: true,
+                                               manifest: true)
 
-    # config.assets.digests = YAML.load_file(manifest) if File.exists?(manifest)
-    # PageController.subclasses.each do |c|
-    #   c.view_paths.each(&:clear_cache)
-    # end
+      retriable on: Errno::ENOENT, tries: 5 do
+        compiler.compile
+      end
 
-    raise "Couldn't find manifest.yml" unless File.exists?(manifest)
-    AssetSync.sync
-    Rails.cache.write("digests:#{project_name}", YAML.load_file(manifest))
+      # config.assets.digests = YAML.load_file(manifest) if File.exists?(manifest)
+      # ProjectsController.view_paths.each(&:clear_cache)
+
+      raise "Couldn't find manifest.yml" unless File.exists?(manifest)
+      AssetSync.sync
+      Rails.cache.write("digests:#{project_name}", YAML.load_file(manifest))
   end
 
   def self.generate_views(project_name, project_path)
+    project_path = Pathname.new(project_path)
     project = Project.find_by_name(project_name)
     project.view_templates.delete_all
     file_extensions = "erb,haml"
