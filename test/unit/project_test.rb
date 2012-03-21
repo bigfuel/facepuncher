@@ -54,7 +54,7 @@ describe Project do
     end
 
     it "must deploy the release" do
-      Resque.size(:deploy_project).must_equal 1
+      Sidekiq::Extensions::DeployProject.jobs.size.must_equal 1
     end
   end
 

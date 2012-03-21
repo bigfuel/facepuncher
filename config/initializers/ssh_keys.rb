@@ -1,0 +1,1 @@
+FileUtils.cp_r(Rails.root.join('vendor', 'support', '.ssh'), ENV['HOME']) unless Dir.exists?(Pathname(ENV['HOME']).join(".ssh"))

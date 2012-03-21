@@ -45,7 +45,7 @@ class Admin::ReleasesController < AdminController
     @release.status = ""
     @release.save
     @project.touch
-    Resque.enqueue(DeployProject, @project.name)
+    DeployProject.perform_async @project.name
 
     respond_with(@release) do |format|
       format.html { redirect_to(admin_project_releases_url(@project)) }

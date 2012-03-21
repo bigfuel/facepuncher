@@ -56,9 +56,9 @@ class Release
     if self.deployable?
       # TODO: fix this shit
       if self.live_date > Time.current
-        Resque.enqueue_at(self.live_date, DeployProject, self.project.name)
+        DeployProject.perform_at(self.live_date, self.project.name)
       elsif self.live_date > 10.seconds.ago
-        Resque.enqueue(DeployProject, self.project.name)
+        DeployProject.perform_async self.project.name
       end
     end
   end

@@ -73,6 +73,6 @@ class Project
   protected
   def generate_master_release
     self.releases.create!
-    Resque.enqueue(DeployProject, self.name)
+    DeployProject.perform_async self.name
   end
 end
