@@ -1,0 +1,10 @@
+before_script:
+  - mv config/config.yml.example config/config.yml
+  - mv config/mongoid.yml.example config/mongoid.yml
+  - mongo facepuncher_test --eval 'db.addUser("travis", "test");
+language: ruby
+rvm:
+  - 1.9.2
+  - 1.9.3
+  - jruby-19mode
+  - rbx-19mode

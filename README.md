@@ -1,15 +1,17 @@
 Facepuncher
 ================================
 
+[![Build Status](https://secure.travis-ci.org/bigfuel/facepuncher.png?branch=master)](http://travis-ci.org/bigfuel/facepuncher)
+
 Welcome to a Punch in the Face! Facepuncher is a platform for quickly bootstrapping deploying Facebook tabs.
 
 Requirements
 ------------
-Rails 3.2
-MongoDB 1.8+
-Redis 2.4+
-git
-ssh
+- Rails 3.2
+- MongoDB 1.8+
+- Redis 2.4+
+- git
+- ssh
 
 Setup
 -----
