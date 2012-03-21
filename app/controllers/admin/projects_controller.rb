@@ -11,11 +11,11 @@ class Admin::ProjectsController < AdminController
   end
 
   def edit
-    @project = Project.where(name: params[:id]).first
+    @project = Project.find_by_name(params[:id])
   end
 
   def show
-    @project = Project.where(name: params[:id]).first
+    @project = Project.find_by_name(params[:id])
     respond_with @project
   end
 
@@ -26,22 +26,22 @@ class Admin::ProjectsController < AdminController
   end
 
   def update
-    @project = Project.where(name: params[:id]).first
+    @project = Project.find_by_name(params[:id])
     @project.update_attributes(params[:project])
     respond_with @project, location: [:admin, @project]
   end
 
   def destroy
-    @project = Project.where(name: params[:id]).first
+    @project = Project.find_by_name(params[:id])
     @project.destroy
-    
+
     respond_with @project, location: admin_projects_url do |format|
       format.json { render json: '{ "status":"success" }', status: :ok }
     end
   end
 
   def activate
-    @project = Project.where(name: params[:id]).first
+    @project = Project.find_by_name(params[:id])
     @project.activate
 
     respond_with @project do |format|
@@ -51,7 +51,7 @@ class Admin::ProjectsController < AdminController
   end
 
   def deactivate
-    @project = Project.where(name: params[:id]).first
+    @project = Project.find_by_name(params[:id])
     @project.deactivate
 
     respond_with @project do |format|
