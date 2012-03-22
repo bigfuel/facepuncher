@@ -14,15 +14,12 @@ jQuery ->
         $.each item, (i, j) ->
           $.tmpl("newEntry", j).appendTo ".table"
     ).success (data) ->
-      $(".table tr").hover (->
-        $("td .actions", this).show()
-      ), ->
-        $("td .actions", this).hide()
       $(".table").addClass("table-striped")
 
-  loadShow = (project, model, obj_id) -> 
+  loadShow = (project, model, obj_id) ->
     $.getJSON("/api/project/" + project + "/" + model + "/" + obj_id + ".json", (data) ->
-      $.tmpl("newEntry", data).appendTo ".table"
+      $.each data, (i, item) ->
+        $.tmpl("newEntry", item).appendTo ".table"
     )
 
   if project_name and model_name

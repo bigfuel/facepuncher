@@ -2,8 +2,6 @@ class Admin::PostsController < AdminController
   respond_to :html, :json
 
   def index
-    @posts = @project.posts.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with @posts
   end
 
   def new
@@ -15,8 +13,6 @@ class Admin::PostsController < AdminController
   end
 
   def show
-    @post = @project.posts.find(params[:id])
-    respond_with @post
   end
 
   def create
@@ -53,26 +49,6 @@ class Admin::PostsController < AdminController
   def deny
     @post = @project.posts.find(params[:id])
     @post.deny
-
-    respond_with(@project) do |format|
-      format.html { redirect_to admin_project_posts_url }
-      format.json { render json: '{ "status":"success" }', status: :ok }
-    end
-  end
-
-  def up
-    @post = @project.posts.find(params[:id])
-    @post.move(:up)
-
-    respond_with(@project) do |format|
-      format.html { redirect_to admin_project_posts_url }
-      format.json { render json: '{ "status":"success" }', status: :ok }
-    end
-  end
-
-  def down
-    @post = @project.posts.find(params[:id])
-    @post.move(:down)
 
     respond_with(@project) do |format|
       format.html { redirect_to admin_project_posts_url }
