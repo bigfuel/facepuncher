@@ -18,4 +18,8 @@ module ApplicationHelper
   def controller_action
     "#{action_name.capitalize} #{controller_name.humanize.capitalize.singularize}"
   end
+
+  def admin_url
+    "/admin/projects/#{@project.name}/#{controller_name}/"
+  end
 end

@@ -8,7 +8,7 @@
 
 .row
   .span6
-    = form_tag vote_project_poll_path(@project.name, @poll), class: "form-horizontal", method: :put do
+    = form_tag vote_api_project_poll_path(@project, @poll), class: "form-horizontal", method: :put do
       %fieldset
         %legend= @poll.question
         - @poll.choices.each do |choice|

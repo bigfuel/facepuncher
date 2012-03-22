@@ -2,8 +2,6 @@ class Admin::ImagesController < AdminController
   respond_to :html, :json
 
   def index
-    @images = @project.images.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with @images
   end
 
   def new
@@ -15,8 +13,6 @@ class Admin::ImagesController < AdminController
   end
 
   def show
-    @image = @project.images.find(params[:id])
-    respond_with @image
   end
 
   def create

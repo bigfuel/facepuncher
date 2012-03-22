@@ -31,9 +31,8 @@
           = f.label :screencap, class: "control-label"
           .controls
             = f.file_field :screencap
-            %br
             - unless @video.new_record?
-              = image_tag @video.screencap.url
+              = image_tag @video.screencap.url if @video.screencap?
 
         .form-actions
           = f.hidden_field :project_id

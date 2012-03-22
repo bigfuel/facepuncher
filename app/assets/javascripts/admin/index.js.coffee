@@ -1,10 +1,4 @@
 jQuery ->
-  # Admin - Project dashboard
-  $(".table tr").hover (->
-    $("td .actions", this).show()
-  ), ->
-    $("td .actions", this).hide()
-
   # Buttons
   removeAlert = ->
     $("#content .alert.alert-error").remove()
@@ -31,6 +25,7 @@ jQuery ->
     removeAlert()
   ).on("ajax:success", ".activate", (e) ->
     newLink = $(this).attr("href").replace("activate", "deactivate")
+    $(this).siblings(".state").hide()
     $(this).removeClass("activate").addClass("deactivate").attr("href", newLink).attr "title", "Deactivate"
     $(this).children("i").removeClass("icon-ok-circle").addClass("icon-ban-circle")
     $(this).parents("tr").removeClass("inactive")
@@ -41,6 +36,7 @@ jQuery ->
     removeAlert()
   ).on("ajax:success", ".deactivate", (e) ->
     newLink = $(this).attr("href").replace("deactivate", "activate")
+    $(this).siblings(".state").hide()
     $(this).removeClass("deactivate").addClass("activate").attr("href", newLink).attr "title", "Activate"
     $(this).children("i").removeClass("icon-ban-circle").addClass("icon-ok-circle")
     $(this).parents("tr").addClass "inactive"
@@ -51,9 +47,10 @@ jQuery ->
     removeAlert()
   ).on("ajax:success", ".approve", (e) ->
     newLink = $(this).attr("href").replace("approve", "deny")
+    $(this).siblings(".state").hide()
     $(this).removeClass("approve").addClass("deny").attr("href", newLink).attr "title", "Deny"
     $(this).children("i").removeClass("icon-ok-circle").addClass("icon-ban-circle")
-    $(this).parents("tr").removeClass("inactive")
+    $(this).parents("tr").removeClass("denied pending").addClass "approved"
   ).on "ajax:error", ".approve", (e) ->
     addAlert()
 
@@ -61,9 +58,10 @@ jQuery ->
     removeAlert()
   ).on("ajax:success", ".deny", (e) ->
     newLink = $(this).attr("href").replace("deny", "approve")
+    $(this).siblings(".state").hide()
     $(this).removeClass("deny").addClass("approve").attr("href", newLink).attr "title", "Approve"
     $(this).children("i").removeClass("icon-ban-circle").addClass("icon-ok-circle")
-    $(this).parents("tr").addClass "inactive"
+    $(this).parents("tr").removeClass("approved pending").addClass "denied"
   ).on "ajax:error", ".deny", (e) ->
     addAlert()
 

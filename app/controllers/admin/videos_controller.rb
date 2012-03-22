@@ -2,8 +2,6 @@ class Admin::VideosController < AdminController
   respond_to :html, :json
 
   def index
-    @videos = @project.videos.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with @videos
   end
 
   def new
@@ -15,8 +13,6 @@ class Admin::VideosController < AdminController
   end
 
   def show
-    @video = @project.videos.find(params[:id])
-    respond_with @video
   end
 
   def create

@@ -2,8 +2,6 @@ class Admin::SubmissionsController < AdminController
   respond_to :html, :json
 
   def index
-    @submissions = @project.submissions.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with @submissions
   end
 
   def new
@@ -27,8 +25,6 @@ class Admin::SubmissionsController < AdminController
   end
 
   def show
-    @submission = @project.submissions.find(params[:id])
-    respond_with @submission
   end
 
   def destroy
