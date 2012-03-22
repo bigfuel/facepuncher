@@ -2,8 +2,6 @@ class Admin::PollsController < AdminController
   respond_to :html, :json
 
   def index
-    @polls = @project.polls.order_by([sort_column, sort_direction])
-    respond_with @polls
   end
 
   def new

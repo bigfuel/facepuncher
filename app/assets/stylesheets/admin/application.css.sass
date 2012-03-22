@@ -8,6 +8,9 @@ body
 
 @import "bootstrap-responsive"
 
+.tmpl
+  display: none
+
 .pagination
   border-left: 1px solid #ddd
   span
@@ -23,19 +26,26 @@ body
   tbody tr:hover td, tbody tr:hover th
     background-color: #eaeaea
   tr
-    &.inactive
+    &.pending
+      color: #aaa
+      a
+        color: #aaa
+        cursor: default
+    &.inactive, &.denied
       color: #ccc
       a
         color: #ccc
         cursor: default
-      .actions
-        .btn
-          display: inline-block
       .btn
-        display: none
         &.home
           display: inline-block
           cursor: pointer
+        &.deny, &.release, &.repo
+          display: none
+    &.active, &.approved
+      .btn
+        &.approve
+          display: none
     &.live
       color: green
 
@@ -43,6 +53,9 @@ body
     .actions
       display: none
       float: right
+    &:hover
+      .actions
+        display: inline-block
 
 .import-csv
   display: none
@@ -55,8 +68,3 @@ body
   #pano
     width: 420px
     height: 230px
-
-#editor
-  position: relative
-  width: 800px
-  height: 800px

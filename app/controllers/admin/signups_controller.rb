@@ -5,8 +5,6 @@ class Admin::SignupsController < AdminController
   respond_to :csv, only: :index
 
   def index
-    @signups = @project.signups.order_by([sort_column, sort_direction]).page(params[:page])
-
     respond_with @signups do |format|
       format.csv do
         @signups = @project.signups
@@ -43,25 +41,24 @@ class Admin::SignupsController < AdminController
     @signup = @project.signups.new
   end
 
+  def edit
+    @signup = @project.signups.find(params[:id])
+  end
+
+  def show
+  end
+  
   def create
     @signup = @project.signups.new(params[:signup])
     @signup.save
     respond_with @signup, location: [:admin, @project, @signup]
   end
 
-  def edit
-    @signup = @project.signups.find(params[:id])
-  end
 
   def update
     @signup = @project.signups.find(params[:id])
     @signup.update_attributes(params[:signup])
     respond_with @signup, location: [:admin, @project, @signup]
-  end
-
-  def show
-    @signup = @project.signups.find(params[:id])
-    respond_with @signup
   end
 
   def destroy

@@ -35,9 +35,8 @@
           = f.label :photo, class: "control-label"
           .controls
             = f.file_field :photo
-            %br
-              - unless @submission.new_record?
-                = image_tag @submission.photo.url
+            - unless @submission.new_record?
+              = image_tag @submission.photo.url if @submission.photo?
 
         .form-actions
           = f.hidden_field :project_id

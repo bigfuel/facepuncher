@@ -4,7 +4,7 @@ class Api::PollsController < ApplicationController
   respond_to :json, :xml
 
   def index
-    @polls = @project.polls.active.page(params[:page])
+    @polls = @project.polls.page(params[:page])
 
     respond_with :api, @project, @polls
   end
@@ -17,7 +17,7 @@ class Api::PollsController < ApplicationController
   end
 
   def show
-    @poll = @project.polls.active.find(params[:id])
+    @poll = @project.polls.find(params[:id])
 
     respond_with :api, @project, @poll
   end
