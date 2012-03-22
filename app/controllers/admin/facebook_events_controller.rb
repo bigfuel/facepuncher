@@ -2,8 +2,6 @@ class Admin::FacebookEventsController < AdminController
   respond_to :html, :json
 
   def index
-    @facebook_events = @project.facebook_events.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with @facebook_events
   end
 
   def new
@@ -15,8 +13,6 @@ class Admin::FacebookEventsController < AdminController
   end
 
   def show
-    @facebook_event = @project.facebook_events.find(params[:id])
-    respond_with @facebook_event
   end
 
   def create

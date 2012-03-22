@@ -4,20 +4,26 @@
 %p
   = link_to 'Back', admin_project_facebook_events_path(@project), title: "Back", class: "btn btn-inverse"
   = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_facebook_event_path(@project), title: "New", class: "btn"
-  = link_to '<i class="icon-edit"></i>'.html_safe, edit_admin_project_facebook_event_path(@project), title: "Edit", class: "btn"
+
+%table{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+  %tbody
+    %tr
+      %td{colspan: 2}
+        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
+        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}', confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+    %tr
+      %td Created at
+      %td ${created_at}
+    %tr
+      %td Updated at
+      %td ${updated_at}
+    %tr
+      %td Name
+      %td ${name}
+    %tr
+      %td Limit
+      %td ${limit}
 
 .row
   .span6
     %table.table.table-bordered
-      %tr
-        %td Created at
-        %td= @facebook_event.created_at
-      %tr
-        %td Updated at
-        %td= @facebook_event.updated_at
-      %tr
-        %td Name
-        %td= @facebook_event.name
-      %tr
-        %td Set ID
-        %td= @facebook_event.limit

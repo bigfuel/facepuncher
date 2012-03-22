@@ -93,6 +93,7 @@ Facepuncher::Application.routes.draw do
       resources :feeds
       resources :posts
       resources :facebook_albums
+      resources :facebook_events
 
       resources :polls do
         put 'vote', on: :member
