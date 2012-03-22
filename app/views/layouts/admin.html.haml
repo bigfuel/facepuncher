@@ -31,5 +31,6 @@
                 - Project.reflect_on_all_associations(:references_many).map(&:name).each do |relation|
                   %li{class: (controller_name == relation.to_s ? "active" : nil)}
                     %li= link_to "#{relation.to_s.humanize} (#{@project.send(relation).count})", instance_eval("admin_project_#{relation.to_s}_path(@project)")
+
       #content
         = yield
