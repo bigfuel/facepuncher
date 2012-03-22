@@ -2,8 +2,6 @@ class Admin::FacebookAlbumsController < AdminController
   respond_to :html, :json
 
   def index
-    @facebook_albums = @project.facebook_albums.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with @facebook_albums
   end
 
   def new
@@ -15,8 +13,6 @@ class Admin::FacebookAlbumsController < AdminController
   end
 
   def show
-    @facebook_album = @project.facebook_albums.find(params[:id])
-    respond_with @facebook_album
   end
 
   def create

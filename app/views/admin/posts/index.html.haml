@@ -5,36 +5,31 @@
   %h6 Stats
   #{@project.posts.all.count} total
 
-= paginate @posts
+%table{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+  %tbody
+    %tr{class: "${state}"}
+      %td
+        = link_to '${title}', admin_url + '${id}'
+        %div{class: "actions ${state}"}
+          = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/approve.json', remote: true, class: "state approve btn", title: "Approve"
+          = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deny.json', remote: true, class: "state deny btn", title: "Deny"
+          = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
+          = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}.json', remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+      %td ${content}
+      %td ${url}
+      %td ${tags}
+      %td ${updated_at}
+      %td ${position}
+      %td ${state}
+      %td {{if image.url}}<a href="${image.url}" class="btn" target="_blank"><i class="icon-picture"></i></a>{{/if}}
 
 %table.table.table-striped.table-bordered
   %tr
-    %th{width: 250}= sort_by "title"
-    - %w{content url image tags updated_at position move}.each do |c|
-      %th.sort= sort_by c
-
-  - @posts.each do |post|
-    %tr{class: (post.state == 'approved' ? nil : "inactive")}
-      %td
-        = link_to post.title, [:admin, @project, post]
-        .actions
-          = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, post], class: "btn", title: "Edit"
-          - if post.state == 'pending'
-            = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_post_path(@project, post, format: :json), remote: true, class: "approve btn", title: "Approve"
-            = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_post_path(@project, post, format: :json), remote: true, class: "deny btn", title: "Deny"
-          - elsif post.state == 'denied'
-            = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_post_path(@project, post, format: :json), remote: true, class: "approve btn", title: "Approve"
-          - elsif post.state == 'approved'
-            = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_post_path(@project, post, format: :json), remote: true, class: "deny btn", title: "Deny"
-          = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, post], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-      %td= post.content
-      %td= post.url
-      %td= link_to image_tag(post.image.url), [:admin, @project, post] if post.image?
-      %td= post.tags
-      %td= l post.updated_at, format: :custom
-      %td= post.position
-      %td
-        = link_to 'Up', up_admin_project_post_path(@project, post, format: :html), remote: false, method: :put, class: "up button"
-        = link_to 'Down', down_admin_project_post_path(@project, post, format: :html), remote: false, method: :put, class: "down button"
-
-= paginate @posts
+    %th{width: 250} Title
+    %th Content
+    %th URL
+    %th Tags
+    %th Updated At
+    %th Position
+    %th State
+    %th Image?
