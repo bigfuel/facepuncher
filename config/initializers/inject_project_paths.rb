@@ -18,7 +18,7 @@ Rails.application.config.before_configuration do
       asset_directories.each do |asset_dir|
         absolute_project_asset_path = Pathname.new(project_dir).join(asset_dir)
         project_name = project_dir.split("/").last
-        retriable on: [Timeout::Error, Errno::ENOENT], tries: NUM_RETRIES, interval: 3 do
+        unless Dir.exists?(local_assets_path.join(asset_dir, project_name))
           FileUtils.ln_s(absolute_project_asset_path, local_assets_path.join(asset_dir, project_name))
         end
       end
