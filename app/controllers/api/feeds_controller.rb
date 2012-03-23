@@ -4,6 +4,12 @@ class Api::FeedsController < ApplicationController
   respond_to :json, :xml
   PER_PAGE = 5
 
+  def index
+    @feeds = @project.feeds.page(params[:page])
+
+    respond_with :api, @project, @feeds
+  end
+
   def show
     feed = @project.feeds.where(name: params[:id]).first
     @response = Hash.new

@@ -2,8 +2,6 @@ class Admin::FeedsController < AdminController
   respond_to :html, :json
 
   def index
-    @feeds = @project.feeds.order_by([sort_column, sort_direction]).page(params[:page])
-    respond_with @feeds
   end
 
   def new
