@@ -15,9 +15,7 @@
           = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deactivate.json', remote: true, class: "state deactivate btn", title: "Deny"
           = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
           = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}.json', remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-      %td 
-        / ${choices.choice}
-        {{each choices}}-${choice.content} {{/each}}
+      %td {{each choices}}-${choice.content} {{/each}}
       %td ${start_date}
       %td ${end_date}
       %td ${state}
