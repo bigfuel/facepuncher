@@ -5,14 +5,13 @@
   = link_to 'Back', admin_project_feeds_path(@project), title: "Back", class: "btn btn-inverse"
   = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_feed_path(@project), title: "New", class: "btn"
 
-%table{class: "tmpl", "data-project" => "#{@project.name}", "data-action" => "feed", "data-feed-name" => "#{@feed.name}"}
-  %tbody
-    %tr
-      %td Size
-      %td ${size}
-    %tr
-      %td Entries
-      %td {{each(i, j) entries}} <div class="well">{{each(a, b) j}}<strong>${a}</strong>: ${b}<br/>{{/each}}</div> {{/each}}
+%textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-action" => "feed", "data-feed-name" => "#{@feed.name}"}
+  %tr
+    %td Size
+    %td ${size}
+  %tr
+    %td Entries
+    %td {{each(i, j) entries}} <div class="well">{{each(a, b) j}}<strong>${a}</strong>: ${b}<br/>{{/each}}</div> {{/each}}
 
 .row
   .span12
@@ -21,6 +20,9 @@
         %td{colspan: 2}
           = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + "#{@feed.id}/edit", class: "btn", title: "Edit"
           = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + "#{@feed.id}", confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+      %tr
+        %td Created At
+        %td= @feed.created_at
       %tr
         %td Name
         %td= @feed.name
