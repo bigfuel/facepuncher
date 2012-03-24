@@ -5,21 +5,20 @@
   %h6 Stats
   #{@project.polls.all.count} total
 
-%table{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
-  %tbody
-    %tr{class: "${state}"}
-      %td
-        = link_to '${question}', admin_url + '${id}'
-        %div{class: "actions ${state}"}
-          = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/activate.json', remote: true, class: "state activate btn", title: "Approve"
-          = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deactivate.json', remote: true, class: "state deactivate btn", title: "Deny"
-          = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
-          = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}.json', remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-      %td {{each choices}}-${choice.content} {{/each}}
-      %td ${start_date}
-      %td ${end_date}
-      %td ${state}
-      %td ${created_at}
+%textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+  %tr{class: "${state}"}
+    %td
+      = link_to '${question}', admin_url + '${id}'
+      %div{class: "actions ${state}"}
+        = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/activate.json', remote: true, class: "state activate btn", title: "Approve"
+        = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deactivate.json', remote: true, class: "state deactivate btn", title: "Deny"
+        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
+        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}.json', remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+    %td {{each choices}}-${choice.content} {{/each}}
+    %td ${start_date}
+    %td ${end_date}
+    %td ${state}
+    %td ${created_at}
 
 %table.table.table-striped.table-bordered
   %tr

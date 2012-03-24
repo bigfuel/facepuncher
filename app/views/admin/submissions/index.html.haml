@@ -5,20 +5,19 @@
   %h6 Stats
   #{@project.submissions.all.count} total / #{@project.submissions.pending.count} pending / #{@project.submissions.approved.count} approved / #{@project.submissions.denied.count} denied
 
-%table{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
-  %tbody
-    %tr{class: "${state}"}
-      %td
-        = link_to '${facebook_name}', admin_url + '${id}'
-        %div{class: "actions ${state}"}
-          = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/approve.json', remote: true, class: "state approve btn", title: "Approve"
-          = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deny.json', remote: true, class: "state deny btn", title: "Deny"
-          = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
-          = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}.json', remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-      %td ${facebook_id}
-      %td ${facebook_email}
-      %td ${created_at}
-      %td {{if photo.url}}<a href="${photo.url}" class="btn" target="_blank"><i class="icon-picture"></i></a>{{/if}}
+%textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+  %tr{class: "${state}"}
+    %td
+      = link_to '${facebook_name}', admin_url + '${id}'
+      %div{class: "actions ${state}"}
+        = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/approve.json', remote: true, class: "state approve btn", title: "Approve"
+        = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deny.json', remote: true, class: "state deny btn", title: "Deny"
+        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
+        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}.json', remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+    %td ${facebook_id}
+    %td ${facebook_email}
+    %td ${created_at}
+    %td {{if photo.url}}<a href="${photo.url}" class="btn" target="_blank"><i class="icon-picture"></i></a>{{/if}}
 
 %table.table.table-striped.table-bordered
   %tr

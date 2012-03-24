@@ -14,45 +14,41 @@
   %h6 Stats
   #{@project.events.all.count} total
 
-= paginate @events
+%textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+  %tr{class: "${state}"}
+    %td
+      = link_to '${name}', admin_url + '${id}'
+      %div{class: "actions ${state}"}
+        = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/approve.json', remote: true, class: "state approve btn", title: "Approve"
+        = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deny.json', remote: true, class: "state deny btn", title: "Deny"
+        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
+        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}.json', remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+    %td ${state}
+    %td ${type}
+    %td ${start_date}
+    %td ${end_date}
+    %td ${location.address}
+    %td ${location.latitude}
+    %td ${location.longitude}
+    %td ${updated_at}
 
 %table.table.table-striped.table-bordered
   %tr
-    %th.sort{width: 250}= sort_by "name"
-    - %w{state type start_date end_date}.each do |c|
-      %th.sort= sort_by c
-    %th.sort= sort_by "location.address", "Address"
-    %th.sort= sort_by "location.latitude", "Latitude"
-    %th.sort= sort_by "location.longitude", "Longitude"
-    %th.sort= sort_by "updated_at", "Updated At"
-    %th Locate
+    %th{width: 250} Name
+    %th State
+    %th Type
+    %th Start Date
+    %th End Date
+    %th Address
+    %th Latitude
+    %th Longitude
+    %th Updated At
 
-    - @events.each do |event|
-      %tr{id: "#{dom_id(event)}", class: (event.state == 'approved' ? nil : "inactive")}
-        %td
-          = link_to truncate(event.name, length: 50), [:admin, @project, event]
-          .actions
-            = link_to '<i class="icon-edit"></i>'.html_safe, [:edit, :admin, @project, event], class: "btn", title: "Edit"
-            - if event.state == 'approved'
-              = link_to '<i class="icon-ban-circle"></i>'.html_safe, deny_admin_project_event_path(@project, event, format: :json), remote: true, class: "deny btn", title: "Deny"
-            - elsif
-              = link_to '<i class="icon-ok-circle"></i>'.html_safe, approve_admin_project_event_path(@project, event, format: :json), remote: true, class: "approve btn", title: "Approve"
-            = link_to '<i class="icon-trash"></i>'.html_safe, polymorphic_url([:admin, @project, event], format: :json), remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-        %td= event.state
-        %td= event.type
-        %td= l event.start_date, format: :custom
-        %td= l event.end_date, format: :custom
-        %td= event.location.address
-        %td.event-latitude= event.location.latitude
-        %td.event-longitude= event.location.longitude
-        %td= l event.updated_at, format: :custom
-        %td
-          = form_for event, url: admin_project_event_path(@project.name, event, format: :json), remote: true, html: { class: 'location_update_form' } do |f|
-            = f.hidden_field :id
-            = f.fields_for :location do |l|
-              = l.hidden_field :address
-              = l.hidden_field :latitude
-              = l.hidden_field :longitude
-            = link_to 'Locate', 'javascript: void(0);', 'data-form-id' => "edit_#{dom_id(event)}", class: "locate btn"
-
-= paginate @events
+    / %td
+    /   = form_for event, url: admin_project_event_path(@project.name, event, format: :json), remote: true, html: { class: 'location_update_form' } do |f|
+    /     = f.hidden_field :id
+    /     = f.fields_for :location do |l|
+    /       = l.hidden_field :address
+    /       = l.hidden_field :latitude
+    /       = l.hidden_field :longitude
+    /     = link_to 'Locate', 'javascript: void(0);', 'data-form-id' => "edit_#{dom_id(event)}", class: "locate btn"

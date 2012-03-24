@@ -5,7 +5,7 @@
   = link_to 'Back', admin_project_submissions_path(@project), title: "Back", class: "btn btn-inverse"
   = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_submission_path(@project), title: "New", class: "btn"
 
-%table{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+%textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
   %tr{class: "${state}"}
     %td{colspan: 2}
       = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/approve.json', remote: true, class: "state approve btn", title: "Approve"

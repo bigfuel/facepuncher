@@ -1,5 +1,5 @@
 jQuery ->
-  $.template "newEntry", $(".tmpl tbody").html()
+  $.template "newEntry", $(".tmpl").val()
 
   project_name = $(".tmpl").attr "data-project"
 

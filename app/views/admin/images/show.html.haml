@@ -5,32 +5,31 @@
   = link_to 'Back', admin_project_images_path(@project), title: "Back", class: "btn btn-inverse"
   = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_image_path(@project), title: "New", class: "btn"
 
-%table{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
-  %tbody
-    %tr{class: "${state}"}
-      %td{colspan: 2}
-        = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/approve.json', remote: true, class: "state approve btn", title: "Approve"
-        = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deny.json', remote: true, class: "state deny btn", title: "Deny"
-        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
-        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}', confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-    %tr
-      %td Created at
-      %td ${created_at}
-    %tr
-      %td Updated at
-      %td ${updated_at}
-    %tr
-      %td State
-      %td ${state}
-    %tr
-      %td Name
-      %td ${name}
-    %tr
-      %td Description
-      %td ${description}
-    %tr
-      %td Image
-      %td {{if image.url}}<a href="${image.url}" class="btn" target="_blank"><i class="icon-picture"></i></a>{{/if}}
+%textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+  %tr{class: "${state}"}
+    %td{colspan: 2}
+      = link_to '<i class="icon-ok-circle"></i>'.html_safe, admin_url + '${id}/approve.json', remote: true, class: "state approve btn", title: "Approve"
+      = link_to '<i class="icon-ban-circle"></i>'.html_safe, admin_url + '${id}/deny.json', remote: true, class: "state deny btn", title: "Deny"
+      = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
+      = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}', confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+  %tr
+    %td Created at
+    %td ${created_at}
+  %tr
+    %td Updated at
+    %td ${updated_at}
+  %tr
+    %td State
+    %td ${state}
+  %tr
+    %td Name
+    %td ${name}
+  %tr
+    %td Description
+    %td ${description}
+  %tr
+    %td Image
+    %td {{if image.url}}<a href="${image.url}" class="btn" target="_blank"><i class="icon-picture"></i></a>{{/if}}
 
 .row
   .span6
