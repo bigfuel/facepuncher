@@ -13,6 +13,8 @@ class Admin::FacebookAlbumsController < AdminController
   end
 
   def show
+    @facebook_album = @project.facebook_albums.find(params[:id])
+    respond_with @facebook_album
   end
 
   def create

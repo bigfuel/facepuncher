@@ -5,25 +5,31 @@
   = link_to 'Back', admin_project_facebook_albums_path(@project), title: "Back", class: "btn btn-inverse"
   = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_facebook_album_path(@project), title: "New", class: "btn"
 
-%table{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
-  %tbody
-    %tr
-      %td{colspan: 2}
-        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
-        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}', confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-    %tr
-      %td Created at
-      %td ${created_at}
-    %tr
-      %td Updated at
-      %td ${updated_at}
-    %tr
-      %td Name
-      %td ${name}
-    %tr
-      %td Set ID
-      %td ${set_id}
+
+%textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+  %tr
+    %td
+      %img{"src" => '${$data.picture}', width: 100}
+    %td 
+      %a{href: '${$data.source}', target: "_blank"}
+        ${$data.source}
 
 .row
-  .span6
+  .span12
     %table.table.table-bordered
+      %tr
+        %td{colspan: 2}
+          = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + "#{@facebook_album.id}/edit", class: "btn", title: "Edit"
+          = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + "#{@facebook_album.id}", confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+      %tr
+        %td Created at
+        %td= @facebook_album.created_at
+      %tr
+        %td Updated at
+        %td= @facebook_album.updated_at
+      %tr
+        %td Name
+        %td= @facebook_album.name
+      %tr
+        %td Set ID
+        %td= @facebook_album.set_id
