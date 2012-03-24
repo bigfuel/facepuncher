@@ -30,6 +30,10 @@
       = f.label :url, class: "control-label"
       .controls= f.text_field :url
 
+    .control-group
+      = f.label :details, class: "control-label"
+      .controls= f.text_field :details
+
     = f.fields_for :location do |l|
       = render partial: 'shared/form_location', locals: {f: l}
 

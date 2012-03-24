@@ -5,39 +5,38 @@
   = link_to 'Back', admin_project_signups_path(@project), title: "Back", class: "btn btn-inverse"
   = link_to '<i class="icon-plus"></i>'.html_safe, new_admin_project_signup_path(@project, @signup), title: "New", class: "btn"
 
-%table{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
-  %tbody
-    %tr
-      %td{colspan: 2}
-        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
-        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}', confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
-    %tr
-      %td Created at
-      %td ${created_at}
-    %tr
-      %td Updated at
-      %td ${updated_at}
-    %tr
-      %td First Name
-      %td ${first_name}
-    %tr
-      %td Last Name
-      %td ${last_name}
-    %tr
-      %td Address
-      %td ${address}
-    %tr
-      %td City
-      %td ${city}
-    %tr
-      %td State Province
-      %td ${state_province}
-    %tr
-      %td Zip Code
-      %td ${zip_code}
-    %tr
-      %td Email
-      %td ${email}
+%textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
+  %tr
+    %td{colspan: 2}
+      = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + '${id}/edit', class: "btn", title: "Edit"
+      = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}', confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+  %tr
+    %td Created at
+    %td ${created_at}
+  %tr
+    %td Updated at
+    %td ${updated_at}
+  %tr
+    %td First Name
+    %td ${first_name}
+  %tr
+    %td Last Name
+    %td ${last_name}
+  %tr
+    %td Address
+    %td ${address}
+  %tr
+    %td City
+    %td ${city}
+  %tr
+    %td State Province
+    %td ${state_province}
+  %tr
+    %td Zip Code
+    %td ${zip_code}
+  %tr
+    %td Email
+    %td ${email}
 
 .row
   .span6
