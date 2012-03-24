@@ -1,3 +1,2 @@
 collection @facebook_events
-
-extends "api/facebook_events/show"
+attributes :id, :name, :limit, :created_at, :updated_at
