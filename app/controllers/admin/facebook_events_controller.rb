@@ -13,6 +13,8 @@ class Admin::FacebookEventsController < AdminController
   end
 
   def show
+    @facebook_event = @project.facebook_events.find(params[:id])
+    respond_with @facebook_event
   end
 
   def create

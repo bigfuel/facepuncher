@@ -10,9 +10,9 @@ class Api::FacebookEventsController < ApplicationController
   end
 
   def show
-    @facebook_event = @project.facebook_events.find(params[:id])
+    @response = FacebookGraph::Event.get(@project.id)
 
-    respond_with :api, @project, @facebook_event
+    respond_with @response
   end
 
   def create
