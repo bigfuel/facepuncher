@@ -6,19 +6,19 @@ class Api::EventsController < ApplicationController
   def index
     if params[:type]
       types = params[:type].delete_if {|k, v| v == "0"}.keys
-      @events = @project.events.approved
+      @events = @project.events
       if !types.empty?
         @events = @events.any_in(type: types)
       end
       @events.page(params[:page])
     else
-      @events = @project.events.approved.page(params[:page])
+      @events = @project.events.page(params[:page])
     end
     respond_with :api, @project, @events
   end
 
   def show
-    @event = @project.events.approved.find(params[:id])
+    @event = @project.events.find(params[:id])
     respond_with :api, @project, @event
   end
 
