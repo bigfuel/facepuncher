@@ -1,7 +1,7 @@
-Rails.application.config.before_configuration do
-  asset_directories = ["images", "stylesheets", "javascripts"]
+if Rails.env.development?
+  Rails.application.config.before_configuration do
+    asset_directories = ["images", "stylesheets", "javascripts"]
 
-  if Rails.env.development?
     local_assets_path = Rails.root.join("tmp", "local_assets")
 
     if Dir.exists?(local_assets_path)
@@ -23,10 +23,9 @@ Rails.application.config.before_configuration do
         end
       end
     end
-  end
 
-  asset_directories.each do |asset_dir|
-    Rails.application.config.assets.paths << local_assets_path.join(asset_dir) if Rails.env.development?
-    Rails.application.config.assets.paths << Rails.root.join("tmp", "assets").join(asset_dir)
+    asset_directories.map(&:to_s).each do |asset_dir|
+      Rails.application.config.assets.append_path(local_assets_path.join(asset_dir)) if Rails.env.development?
+    end
   end
 end
