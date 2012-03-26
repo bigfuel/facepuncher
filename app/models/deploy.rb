@@ -3,8 +3,6 @@ require 'asset_sync'
 require 'sprockets'
 
 module Deploy
-  ASSETS_PATH = Rails.root.join("tmp", "assets")
-
   module Errors
     class Error < StandardError; end
     class ProjectNotFoundError < Errors::Error; end
@@ -24,23 +22,30 @@ module Deploy
     release.save
 
     Dir.mktmpdir(project.name) do |project_dir|
+      project_dir = Pathname.new(project_dir)
+      repo_dir = project_dir.join('repo')
+      FileUtils.mkdir_p(repo_dir)
+      assets_dir = project_dir.join('assets')
+      FileUtils.mkdir_p(assets_dir)
+      public_dir = project_dir.join('public')
+      FileUtils.mkdir_p(public_dir)
+
       begin
         # clone repo
-        clone_repo(project_dir, project.repo, release.branch)
+        clone_repo(repo_dir.to_s, project.repo, release.branch)
 
         # TODO: Alert people
-
         begin
-          copy_assets(project.name, project_dir, ASSETS_PATH)
+          copy_assets(repo_dir.to_s, assets_dir.join(project.name))
         rescue Timeout::Error => e
           release.status = e.message
           release.save
           raise
         end
 
-        compile_assets(project.name)
+        compile_assets(project.name, assets_dir.to_s, public_dir.to_s)
 
-        self.generate_views(project.name, project_dir)
+        self.generate_views(project.name, repo_dir.to_s)
 
         release.go_live
         project.touch
@@ -67,40 +72,38 @@ module Deploy
     result
   end
 
-  def self.copy_assets(project_name, source_root_path, dest_root_path)
+  def self.copy_assets(source_path, dest_path)
     ["images", "stylesheets", "javascripts"].each do |dir|
-      dest_path = Pathname.new(dest_root_path).join(dir, project_name)
-      FileUtils.rm_r(dest_path, secure: true) if Dir.exists?(dest_path)
-      FileUtils.mkdir_p(dest_path)
-      source_path = "#{source_root_path}/#{dir}/."
-      FileUtils.cp_r(source_path, dest_path)
+      FileUtils.cp_r("#{source_path}/#{dir}/.", dest_path)
     end
   end
 
-  def self.compile_assets(project_name)
-      config = Rails.application.config
-      public_asset_path = File.join(Rails.public_path, config.assets.prefix)
+  def self.compile_assets(project_name, assets_dir, public_dir)
+    app = Rails.application
+    public_asset_path = File.join(Rails.public_path, app.config.assets.prefix)
+    public_dir = Rails.root.join('tmp', 'public_assets', project_name) if Rails.env.development?
 
-      manifest_path = config.assets.manifest ? Pathname.new(config.assets.manifest).join(project_name) : Pathname.new(public_asset_path).join(project_name)
-      manifest = File.join(manifest_path, "manifest.yml")
+    manifest_path = app.config.assets.manifest ? Pathname.new(app.config.assets.manifest).join(project_name) : Pathname.new(public_dir).join(project_name)
+    manifest = File.join(manifest_path, "manifest.yml")
 
-      compiler = Sprockets::StaticCompiler.new(Rails.application.assets,
-                                               public_asset_path,
-                                               config.assets.precompile,
-                                               manifest_path: manifest_path,
-                                               digest: true,
-                                               manifest: true)
+    assets = app.assets.dup
+    assets.instance_variable_set(:@trail, app.assets.instance_variable_get(:@trail).dup)
+    assets.instance_variable_get(:@trail).instance_variable_set(:@paths, app.assets.instance_variable_get(:@trail).instance_variable_get(:@paths).dup)
+    assets.append_path(assets_dir)
 
-      retriable on: Errno::ENOENT, tries: 5 do
-        compiler.compile
-      end
+    compiler = Sprockets::StaticCompiler.new(assets,
+                                             public_dir,
+                                             app.config.assets.precompile,
+                                             manifest_path: manifest_path,
+                                             digest: true,
+                                             manifest: true)
 
-      # config.assets.digests = YAML.load_file(manifest) if File.exists?(manifest)
-      # ProjectsController.view_paths.each(&:clear_cache)
+    compiler.compile
 
-      raise "Couldn't find manifest.yml" unless File.exists?(manifest)
-      AssetSync.sync
-      Rails.cache.write("digests:#{project_name}", YAML.load_file(manifest))
+    raise "Couldn't find manifest.yml" unless File.exists?(manifest)
+    FileUtils.cp_r("#{public_dir}/.", public_asset_path)
+    AssetSync.sync
+    Rails.cache.write("digests:#{project_name}", YAML.load_file(manifest))
   end
 
   def self.generate_views(project_name, project_path)
