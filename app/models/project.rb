@@ -1,6 +1,9 @@
+require 'mongoid/carrierwave_fix'
+
 class Project
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::CarrierwaveFix
 
   field :name, type: String
   field :description, type: String
