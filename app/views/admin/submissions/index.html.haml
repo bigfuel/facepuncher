@@ -16,6 +16,7 @@
         = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + '${id}.json', remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
     %td ${facebook_id}
     %td ${facebook_email}
+    %td ${state}
     %td ${created_at}
     %td {{if photo.url}}<a href="${photo.url}" class="btn" target="_blank"><i class="icon-picture"></i></a>{{/if}}
 
@@ -24,6 +25,7 @@
     %th{width: 250} FB Name
     %th FB ID
     %th FB Email
+    %th State
     %th Created At
     %th Image?
       
