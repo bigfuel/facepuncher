@@ -15,6 +15,8 @@ class Signup
 
   belongs_to :project
 
+  paginates_per 20
+
   validates_length_of :email, :first_name, :last_name, :address, :city, :state_province, :zip_code, maximum: 255, message: "has exceeded the maximum character limit."
   validates_confirmation_of :email, if: Proc.new { |signup| signup.email_confirmation }
 

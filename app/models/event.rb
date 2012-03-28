@@ -23,7 +23,6 @@ class Event
 
   validates :name, :start_date, presence: true
 
-  default_scope order_by(:start_date, :asc)
   scope :pending, where(state: "pending")
   scope :approved, where(state: "approved")
   scope :denied, where(state: "denied")

@@ -9,6 +9,8 @@ class FacebookAlbum
 
   belongs_to :project
 
+  paginates_per 20
+
   validates :name, :set_id, presence: true
   validates :name, uniqueness: { scope: :project_id, message: "has already been used in this project." }
 

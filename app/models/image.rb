@@ -11,6 +11,8 @@ class Image
 
   belongs_to :project
 
+  paginates_per 20
+
   mount_uploader :image, ImageGridUploader
 
   scope :pending, where(state: "pending")
