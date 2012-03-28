@@ -15,6 +15,8 @@ class Poll
 
   belongs_to :project
 
+  paginates_per 20
+
   embeds_many :choices, cascade_callbacks: true
   accepts_nested_attributes_for :choices, reject_if: proc { |attributes| attributes[:content].blank? }, allow_destroy: true
 
