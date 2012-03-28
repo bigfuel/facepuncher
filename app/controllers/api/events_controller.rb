@@ -4,27 +4,28 @@ class Api::EventsController < ApplicationController
   respond_to :json, :xml
 
   def index
-    if params[:type]
-      types = params[:type].delete_if {|k, v| v == "0"}.keys
-      @events = @project.events
-      if !types.empty?
-        @events = @events.any_in(type: types)
-      end
-      @events.page(params[:page])
-    else
-      @events = @project.events.page(params[:page])
-    end
+    params[:sort_direction] ||= "asc"
+    
+    @events = @project.events
+    @events = @events.where(state: params[:state]) if params[:state]
+    @events = @events.any_in(type: params[:type].split(",")) if params[:type]
+    @events = @events.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
+    @events = @events.page(params[:page])
+    @events = @events.per(params[:per_page]) if params[:per_page]
+    
     respond_with :api, @project, @events
   end
 
   def show
     @event = @project.events.find(params[:id])
+
     respond_with :api, @project, @event
   end
 
   def create
     @event = @project.events.new(params[:event])
     @event.save
+
     respond_with :api, @project, @event
   end
 end

@@ -4,7 +4,12 @@ class Api::SignupsController < ApplicationController
   respond_to :json, :xml
 
   def index
-    @signups = @project.signups.page(params[:page])
+    params[:sort_direction] ||= "asc"
+    
+    @signups = @project.signups
+    @signups = @signups.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
+    @signups = @signups.page(params[:page])
+    @signups = @signups.per(params[:per_page]) if params[:per_page]
 
     respond_with :api, @project, @signups
   end

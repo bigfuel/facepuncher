@@ -4,7 +4,13 @@ class Api::SubmissionsController < ApplicationController
   respond_to :json, :xml
 
   def index
-    @submissions = @project.submissions.page(params[:page])
+    params[:sort_direction] ||= "asc"
+    
+    @submissions = @project.submissions
+    @submissions = @submissions.where(state: params[:state]) if params[:state]
+    @submissions = @submissions.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
+    @submissions = @submissions.page(params[:page])
+    @submissions = @submissions.per(params[:per_page]) if params[:per_page]
 
     respond_with :api, @project, @submissions
   end
