@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   before_filter :load_project, :check_for_project
   around_filter :load_digests
   prepend_view_path APP_CONFIG['project_path'] if Rails.env.development?
-  prepend_view_path ViewTemplate.resolver
+  append_view_path ViewTemplate.resolver
 
   respond_to :html, :json, :xml
 
