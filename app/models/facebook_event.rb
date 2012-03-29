@@ -4,18 +4,21 @@ class FacebookEvent
 
   field :name, type: String
   field :limit, type: Integer, default: 10
+  field :graph, type: Hash, default: Hash.new
 
-  attr_accessible :name, :limit
+  attr_accessible :name, :limit, :graph
 
   belongs_to :project
 
   paginates_per 20
 
   validates :name, :limit, presence: true
-  validates :name, uniqueness: { scope: :project_id, message: "has already been used in this project." }
+  validates :name, format: { with: /^[\S]+$/i }, uniqueness: { scope: :project_id, message: "has already been used in this project." }
 
-  def self.cached_results
-    project_id = scoped.selector['project_id']
-    FacebookGraph::Event.get(project_id)
+  after_save :fetch_event
+
+  protected
+  def fetch_event
+    FetchEvent.perform_async self.project.name, self.name
   end
 end
