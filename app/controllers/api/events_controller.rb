@@ -21,11 +21,4 @@ class Api::EventsController < ApplicationController
 
     respond_with :api, @project, @event
   end
-
-  def create
-    @event = @project.events.new(params[:event])
-    @event.save
-
-    respond_with :api, @project, @event
-  end
 end
