@@ -20,10 +20,4 @@ class Api::ImagesController < ApplicationController
 
     respond_with :api, @project, @image
   end
-
-  def create
-    @image = @project.images.new(params[:image])
-    @image.save
-    respond_with :api, @project, @image
-  end
 end

@@ -27,14 +27,4 @@ class Api::PollsController < ApplicationController
 
     respond_with :api, @project, @poll
   end
-
-  def create
-    @poll = @project.polls.new(params[:poll])
-
-    if @poll.save
-      @poll.move_to_top
-    end
-
-    respond_with :api, @project, @poll
-  end
 end
