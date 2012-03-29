@@ -5,7 +5,12 @@ class Api::FeedsController < ApplicationController
   PER_PAGE = 5
 
   def index
-    @feeds = @project.feeds.page(params[:page])
+    params[:sort_direction] ||= "asc"
+    
+    @feeds = @project.feeds
+    @feeds = @feeds.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
+    @feeds = @feeds.page(params[:page])
+    @feeds = @feeds.per(params[:per_page]) if params[:per_page]
 
     respond_with :api, @project, @feeds
   end

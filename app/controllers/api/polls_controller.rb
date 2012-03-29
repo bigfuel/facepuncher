@@ -4,7 +4,13 @@ class Api::PollsController < ApplicationController
   respond_to :json, :xml
 
   def index
-    @polls = @project.polls.page(params[:page])
+    params[:sort_direction] ||= "asc"
+    
+    @polls = @project.polls
+    @polls = @polls.where(state: params[:state]) if params[:state]
+    @polls = @polls.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
+    @polls = @polls.page(params[:page])
+    @polls = @polls.per(params[:per_page]) if params[:per_page]
 
     respond_with :api, @project, @polls
   end

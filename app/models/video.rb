@@ -12,6 +12,8 @@ class Video
 
   belongs_to :project
 
+  paginates_per 20
+
   mount_uploader :screencap, ImageUploader
 
   validates :youtube_id, presence: true

@@ -9,6 +9,8 @@ class FacebookEvent
 
   belongs_to :project
 
+  paginates_per 20
+
   validates :name, :limit, presence: true
   validates :name, uniqueness: { scope: :project_id, message: "has already been used in this project." }
 

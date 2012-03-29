@@ -4,7 +4,12 @@ class Api::FacebookEventsController < ApplicationController
   respond_to :json, :xml
 
   def index
-    @facebook_events = @project.facebook_events.page(params[:page])
+    params[:sort_direction] ||= "asc"
+    
+    @facebook_events = @project.facebook_events
+    @facebook_events = @facebook_events.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
+    @facebook_events = @facebook_events.page(params[:page])
+    @facebook_events = @facebook_events.per(params[:per_page]) if params[:per_page]
 
     respond_with :api, @project, @facebook_events
   end

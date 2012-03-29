@@ -23,7 +23,6 @@ class Post
 
   validates :title, :content, :url, presence: true
 
-  default_scope order_by(:position, :asc)
   scope :has_images, where(:image.ne => nil) # TODO: check to see if image is nil when you remove an image
   scope :pending, where(state: "pending")
   scope :approved, where(state: "approved")

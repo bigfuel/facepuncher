@@ -4,7 +4,13 @@ class Api::ImagesController < ApplicationController
   respond_to :json, :xml
 
   def index
-    @images = @project.images.page(params[:page])
+    params[:sort_direction] ||= "asc"
+    
+    @images = @project.images
+    @images = @images.where(state: params[:state]) if params[:state]
+    @images = @images.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
+    @images = @images.page(params[:page])
+    @images = @images.per(params[:per_page]) if params[:per_page]
 
     respond_with :api, @project, @images
   end

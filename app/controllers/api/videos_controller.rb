@@ -4,7 +4,13 @@ class Api::VideosController < ApplicationController
   respond_to :json, :xml
 
   def index
-    @videos = @project.videos.page(params[:page])
+    params[:sort_direction] ||= "asc"
+    
+    @videos = @project.videos
+    @videos = @videos.where(state: params[:state]) if params[:state]
+    @videos = @videos.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
+    @videos = @videos.page(params[:page])
+    @videos = @videos.per(params[:per_page]) if params[:per_page]
 
     respond_with :api, @project, @videos
   end

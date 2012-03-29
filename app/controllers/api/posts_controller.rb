@@ -5,9 +5,15 @@ class Api::PostsController < ApplicationController
   respond_to :json, :xml
 
   def index
-    @posts = @project.posts.page(params[:page])
+    params[:sort_direction] ||= "asc"
+    
+    @posts = @project.posts
+    @posts = @posts.where(state: params[:state]) if params[:state]
+    @posts = @posts.order_by(params[:sort_column], params[:sort_direction]) if params[:sort_column]
     @posts = @posts.has_images if params[:has_images]
     @posts = @posts.tags_tagged_with(params[:tags]) if params[:tags]
+    @posts = @posts.page(params[:page])
+    @posts = @posts.per(params[:per_page]) if params[:per_page]
 
     respond_with :api, @project, @posts
   end
