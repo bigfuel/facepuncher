@@ -15,15 +15,8 @@ class Api::FacebookAlbumsController < ApplicationController
   end
 
   def show
-    @response = FacebookGraph::Album.get(@project.id)
-    
-    respond_with @response
-  end
+    @facebook_album = @project.facebook_albums.find(params[:id])
 
-  def create
-    @facebook_album = @project.facebook_albums.new(params[:facebook_album])
-    @facebook_album.save
-    
     respond_with :api, @project, @facebook_album
   end
 end
