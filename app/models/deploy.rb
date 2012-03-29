@@ -92,7 +92,7 @@ module Deploy
     assets.instance_variable_get(:@trail).instance_variable_set(:@paths, trail.instance_variable_get(:@paths).dup)
     assets.append_path(assets_dir)
 
-    digest = Rails.env.development? ? false : true
+    digest = !Rails.env.development?
 
     compiler = Sprockets::StaticCompiler.new(assets.index,
                                              public_dir,
