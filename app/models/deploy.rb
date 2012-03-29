@@ -22,30 +22,29 @@ module Deploy
     release.save
 
     Dir.mktmpdir(project.name) do |project_dir|
-      project_dir = Pathname.new(project_dir)
-      repo_dir = project_dir.join('repo')
+      repo_dir = File.join(project_dir, 'repo')
       FileUtils.mkdir_p(repo_dir)
-      assets_dir = project_dir.join('assets')
+      assets_dir = File.join(project_dir, 'assets')
       FileUtils.mkdir_p(assets_dir)
-      public_dir = project_dir.join('public')
+      public_dir = File.join(project_dir, 'public')
       FileUtils.mkdir_p(public_dir)
 
       begin
         # clone repo
-        clone_repo(repo_dir.to_s, project.repo, release.branch)
+        clone_repo(repo_dir, project.repo, release.branch)
 
         # TODO: Alert people
         begin
-          copy_assets(repo_dir.to_s, assets_dir.join(project.name))
+          copy_assets(repo_dir, File.join(assets_dir, project.name))
         rescue Timeout::Error => e
           release.status = e.message
           release.save
           raise
         end
 
-        compile_assets(project.name, assets_dir.to_s, public_dir.to_s)
+        compile_assets(project.name, assets_dir, public_dir)
 
-        self.generate_views(project.name, repo_dir.to_s)
+        self.generate_views(project.name, repo_dir)
 
         release.go_live
         project.touch
@@ -83,7 +82,7 @@ module Deploy
     public_asset_path = File.join(Rails.public_path, app.config.assets.prefix)
     public_dir = Rails.root.join('tmp', 'public_assets', project_name) if Rails.env.development?
 
-    manifest_path = app.config.assets.manifest ? Pathname.new(app.config.assets.manifest).join(project_name) : Pathname.new(public_dir).join(project_name)
+    manifest_path = app.config.assets.manifest ? File.join(app.config.assets.manifest, project_name) : File.join(public_dir, project_name)
     manifest = File.join(manifest_path, "manifest.yml")
 
     assets = app.assets.dup
@@ -91,18 +90,22 @@ module Deploy
     assets.instance_variable_get(:@trail).instance_variable_set(:@paths, app.assets.instance_variable_get(:@trail).instance_variable_get(:@paths).dup)
     assets.append_path(assets_dir)
 
+    digest = Rails.env.development? ? false : true
+
     compiler = Sprockets::StaticCompiler.new(assets,
                                              public_dir,
                                              app.config.assets.precompile,
                                              manifest_path: manifest_path,
-                                             digest: true,
+                                             digest: digest,
                                              manifest: true)
 
     compiler.compile
 
     raise "Couldn't find manifest.yml" unless File.exists?(manifest)
+
+    FileUtils.rm_r(File.join(public_asset_path, project_name), secure: true) if Dir.exists?(File.join(public_asset_path, project_name))
     FileUtils.cp_r("#{public_dir}/.", public_asset_path)
-    AssetSync.sync
+    AssetSync.sync unless Rails.env.development?
     Rails.cache.write("digests:#{project_name}", YAML.load_file(manifest))
   end
 
