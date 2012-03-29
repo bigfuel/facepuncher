@@ -85,14 +85,16 @@ module Deploy
     manifest_path = app.config.assets.manifest ? File.join(app.config.assets.manifest, project_name) : File.join(public_dir, project_name)
     manifest = File.join(manifest_path, "manifest.yml")
 
-    assets = app.assets.dup
-    assets.instance_variable_set(:@trail, app.assets.instance_variable_get(:@trail).dup)
-    assets.instance_variable_get(:@trail).instance_variable_set(:@paths, app.assets.instance_variable_get(:@trail).instance_variable_get(:@paths).dup)
+    assets = app.assets.index
+    assets = assets.instance_variable_get(:@environment).dup
+    trail = app.assets.index.instance_variable_get(:@environment).instance_variable_get(:@trail).dup
+    assets.instance_variable_set(:@trail, trail)
+    assets.instance_variable_get(:@trail).instance_variable_set(:@paths, trail.instance_variable_get(:@paths).dup)
     assets.append_path(assets_dir)
 
     digest = Rails.env.development? ? false : true
 
-    compiler = Sprockets::StaticCompiler.new(assets,
+    compiler = Sprockets::StaticCompiler.new(assets.index,
                                              public_dir,
                                              app.config.assets.precompile,
                                              manifest_path: manifest_path,
