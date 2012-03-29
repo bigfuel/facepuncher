@@ -80,10 +80,12 @@ module Deploy
   def self.compile_assets(project_name, assets_dir, public_dir)
     app = Rails.application
     public_asset_path = File.join(Rails.public_path, app.config.assets.prefix)
-    public_dir = Rails.root.join('tmp', 'public_assets', project_name) if Rails.env.development?
+    if Rails.env.development?
+      public_dir = Rails.root.join('tmp', 'public_assets', project_name)
+      FileUtils.rm_r(public_dir, secure: true) if Dir.exists?(public_dir)
+    end
 
-    manifest_path = app.config.assets.manifest ? File.join(app.config.assets.manifest, project_name) : File.join(public_dir, project_name)
-    manifest = File.join(manifest_path, "manifest.yml")
+    manifest_path = File.join(app.config.assets.manifest || public_dir, project_name)
 
     assets = app.assets.index
     assets = assets.instance_variable_get(:@environment).dup
@@ -92,17 +94,16 @@ module Deploy
     assets.instance_variable_get(:@trail).instance_variable_set(:@paths, trail.instance_variable_get(:@paths).dup)
     assets.append_path(assets_dir)
 
-    digest = !Rails.env.development?
-
     compiler = Sprockets::StaticCompiler.new(assets.index,
                                              public_dir,
                                              app.config.assets.precompile,
                                              manifest_path: manifest_path,
-                                             digest: digest,
+                                             digest: !Rails.env.development?,
                                              manifest: true)
 
     compiler.compile
 
+    manifest = File.join(manifest_path, "manifest.yml")
     raise "Couldn't find manifest.yml" unless File.exists?(manifest)
 
     FileUtils.rm_r(File.join(public_asset_path, project_name), secure: true) if Dir.exists?(File.join(public_asset_path, project_name))
