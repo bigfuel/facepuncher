@@ -1,2 +1,2 @@
 collection @facebook_albums
-attributes :id, :name, :set_id, :updated_at
+attributes :id, :name, :set_id, :limit, :updated_at
