@@ -27,6 +27,10 @@
           = f.label :limit, class: "control-label"
           .controls= f.text_field :limit
 
+        .control-group
+          = f.label :rss, class: "control-label"
+          .controls= f.text_field :rss
+          
         .form-actions
           = f.hidden_field :project_id
           = f.submit 'Save', class: 'btn btn-primary'
