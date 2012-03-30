@@ -54,7 +54,6 @@ class Admin::SignupsController < AdminController
     respond_with @signup, location: [:admin, @project, @signup]
   end
 
-
   def update
     @signup = @project.signups.find(params[:id])
     @signup.update_attributes(params[:signup])

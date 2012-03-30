@@ -1,6 +1,6 @@
 class Admin::ViewTemplatesController < AdminController
   def index
-    @view_templates = @project.view_templates.order_by([sort_column, sort_direction]).page(params[:page])
+    @view_templates = @project.view_templates.page(params[:page])
     respond_with @view_templates
   end
 

@@ -2,7 +2,7 @@ class Admin::ProjectsController < AdminController
   respond_to :html, :json, except: :queue_deploy
 
   def index
-    @projects = Project.order_by([sort_column, sort_direction]).page(params[:page])
+    @projects = Project.order_by("name", "asc").page(params[:page])
     respond_with @projects
   end
 
