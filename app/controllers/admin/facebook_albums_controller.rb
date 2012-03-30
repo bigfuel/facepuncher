@@ -9,7 +9,7 @@ class Admin::FacebookAlbumsController < AdminController
   end
 
   def edit
-    @facebook_album = @project.facebook_albums.find(params[:id])
+    @facebook_album = @project.facebook_albums.find_by_name(params[:id])
   end
 
   def show
@@ -22,13 +22,13 @@ class Admin::FacebookAlbumsController < AdminController
   end
 
   def update
-    @facebook_album = @project.facebook_albums.find(params[:id])
+    @facebook_album = @project.facebook_albums.find_by_name(params[:id])
     @facebook_album.update_attributes(params[:facebook_album])
     respond_with @facebook_album, location: [:admin, @project, @facebook_album]
   end
 
   def destroy
-    @facebook_album = @project.facebook_albums.find(params[:id])
+    @facebook_album = @project.facebook_albums.find_by_name(params[:id])
     @facebook_album.destroy
 
     respond_with(@facebook_album, location: admin_project_facebook_albums_url) do |format|

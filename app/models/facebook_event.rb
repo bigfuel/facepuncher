@@ -17,6 +17,14 @@ class FacebookEvent
 
   after_save :fetch_event
 
+  def to_param
+    self.name
+  end
+
+  def self.find_by_name(name)
+    where(name: name).limit(1).first
+  end
+  
   protected
   def fetch_event
     FetchEvent.perform_async self.project.name, self.name

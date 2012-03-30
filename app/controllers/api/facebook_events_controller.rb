@@ -15,7 +15,7 @@ class Api::FacebookEventsController < ApplicationController
   end
 
   def show
-    @facebook_event = @project.facebook_events.find(params[:id])
+    @facebook_event = @project.facebook_events.find_by_name(params[:id])
 
     respond_with :api, @project, @facebook_event
   end

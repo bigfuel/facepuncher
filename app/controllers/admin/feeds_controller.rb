@@ -9,7 +9,7 @@ class Admin::FeedsController < AdminController
   end
 
   def edit
-    @feed = @project.feeds.find(params[:id])
+    @feed = @project.feeds.find_by_name(params[:id])
   end
 
   def show
@@ -22,13 +22,13 @@ class Admin::FeedsController < AdminController
   end
 
   def update
-    @feed = @project.feeds.find(params[:id])
+    @feed = @project.feeds.find_by_name(params[:id])
     @feed.update_attributes(params[:feed])
     respond_with @feed, location: [:admin, @project, @feed]
   end
 
   def destroy
-    @feed = @project.feeds.find(params[:id])
+    @feed = @project.feeds.find_by_name(params[:id])
     @feed.destroy
 
     respond_with(@feed, location: admin_project_feeds_url) do |format|

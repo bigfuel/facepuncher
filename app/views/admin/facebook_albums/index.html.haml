@@ -8,10 +8,10 @@
 %textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
   %tr
     %td
-      = link_to '${name}', admin_url + "${id}"
+      = link_to '${name}', admin_url + "${name}"
       .actions
-        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + "${id}/edit", class: "btn", title: "Edit"
-        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + "${id}.json", remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+        = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + "${name}/edit", class: "btn", title: "Edit"
+        = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + "${name}.json", remote: true, confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
     %td
       ${set_id}
     %td
