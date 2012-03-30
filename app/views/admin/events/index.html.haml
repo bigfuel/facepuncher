@@ -30,11 +30,10 @@
     %td ${location.address}
     %td ${location.latitude}
     %td ${location.longitude}
-    %td ${updated_at}
 
 %table.table.table-striped.table-bordered
   %tr
-    %th{width: 250} Name
+    %th Name
     %th State
     %th Type
     %th Start Date
@@ -42,7 +41,6 @@
     %th Address
     %th Latitude
     %th Longitude
-    %th Updated At
 
     / %td
     /   = form_for event, url: admin_project_event_path(@project.name, event, format: :json), remote: true, html: { class: 'location_update_form' } do |f|

@@ -26,6 +26,12 @@ body
   tbody tr:hover td, tbody tr:hover th
     background-color: #eaeaea
   tr
+    &:first-child 
+      &th
+        &:first-child
+          width: 250px
+        &.auto
+          width: auto
     &.pending
       color: #aaa
       a

@@ -9,11 +9,13 @@
 
 %table.table.table-striped.table-bordered
   %tr
-    %th{width: 250}=sort_by "handlers"
-    - %w{path formats locales updated_at}.each do |c|
-      %th.sort= sort_by c
+    %th Handlers
+    %th Path
+    %th Formats
+    %th Locales
+    %th Updated At
 
-    -@view_templates.each do |view_template|
+    - @view_templates.each do |view_template|
       %tr
         %td
           = link_to view_template.handlers, [:admin, @project, view_template]
