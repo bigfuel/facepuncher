@@ -14,11 +14,9 @@ class DeployProject
     Deploy.perform(project_name) if deployable
   end
 
-  class << self
-    def queue_active
-      Project.active.each do |project|
-        DeployProject.perform_async project.name
-      end
+  def self.queue_active
+    Project.active.each do |project|
+      DeployProject.perform_async project.name
     end
   end
 end

@@ -5,13 +5,11 @@ class FetchEvent
     FacebookGraph::Event.update project_name, event_name
   end
 
-  # class << self
-  #   def queue_all
-  #     Project.active.each do |project|
-  #       project.facebook_events.each do |event|
-  #         FetchEvent.perform_async project.name, event.name
-  #       end
-  #     end
-  #   end
-  # end
+  def self.queue_all
+    Project.active.each do |project|
+      project.facebook_events.each do |event|
+        FetchEvent.perform_async project.name, event.name
+      end
+    end
+  end
 end
