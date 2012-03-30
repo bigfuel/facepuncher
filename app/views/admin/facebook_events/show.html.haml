@@ -8,8 +8,8 @@
 %textarea{class: "tmpl", "data-project" => "#{@project.name}", "data-model" => "#{controller_name}", "data-action" => "#{action_name}"}
   %tr
     %td{colspan: 2}
-      = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + "${id}/edit", class: "btn", title: "Edit"
-      = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + "${id}", confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
+      = link_to '<i class="icon-edit"></i>'.html_safe, admin_url + "${name}/edit", class: "btn", title: "Edit"
+      = link_to '<i class="icon-trash"></i>'.html_safe, admin_url + "${name}", confirm: 'Are you sure?', method: :delete, class: "btn delete", title: "Delete"
   %tr
     %td Created at
     %td ${created_at}

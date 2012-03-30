@@ -9,7 +9,7 @@ class Admin::FacebookEventsController < AdminController
   end
 
   def edit
-    @facebook_event = @project.facebook_events.find(params[:id])
+    @facebook_event = @project.facebook_events.find_by_name(params[:id])
   end
 
   def show
@@ -22,13 +22,13 @@ class Admin::FacebookEventsController < AdminController
   end
 
   def update
-    @facebook_event = @project.facebook_events.find(params[:id])
+    @facebook_event = @project.facebook_events.find_by_name(params[:id])
     @facebook_event.update_attributes(params[:facebook_event])
     respond_with @facebook_event, location: [:admin, @project, @facebook_event]
   end
 
   def destroy
-    @facebook_event = @project.facebook_events.find(params[:id])
+    @facebook_event = @project.facebook_events.find_by_name(params[:id])
     @facebook_event.destroy
 
     respond_with(@facebook_event, location: admin_project_facebook_events_url) do |format|

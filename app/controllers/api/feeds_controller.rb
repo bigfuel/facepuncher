@@ -15,7 +15,7 @@ class Api::FeedsController < ApplicationController
   end
 
   def show
-    @feed = @project.feeds.find(params[:id])
+    @feed = @project.feeds.find_by_name(params[:id])
 
     respond_with :api, @project, @feed
   end

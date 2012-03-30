@@ -18,6 +18,14 @@ class FacebookAlbum
 
   after_save :fetch_album
 
+  def to_param
+    self.name
+  end
+
+  def self.find_by_name(name)
+    where(name: name).limit(1).first
+  end
+  
   protected
   def fetch_album
     FetchAlbum.perform_async self.project.name, self.name

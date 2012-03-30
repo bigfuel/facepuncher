@@ -15,7 +15,7 @@ class Api::FacebookAlbumsController < ApplicationController
   end
 
   def show
-    @facebook_album = @project.facebook_albums.find(params[:id])
+    @facebook_album = @project.facebook_albums.find_by_name(params[:id])
 
     respond_with :api, @project, @facebook_album
   end
