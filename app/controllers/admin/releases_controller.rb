@@ -1,6 +1,6 @@
 class Admin::ReleasesController < AdminController
   def index
-    @releases = @project.releases.order_by([sort_column, sort_direction]).page(params[:page])
+    @releases = @project.releases.page(params[:page])
     respond_with @releases
   end
 

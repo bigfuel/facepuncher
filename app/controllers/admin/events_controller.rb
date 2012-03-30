@@ -4,7 +4,7 @@ class Admin::EventsController < AdminController
   respond_to :html, :json
 
   def index
-    @events = @project.events.order_by([sort_column, sort_direction]).page(params[:page])
+    @events = @project.events.page(params[:page])
     respond_with @events
   end
 
