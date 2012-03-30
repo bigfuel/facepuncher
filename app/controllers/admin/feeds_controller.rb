@@ -13,8 +13,6 @@ class Admin::FeedsController < AdminController
   end
 
   def show
-    @feed = @project.feeds.find(params[:id])
-    respond_with @feed
   end
 
   def create
