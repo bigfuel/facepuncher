@@ -9,10 +9,12 @@
 
 %table.table.table-striped.table-bordered
   %tr
-    %th{width: 250}= sort_by "description"
-    - %w{live_date state branch status}.each do |c|
-      %th.sort= sort_by c
-    %th{width: 63}
+    %th Description
+    %th Live Date
+    %th State
+    %th Branch
+    %th Status
+    %th{width: 63} Deploy
 
     - @releases.each do |release|
       %tr{class: (release.state == 'live' ? "live" : nil)}
