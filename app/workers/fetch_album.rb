@@ -5,13 +5,11 @@ class FetchAlbum
     FacebookGraph::Album.update project_name, album_name
   end
 
-  # class << self
-  #   def queue_all
-  #     Project.active.each do |project|
-  #       project.facebook_albums.each do |album|
-  #         FetchAlbum.perform_async project.name, album.name
-  #       end
-  #     end
-  #   end
-  # end
+  def self.queue_all
+    Project.active.each do |project|
+      project.facebook_albums.each do |album|
+        FetchAlbum.perform_async project.name, album.name
+      end
+    end
+  end
 end
