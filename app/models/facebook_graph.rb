@@ -11,6 +11,8 @@ module FacebookGraph
     class InvalidDataError < Errors::Error; end
   end
 
+  # to do: need to account for a limit since graph api is paged
+
   module Album
     def self.update(project_name, album_name)
       project = Project.find_by_name(project_name)
@@ -21,7 +23,7 @@ module FacebookGraph
       begin
         photos = facebook_graph.get_connections(album.set_id, "photos")
       rescue Koala::Facebook::APIError
-        raise Errors::InvalidDataError, "Please check values in #{project.name}"
+        raise Errors::InvalidDataError, "Please check values for #{album.name} in #{project.name}"
       end
 
       album.update_attributes(graph: photos)
@@ -38,7 +40,7 @@ module FacebookGraph
       begin
         event_list = facebook_graph.get_connections(event.name, "events")
       rescue Koala::Facebook::APIError
-        raise Errors::InvalidDataError, "Please check values in #{project.name}"
+        raise Errors::InvalidDataError, "Please check values for #{event.name} in #{project.name}"
       end
 
       # event_list.each { |e| e['start_time'] = Date.parse(e['start_time']) }
