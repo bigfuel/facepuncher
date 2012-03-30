@@ -4,9 +4,10 @@ class FacebookAlbum
 
   field :name, type: String
   field :set_id, type: Integer
+  field :limit, type: Integer, default: 10
   field :graph, type: Hash, default: Hash.new
 
-  attr_accessible :name, :set_id, :graph
+  attr_accessible :name, :set_id, :limit, :graph
 
   belongs_to :project
 
