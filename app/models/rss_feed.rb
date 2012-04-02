@@ -39,6 +39,8 @@ module RssFeed
         raise Errors::InvalidDataError, "Please check values for #{feed.name} in #{project.name}"
       end
       
+      rss_feed = rss_feed.take(feed.limit)
+
       feed.update_attributes(rss: rss_feed)
     end
   end
