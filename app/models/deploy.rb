@@ -24,10 +24,11 @@ module Deploy
     Dir.mktmpdir(project.name) do |project_dir|
       repo_dir = File.join(project_dir, 'repo')
       FileUtils.mkdir_p(repo_dir)
-      assets_dir = File.join(project_dir, 'assets')
-      FileUtils.mkdir_p(assets_dir)
       public_dir = File.join(project_dir, 'public')
       FileUtils.mkdir_p(public_dir)
+      assets_dir = Rails.root.join('tmp', 'project_assets').to_s
+      FileUtils.rm_r(assets_dir, secure: true) if Dir.exists?(assets_dir)
+      FileUtils.mkdir_p(assets_dir)
 
       begin
         # clone repo
@@ -85,11 +86,8 @@ module Deploy
       FileUtils.rm_r(public_dir, secure: true) if Dir.exists?(public_dir)
     end
 
-    manifest_path = File.join(app.config.assets.manifest || public_dir, project_name)
-
     assets = app.assets.index.instance_variable_get(:@environment)
-    asset_paths = assets.paths
-    assets.append_path(assets_dir)
+    manifest_path = File.join(app.config.assets.manifest || public_dir, project_name)
 
     compiler = Sprockets::StaticCompiler.new(assets.index,
                                              public_dir,
@@ -99,9 +97,6 @@ module Deploy
                                              manifest: true)
 
     compiler.compile
-
-    assets.clear_paths
-    asset_paths.each { |p| assets.append_path(p) }
 
     manifest = File.join(manifest_path, "manifest.yml")
     raise "Couldn't find manifest.yml" unless File.exists?(manifest)

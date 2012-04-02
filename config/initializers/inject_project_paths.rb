@@ -27,3 +27,5 @@ if Rails.env.development?
     Rails.application.config.assets.paths << local_assets_path.join(asset_dir)
   end
 end
+
+Rails.application.config.assets.paths << Rails.root.join('tmp', 'project_assets')
