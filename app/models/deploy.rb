@@ -87,11 +87,8 @@ module Deploy
 
     manifest_path = File.join(app.config.assets.manifest || public_dir, project_name)
 
-    assets = app.assets.index
-    assets = assets.instance_variable_get(:@environment).dup
-    trail = app.assets.index.instance_variable_get(:@environment).instance_variable_get(:@trail).dup
-    assets.instance_variable_set(:@trail, trail)
-    assets.instance_variable_get(:@trail).instance_variable_set(:@paths, trail.instance_variable_get(:@paths).dup)
+    assets = app.assets.index.instance_variable_get(:@environment)
+    asset_paths = assets.paths
     assets.append_path(assets_dir)
 
     compiler = Sprockets::StaticCompiler.new(assets.index,
@@ -102,6 +99,9 @@ module Deploy
                                              manifest: true)
 
     compiler.compile
+
+    assets.clear_paths
+    asset_paths.each { |p| assets.append_path(p) }
 
     manifest = File.join(manifest_path, "manifest.yml")
     raise "Couldn't find manifest.yml" unless File.exists?(manifest)
