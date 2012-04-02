@@ -29,6 +29,7 @@ class Api::SignupsController < ApplicationController
     if @signup.save
       @signup.complete if @signup[:opt_out]
     end
+    
     respond_with :api, @project, @signup
   end
 end
