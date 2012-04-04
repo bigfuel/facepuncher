@@ -97,7 +97,7 @@ module Deploy
     manifest = File.join(manifest_path, "manifest.yml")
     raise "Couldn't find manifest.yml" unless File.exists?(manifest)
 
-    AssetSync.sync unless Rails.env.development?
+    AssetSync.dup.sync unless Rails.env.development?
     Rails.cache.write("digests:#{project_name}", YAML.load_file(manifest))
   end
 
