@@ -71,7 +71,6 @@ group :test do
   gem 'minitest-matchers'
   gem 'valid_attribute'
   gem 'mocha', require: false
-  gem 'pry-nav'
 end
 
 group :development do
@@ -90,6 +89,8 @@ group :development, :test do
   gem 'rb-fsevent'
   gem 'ruby_gntp'
   gem 'ruby-prof'
+  gem 'pry-nav'
+  gem 'pry-stack_explorer'
   # gem 'ruby-debug19', require: 'ruby-debug'
   # gem 'cover_me', '>= 1.0.0.pre2', require: false
 end
