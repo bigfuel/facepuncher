@@ -2,7 +2,7 @@ require 'fileutils'
 
 class DeployProject
   include Sidekiq::Worker
-  queue :deployer
+  sidekiq_options queue: :deployer
 
   def perform(project_name)
     deployable = true
