@@ -19,7 +19,6 @@ gem 'jquery-rails'
 # mongoid
 gem 'mongoid'
 gem 'bson_ext'
-gem 'mongoid_embedded_helper'
 gem 'acts_as_list_mongoid'
 gem 'mongoid_taggable_with_context'
 
