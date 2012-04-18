@@ -3,7 +3,7 @@
   %head
     %meta{content: "text/html;charset=UTF-8", "http-equiv" => "content-type"}
     %meta{property: "fb:app_id", content: "#{@project.facebook_app_id}"}
-    %title= @page_title ||= "Facebook Tab"
+    %title= @project.name
     = yield :stylesheets
     = javascript_include_tag '//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js'
     :javascript
