@@ -12,7 +12,7 @@ class Feed
 
   belongs_to :project
 
-  paginates_per 5
+  paginates_per 15
 
   validates :name, presence: true, uniqueness: { scope: :project_id, message: "has already been used in this project." }
   validates :url, presence: true
