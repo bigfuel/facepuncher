@@ -6,5 +6,4 @@ Fabricator(:project) do
   facebook_app_secret            "00000000000000000000000000000000" # Replace with a real facebook secret
   google_analytics_tracking_code "whyyoutrackin'me"
   production_url                 "https://apps.facebook.com/bf_project_test/"
-  staging_url                    "https://apps.facebook.com/bf_project_test_staging/"
 end
