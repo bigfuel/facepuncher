@@ -3,10 +3,8 @@ if Rails.env.development?
 
   local_assets_path = Rails.root.join("tmp", "local_assets")
 
-  if Dir.exists?(local_assets_path)
-    retriable on: Errno::ENOENT, tries: 3, interval: 3 do
-      FileUtils.rm_r(local_assets_path, secure: true)
-    end
+  retriable on: Errno::ENOENT, tries: 3, interval: 3 do
+    FileUtils.rm_r(local_assets_path, secure: true) if Dir.exists?(local_assets_path)
   end
 
   FileUtils.mkdir_p(local_assets_path)
