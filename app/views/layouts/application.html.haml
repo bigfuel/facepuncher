@@ -20,7 +20,7 @@
   %body
     = content_for?(:content) ? yield(:content) : yield
     - if @project
-      - if @project.facebook_app_id
+      - unless @project.facebook_app_id.blank?
         #fb-root
         :javascript
           window.fbAsyncInit = function() {
@@ -45,7 +45,7 @@
              js.src = "//connect.facebook.net/en_US/all.js";
              d.getElementsByTagName('head')[0].appendChild(js);
            }(document));
-      - if @project.google_analytics_tracking_code
+      - unless @project.google_analytics_tracking_code.blank?
         :javascript
           var _gaq = _gaq || [];
           _gaq.push(['_setAccount', "#{@project.google_analytics_tracking_code}"]);
