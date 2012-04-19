@@ -5,7 +5,7 @@
     %meta{property: "fb:app_id", content: "#{@project.facebook_app_id}"}
     %title= @project.name
     = yield :stylesheets
-    = javascript_include_tag '//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js'
+    = javascript_include_tag '//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.2.min.js'
     :javascript
       window.jQuery || document.write("<script src='#{asset_path('jquery.min.js')}' type='text/javascript'>\x3C/script>")
       function fbInitHook() {}
