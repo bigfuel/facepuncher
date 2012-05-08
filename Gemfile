@@ -95,6 +95,6 @@ group :development, :test do
 end
 
 group :production, :staging do
-  gem 'airbrake'
+  gem 'exceptional'
   # gem 'rpm_contrib'
 end
