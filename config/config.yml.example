@@ -5,7 +5,6 @@ development: &default
   s3_url:                 https://s3.amazonaws.com
   redis:                  redis://localhost:6379
   uploader_host:          your-sub-domain-here.s3.amazonaws.com
-  airbrake_api_key:       API_KEY
   project_path:           PATH_TO_PROJECTS_DIR
 
 test:
