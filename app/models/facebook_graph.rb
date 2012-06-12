@@ -20,6 +20,7 @@ module FacebookGraph
       project.facebook_albums.each do |album|
         begin
           photos = graph.get_connections(album.set_id, "photos")
+          photos << {album_data: graph.get_object(album.set_id)}
         rescue Koala::Facebook::APIError
           raise Errors::InvalidDataError, "Please double check facebook album values for #{project.name}."
         end
