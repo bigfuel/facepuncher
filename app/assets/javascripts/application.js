@@ -5,4 +5,5 @@
 // the compiled file.
 //
 //= require jquery_ujs
-//= require js-webshim/minified/extras/modernizr-custom
+//= require webshims/minified/extras/modernizr-custom
+//= require webshims/minified/polyfiller

@@ -53,6 +53,7 @@ gem 'pry-rails'
 gem 'bootstrap-sass'
 gem 'responders'
 gem 'ace-rails-ap'
+gem 'webshims-rails'
 
 # Use unicorn as the web server
 gem 'unicorn'
