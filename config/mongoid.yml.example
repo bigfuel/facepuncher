@@ -2,7 +2,6 @@ common: &default
   preload_models: true
   use_utc: false
   use_activesupport_time_zone: true
-  identity_map_enabled: true
 
 development:
   <<: *default
