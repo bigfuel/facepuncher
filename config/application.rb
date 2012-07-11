@@ -59,6 +59,7 @@ module Facepuncher
     config.assets.version = '1.0'
 
     # Custom
+    config.assets.initialize_on_precompile = false # Heroku recommended
     config.cache_store = :redis_store, ENV['REDISTOGO_URL'] || APP_CONFIG['redis']
     config.action_controller.asset_host = APP_CONFIG['asset_host'] if APP_CONFIG['asset_host']
 
